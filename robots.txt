@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.theurer-trucks-2go.de/sitemap.xml
