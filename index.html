@@ -30,7 +30,949 @@
     })(window,document,'script','dataLayer','GTM-P4D6Z66');</script>
 
     <style>
-        /* CSS wird in den folgenden Tasks eingefügt */
+        /* ============================================================
+           CSS CUSTOM PROPERTIES
+        ============================================================ */
+        :root {
+            --primary:          #0088CF;
+            --primary-bright:   #38B6FF;
+            --primary-dark:     #006fa8;
+            --primary-deeper:   #005a8c;
+            --primary-light:    #e8f4fb;
+            --primary-ghost:    rgba(0, 136, 207, 0.08);
+            --primary-grad:     linear-gradient(135deg, #0088CF 0%, #38B6FF 100%);
+            --primary-grad-r:   linear-gradient(135deg, #38B6FF 0%, #0088CF 100%);
+
+            --dark:             #0f1419;
+            --dark-soft:        #1a2028;
+            --dark-medium:      #2a3038;
+            --text:             #4a5568;
+            --text-light:       #718096;
+            --text-dark:        #1a202c;
+
+            --light:            #f7fafc;
+            --white:            #ffffff;
+            --border:           #e2e8f0;
+            --border-light:     #edf2f7;
+
+            --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow:           0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg:        0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-xl:        0 32px 80px rgba(0, 0, 0, 0.16);
+            --shadow-blue:      0 4px 24px rgba(0, 136, 207, 0.28);
+            --shadow-blue-lg:   0 12px 40px rgba(0, 136, 207, 0.35);
+
+            --radius-sm:        8px;
+            --radius:           12px;
+            --radius-lg:        20px;
+            --radius-xl:        28px;
+            --radius-full:      999px;
+
+            --ease:             cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-out:         cubic-bezier(0, 0, 0.2, 1);
+            --ease-bounce:      cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition:       all 0.3s var(--ease);
+            --transition-slow:  all 0.5s var(--ease);
+        }
+
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.15;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+        /* Obere Akzentlinie */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-grad);
+            z-index: 9999;
+        }
+
+        /* ============================================================
+           LAYOUT HELPERS
+        ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .section {
+            padding: 110px 0;
+        }
+
+        .section--light { background: var(--light); }
+        .section--dark {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .section--dark h2,
+        .section--dark h3,
+        .section--dark h4 { color: var(--white); }
+
+        .section-header { text-align: center; margin-bottom: 64px; }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-ghost);
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 7px 20px;
+            border-radius: var(--radius-full);
+            margin-bottom: 18px;
+            border: 1px solid rgba(0, 136, 207, 0.12);
+        }
+
+        .section--dark .section-tag {
+            background: rgba(0, 136, 207, 0.15);
+            border-color: rgba(56, 182, 255, 0.2);
+            color: var(--primary-bright);
+        }
+
+        .section-title {
+            font-size: clamp(1.85rem, 3.2vw, 2.65rem);
+            font-weight: 800;
+            margin-bottom: 14px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        .section--dark .section-subtitle { color: rgba(255,255,255,0.65); }
+
+        /* ============================================================
+           BUTTONS
+        ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 32px;
+            border-radius: var(--radius-full);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-blue-lg);
+        }
+
+        .btn--primary:active { transform: translateY(0); }
+
+        .btn--ghost {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn--ghost:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn--outline {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn--outline:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn--lg {
+            padding: 17px 42px;
+            font-size: 0.95rem;
+        }
+
+        .btn--full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn--white {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .btn--white:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Fokus-Styles für Barrierefreiheit */
+        .btn:focus-visible {
+            outline: 3px solid var(--primary-bright);
+            outline-offset: 3px;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* ============================================================
+           NAVBAR
+        ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 3px;
+            inset-inline: 0;
+            z-index: 900;
+            padding: 20px 0;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 var(--border), var(--shadow-sm);
+        }
+
+        .navbar__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .navbar__logo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar__logo img {
+            height: 42px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .navbar__logo img {
+            height: 38px;
+            filter: none;
+        }
+
+        /* Desktop-Navigation */
+        .navbar__nav {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .navbar__nav a {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.85);
+            transition: color 0.3s;
+            position: relative;
+            letter-spacing: 0.02em;
+        }
+
+        .navbar__nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-bright);
+            transform: scaleX(0);
+            transition: transform 0.3s var(--ease);
+            border-radius: 2px;
+        }
+
+        .navbar__nav a:hover::after { transform: scaleX(1); }
+        .navbar.scrolled .navbar__nav a { color: var(--text-dark); }
+        .navbar__nav a:hover,
+        .navbar.scrolled .navbar__nav a:hover { color: var(--primary); }
+
+        .navbar__cta { flex-shrink: 0; }
+
+        /* Mobile Burger-Button */
+        .navbar__burger {
+            display: none;
+            color: var(--white);
+            font-size: 1.4rem;
+            padding: 4px;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .navbar__burger { color: var(--text-dark); }
+
+        /* ============================================================
+           MOBILE MENU OVERLAY
+        ============================================================ */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--white);
+            z-index: 950;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu__close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .mobile-menu a {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            transition: color 0.3s;
+        }
+
+        .mobile-menu a:hover { color: var(--primary); }
+
+        /* ============================================================
+           HERO
+        ============================================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 140px 0 180px;
+            position: relative;
+            background:
+                linear-gradient(
+                    160deg,
+                    rgba(0, 15, 30, 0.82) 0%,
+                    rgba(0, 60, 110, 0.6) 50%,
+                    rgba(0, 90, 140, 0.45) 100%
+                ),
+                url('img/truck-front.jpg')
+                center / cover no-repeat;
+        }
+
+        .hero__content { max-width: 660px; }
+
+        .hero__pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.73rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 9px 22px;
+            border-radius: var(--radius-full);
+            margin-bottom: 30px;
+        }
+
+        /* Pulsierender Live-Punkt */
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: livepulse 2s infinite;
+        }
+
+        @keyframes livepulse {
+            0%   { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+            70%  { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        .hero__title {
+            font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 24px;
+            line-height: 1.06;
+            letter-spacing: -0.02em;
+        }
+
+        /* Farbiger Gradient-Text für den em-Teil */
+        .hero__title em {
+            font-style: normal;
+            background: linear-gradient(135deg, #7dd3fc, #38B6FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero__lead {
+            font-size: 1.12rem;
+            color: rgba(255, 255, 255, 0.78);
+            margin-bottom: 40px;
+            line-height: 1.8;
+            max-width: 540px;
+        }
+
+        .hero__actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        /* Statistik-Leiste am unteren Rand */
+        .hero__statbar {
+            position: absolute;
+            bottom: 0;
+            inset-inline: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero__stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .hero__stat {
+            padding: 24px;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero__stat:last-child { border-right: none; }
+
+        .hero__stat-val {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.55rem;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .hero__stat-lbl {
+            font-size: 0.76rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 6px;
+        }
+
+        /* ============================================================
+           AVAILABILITY CHECKER
+        ============================================================ */
+        .avail {
+            background: var(--primary-grad);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekorative Kreise im Hintergrund */
+        .avail::before,
+        .avail::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .avail::before { width: 500px; height: 500px; top: -220px; right: -100px; }
+        .avail::after  { width: 360px; height: 360px; bottom: -180px; left: -80px; }
+
+        .avail__inner { position: relative; z-index: 1; }
+
+        .avail__header { text-align: center; margin-bottom: 40px; }
+
+        .avail__tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.73rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 7px 20px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            margin-bottom: 18px;
+        }
+
+        .avail__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .avail__sub {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .avail__card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 44px 40px 40px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Formular-Grid: 3 Felder + Button — angepasst für Station-Dropdown */
+        .avail__form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-light);
+        }
+
+        .form-label i { color: var(--primary); margin-right: 5px; }
+
+        .form-input {
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            background: var(--white);
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 136, 207, 0.1);
+        }
+
+        /* Dropdown-Styling passend zum Form-Input */
+        .form-select {
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            background: var(--white);
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23718096' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 136, 207, 0.1);
+        }
+
+        .avail__btn {
+            height: 52px;
+            padding: 0 30px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: var(--shadow-blue);
+            cursor: pointer;
+        }
+
+        .avail__btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-blue-lg);
+        }
+
+        .avail__result {
+            display: none;
+            margin-top: 24px;
+            padding: 22px 26px;
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+            border-radius: var(--radius);
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avail__result.visible { display: flex; }
+
+        .avail__result-icon {
+            width: 46px;
+            height: 46px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16a34a;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .avail__result-text strong {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #15803d;
+        }
+
+        .avail__result-text p {
+            font-size: 0.84rem;
+            color: #4b7a56;
+            margin-top: 3px;
+        }
+
+        /* ============================================================
+           VERTRAUENS-SEKTION (NEU)
+        ============================================================ */
+        /* 2-Spalten-Grid für Vertrauen-Karten */
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .trust-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
+            border: 1.5px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .trust-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        /* Zitat-Stil als emotionaler Einstieg */
+        .trust-card__quote {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+            line-height: 1.7;
+        }
+
+        .trust-card__quote::before {
+            content: '"';
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary-bright);
+            line-height: 0;
+            vertical-align: -0.5rem;
+            margin-right: 4px;
+        }
+
+        .trust-card__icon {
+            width: 52px;
+            height: 52px;
+            background: var(--primary-ghost);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+
+        .trust-card:hover .trust-card__icon {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .trust-card__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .trust-card__text {
+            font-size: 0.87rem;
+            color: var(--text-light);
+            line-height: 1.75;
+        }
+
+        /* ============================================================
+           VIDEO SHOWCASE
+        ============================================================ */
+        .video-showcase {
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-soft);
+        }
+
+        .video-showcase__inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 520px;
+        }
+
+        .video-showcase__media {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-showcase__media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-showcase__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 64px 56px;
+        }
+
+        .video-showcase__tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 136, 207, 0.15);
+            color: var(--primary-bright);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: var(--radius-full);
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .video-showcase__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+            color: var(--white);
+            margin-bottom: 18px;
+            line-height: 1.15;
+        }
+
+        /* Feature-Checkliste mit blauen Häkchen */
+        .video-showcase__checklist {
+            list-style: none;
+            margin-bottom: 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .video-showcase__checklist li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .video-showcase__checklist li i {
+            color: var(--primary-bright);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           SCROLL REVEAL
+        ============================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+        }
+
+        .reveal.in { opacity: 1; transform: none; }
+
+        .reveal.delay-1 { transition-delay: 0.1s; }
+        .reveal.delay-2 { transition-delay: 0.2s; }
+        .reveal.delay-3 { transition-delay: 0.3s; }
+        .reveal.delay-4 { transition-delay: 0.4s; }
+        .reveal.delay-5 { transition-delay: 0.5s; }
+
+        /* Shake-Animation für Formularvalidierung */
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%     { transform: translateX(-6px); }
+            40%     { transform: translateX(6px); }
+            60%     { transform: translateX(-4px); }
+            80%     { transform: translateX(4px); }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 1024px) {
+            /* Navbar: Burger anzeigen, Desktop-Nav ausblenden */
+            .navbar__nav,
+            .navbar__cta { display: none; }
+            .navbar__burger { display: block; }
+
+            /* Verfügbarkeitsformular: 2+1 Layout auf Tablet */
+            .avail__form { grid-template-columns: 1fr 1fr; }
+
+            /* Trust-Grid bleibt 2-spaltig bis 768px */
+
+            .hero__stats { grid-template-columns: repeat(2, 1fr); }
+            .hero__stat:nth-child(2) { border-right: none; }
+            .hero__stat { border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .hero__stat:nth-child(3),
+            .hero__stat:nth-child(4) { border-bottom: none; }
+
+            .video-showcase__inner { grid-template-columns: 1fr; }
+            .video-showcase__media { min-height: 320px; }
+            .video-showcase__content { padding: 48px 32px; }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 80px 0; }
+
+            .hero { padding: 120px 0 160px; }
+
+            /* Verfügbarkeitsformular: Einspaltig auf Mobile */
+            .avail__form { grid-template-columns: 1fr; }
+            .avail__btn { width: 100%; justify-content: center; }
+            .avail__card { padding: 28px 20px; }
+            .avail { padding: 64px 0; }
+
+            .avail__result { flex-direction: column; align-items: flex-start; }
+            .avail__result .btn { align-self: stretch; justify-content: center; }
+
+            /* Trust-Grid: Einspaltig auf Mobile */
+            .trust-grid { grid-template-columns: 1fr; }
+
+            .hero__title {
+                font-size: clamp(2rem, 7vw, 2.8rem);
+            }
+
+            .section-header { margin-bottom: 48px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero__stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Reduzierte Bewegung für Barrierefreiheit */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .live-dot { animation: none; }
+            *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body>
@@ -38,10 +980,388 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4D6Z66"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    <!-- Sektionen werden in den folgenden Tasks eingefügt -->
+<!-- ================================================================
+     NAVBAR
+================================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="navbar__inner">
+            <a href="#" class="navbar__logo">
+                <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO Logo">
+            </a>
+
+            <ul class="navbar__nav">
+                <li><a href="#so-gehts">So geht's</a></li>
+                <li><a href="#fahrzeug">Fahrzeug</a></li>
+                <li><a href="#standorte">Standorte</a></li>
+                <li><a href="#preise">Preise</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+
+            <div class="navbar__cta">
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--primary"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'navbar'})">
+                    <i class="fas fa-truck-ramp-box"></i> Jetzt mieten
+                </a>
+            </div>
+
+            <button class="navbar__burger" id="burgerBtn" aria-label="Menü öffnen">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile-Menü Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu__close" id="mobileClose" aria-label="Menü schließen">
+        <i class="fas fa-times"></i>
+    </button>
+    <a href="#so-gehts" class="mobile-link">So geht's</a>
+    <a href="#fahrzeug" class="mobile-link">Fahrzeug</a>
+    <a href="#standorte" class="mobile-link">Standorte</a>
+    <a href="#preise" class="mobile-link">Preise</a>
+    <a href="#faq" class="mobile-link">FAQ</a>
+    <a href="https://theurer-trucks-2go.fleetster.de"
+       class="btn btn--primary"
+       target="_blank"
+       rel="noopener noreferrer"
+       onclick="dataLayer.push({'event':'cta_click','cta_location':'navbar'})">
+        <i class="fas fa-truck-ramp-box"></i> Jetzt mieten
+    </a>
+</div>
+
+<!-- ================================================================
+     HERO
+================================================================ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+
+            <div class="hero__pill">
+                <span class="live-dot"></span>
+                Car-Sharing für Pferdetransporter
+            </div>
+
+            <h1 class="hero__title">
+                Entspannt transportieren.<br>
+                <em>Sicher ankommen.</em>
+            </h1>
+
+            <p class="hero__lead">
+                Premium-Pferdetransporter an Reitställen in ganz Deutschland. Einfach per App buchen — Führerschein Klasse B genügt.
+            </p>
+
+            <div class="hero__actions">
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--primary btn--lg"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'hero'})">
+                    <i class="fas fa-truck-ramp-box"></i>
+                    Jetzt kostenlos registrieren →
+                </a>
+                <a href="#so-gehts" class="btn btn--ghost btn--lg">
+                    <i class="fas fa-circle-play"></i>
+                    So funktioniert's
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Statistik-Leiste -->
+    <div class="hero__statbar">
+        <div class="container">
+            <div class="hero__stats">
+                <div class="hero__stat">
+                    <div class="hero__stat-val">100%</div>
+                    <div class="hero__stat-lbl">Versichert</div>
+                </div>
+                <div class="hero__stat">
+                    <div class="hero__stat-val">24/7</div>
+                    <div class="hero__stat-lbl">Online buchbar</div>
+                </div>
+                <div class="hero__stat">
+                    <div class="hero__stat-val">Klasse B</div>
+                    <div class="hero__stat-lbl">Führerschein</div>
+                </div>
+                <div class="hero__stat">
+                    <div class="hero__stat-val">1–2</div>
+                    <div class="hero__stat-lbl">Pferde pro Fahrt</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     AVAILABILITY CHECKER
+================================================================ -->
+<section class="avail" id="verfuegbarkeit">
+    <div class="container avail__inner">
+
+        <div class="avail__header">
+            <div class="avail__tag">
+                <span class="live-dot"></span>
+                Live-Verfügbarkeit
+            </div>
+            <h2 class="avail__title">Ist unser Transporter frei?</h2>
+            <p class="avail__sub">Wähle Zeitraum und Standort und prüfe sofort die Verfügbarkeit — unsere Fahrzeuge stehen an Reitstallparkplätzen deutschlandweit bereit</p>
+        </div>
+
+        <div class="avail__card">
+            <div class="avail__form" id="availForm">
+
+                <div class="form-group">
+                    <label class="form-label" for="startDate">
+                        <i class="fas fa-calendar-plus"></i>Startdatum &amp; Uhrzeit
+                    </label>
+                    <input type="datetime-local" class="form-input" id="startDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="endDate">
+                        <i class="fas fa-calendar-check"></i>Enddatum &amp; Uhrzeit
+                    </label>
+                    <input type="datetime-local" class="form-input" id="endDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="stationSelect">
+                        <i class="fas fa-location-dot"></i>Standort
+                    </label>
+                    <select class="form-select" id="stationSelect">
+                        <option value="">— Standort wählen —</option>
+                        <option value="hamburg">Hamburg – Reitstall Müller</option>
+                        <option value="berlin">Berlin – Pferdehof am See</option>
+                        <option value="muenchen">München – Reitanlage Süd</option>
+                        <option value="koeln">Köln – Gestüt Rheinland</option>
+                        <option value="hannover">Hannover – Reitstall Nordheide</option>
+                    </select>
+                </div>
+
+                <button class="avail__btn" onclick="checkAvailability()">
+                    <i class="fas fa-magnifying-glass"></i>
+                    Verfügbarkeit prüfen
+                </button>
+
+            </div>
+
+            <!-- Ergebnisbereich -->
+            <div class="avail__result" id="availResult">
+                <div class="avail__result-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="avail__result-text" style="flex:1">
+                    <strong>Transporter verfügbar!</strong>
+                    <p>Unser STX Pferdetransporter steht für deinen Zeitraum bereit — jetzt direkt buchen:</p>
+                </div>
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--primary"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Jetzt buchen <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     VERTRAUENS-SEKTION
+================================================================ -->
+<section class="section section--light" id="vertrauen">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-shield-halved"></i> Deine Bedenken — unsere Antworten</span>
+            <h2 class="section-title">Warum TheurerTrucks 2GO?</h2>
+            <p class="section-subtitle">Wir kennen deine Fragen — und haben die Antworten.</p>
+        </div>
+
+        <div class="trust-grid">
+
+            <!-- Karte 1: Führerschein -->
+            <div class="trust-card reveal">
+                <p class="trust-card__quote">Ich hab keinen Anhängerführerschein — darf ich den Transporter trotzdem fahren?</p>
+                <div class="trust-card__icon"><i class="fas fa-id-card"></i></div>
+                <h3 class="trust-card__title">Führerschein Klasse B reicht</h3>
+                <p class="trust-card__text">Unser STX Pferdetransporter wiegt unter 3,5 Tonnen — damit brauchst du nur deinen normalen PKW-Führerschein Klasse B. Kein BE, kein LKW-Schein, kein Sonderkurs. Einfach einsteigen und losfahren.</p>
+            </div>
+
+            <!-- Karte 2: Sicherheit -->
+            <div class="trust-card reveal delay-1">
+                <p class="trust-card__quote">Hoffentlich verletzt sich mein Pferd nicht unterwegs…</p>
+                <div class="trust-card__icon"><i class="fas fa-heart-pulse"></i></div>
+                <h3 class="trust-card__title">Sicherheit auf höchstem Niveau</h3>
+                <p class="trust-card__text">Mit Pferde-Überwachungskamera, weichem Softgummiboden, LED-Beleuchtung und komfortabler Federung ist dein Pferd bestens geschützt. Du hast dein Tier jederzeit im Blick — für eine stressfreie Fahrt.</p>
+            </div>
+
+            <!-- Karte 3: Verladen -->
+            <div class="trust-card reveal delay-2">
+                <p class="trust-card__quote">Was ist, wenn sich mein Pferd nicht verladen lässt?</p>
+                <div class="trust-card__icon"><i class="fas fa-horse"></i></div>
+                <h3 class="trust-card__title">Einfaches Verladen — ohne Stress</h3>
+                <p class="trust-card__text">Die breite Verladerampe und der niedrige Einstieg machen das Einladen auch für scheue Pferde leicht. Separate Türen vor jeder Box und viel Platz sorgen dafür, dass dein Pferd ruhig und sicher einsteigt.</p>
+            </div>
+
+            <!-- Karte 4: Kosten -->
+            <div class="trust-card reveal delay-3">
+                <p class="trust-card__quote">Lohnt sich ein eigener Anhänger wirklich noch?</p>
+                <div class="trust-card__icon"><i class="fas fa-piggy-bank"></i></div>
+                <h3 class="trust-card__title">Nur zahlen wenn du fährst</h3>
+                <p class="trust-card__text">Kein Kauf, keine Wartung, kein Stellplatz, keine TÜV-Sorgen. Mit TheurerTrucks 2GO zahlst du nur wenn du den Transporter wirklich brauchst — bereits ab 149 €/Tag inkl. Versicherung.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     VIDEO SHOWCASE
+================================================================ -->
+<section class="video-showcase" id="fahrzeug">
+    <div class="video-showcase__inner">
+
+        <!-- Video links -->
+        <div class="video-showcase__media">
+            <video autoplay muted loop playsinline>
+                <source src="img/truck-video.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Inhalt rechts -->
+        <div class="video-showcase__content">
+            <div class="video-showcase__tag"><i class="fas fa-play-circle"></i> Erlebe unseren Transporter</div>
+            <h2 class="video-showcase__title">Professionell gebaut — für dein Pferd</h2>
+
+            <ul class="video-showcase__checklist">
+                <li><i class="fas fa-check-circle"></i> Pferde-Überwachungskamera</li>
+                <li><i class="fas fa-check-circle"></i> Komfortable Federung</li>
+                <li><i class="fas fa-check-circle"></i> Platz für 1–2 Pferde</li>
+                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 5 Sitzplätze</li>
+            </ul>
+
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--primary"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'video_showcase'})">
+                <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
+            </a>
+        </div>
+
+    </div>
+</section>
 
     <script>
-        // JavaScript wird in den folgenden Tasks eingefügt
+        /* ── Navbar Scroll-Effekt ──────────────────────────────── */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+
+        /* ── Mobile Menü ──────────────────────────────────────── */
+        const burgerBtn   = document.getElementById('burgerBtn');
+        const mobileMenu  = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+
+        burgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+        // Menü bei Klick auf Link schließen
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+
+        // Menü bei Escape-Taste schließen
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                burgerBtn.focus();
+            }
+        });
+
+        /* ── Datum-Mindestdatum setzen ────────────────────────── */
+        (function setMinDates() {
+            const now = new Date();
+            now.setSeconds(0, 0);
+            const pad = n => String(n).padStart(2, '0');
+            const local = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            const startEl = document.getElementById('startDate');
+            const endEl   = document.getElementById('endDate');
+            if (startEl) startEl.min = local;
+            if (endEl)   endEl.min   = local;
+
+            if (startEl && endEl) {
+                startEl.addEventListener('change', function () {
+                    endEl.min = this.value;
+                    // Enddatum automatisch auf nächsten Tag setzen
+                    if (!endEl.value || endEl.value <= this.value) {
+                        const d = new Date(this.value);
+                        d.setDate(d.getDate() + 1);
+                        endEl.value = d.toISOString().slice(0, 16);
+                    }
+                });
+            }
+        })();
+
+        /* ── Verfügbarkeitsprüfung (Stub) ─────────────────────── */
+        function checkAvailability() {
+            const start  = document.getElementById('startDate').value;
+            const end    = document.getElementById('endDate').value;
+            const result = document.getElementById('availResult');
+
+            // Pflichtfelder prüfen
+            if (!start || !end) {
+                shakeForm();
+                return;
+            }
+            if (new Date(start) >= new Date(end)) {
+                alert('Das Enddatum muss nach dem Startdatum liegen.');
+                return;
+            }
+
+            // Lade-Animation während der Prüfung
+            const btn = document.querySelector('.avail__btn');
+            const origHTML = btn.innerHTML;
+            btn.innerHTML  = '<i class="fas fa-spinner fa-spin"></i> Wird geprüft…';
+            btn.disabled   = true;
+
+            // Demo: nach 1,2 Sekunden Ergebnis anzeigen (API-Anbindung ausstehend)
+            setTimeout(() => {
+                btn.innerHTML = origHTML;
+                btn.disabled  = false;
+                result.classList.add('visible');
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 1200);
+        }
+
+        /* Schüttel-Animation bei fehlenden Pflichtfeldern */
+        function shakeForm() {
+            const card = document.querySelector('.avail__card');
+            card.style.animation = 'none';
+            card.offsetHeight; // Reflow erzwingen
+            card.style.animation = 'shake 0.4s ease';
+        }
+
+        /* ── Scroll-Reveal via IntersectionObserver ───────────── */
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     </script>
 </body>
 </html>
