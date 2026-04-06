@@ -1602,20 +1602,11 @@
            CTA-BAND (Task 15)
         ============================================================ */
         .cta-band {
-            background: var(--dark);
+            background: linear-gradient(135deg, #0088CF, #38B6FF);
             padding: 110px 0;
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .cta-band::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(0, 136, 207, 0.12) 0%, transparent 55%),
-                radial-gradient(circle at 80% 50%, rgba(56, 182, 255, 0.08) 0%, transparent 55%);
         }
 
         .cta-band__inner { position: relative; z-index: 1; }
@@ -1891,7 +1882,7 @@
                    target="_blank"
                    rel="noopener noreferrer"
                    onclick="dataLayer.push({'event':'cta_click','cta_location':'navbar'})">
-                    <i class="fas fa-truck-ramp-box"></i> Jetzt mieten
+                    <i class="fas fa-truck-ramp-box"></i> Jetzt registrieren
                 </a>
             </div>
 
@@ -1917,9 +1908,11 @@
        target="_blank"
        rel="noopener noreferrer"
        onclick="dataLayer.push({'event':'cta_click','cta_location':'navbar'})">
-        <i class="fas fa-truck-ramp-box"></i> Jetzt mieten
+        <i class="fas fa-truck-ramp-box"></i> Jetzt registrieren
     </a>
 </div>
+
+<main>
 
 <!-- ================================================================
      HERO
@@ -1947,7 +1940,7 @@
                    class="btn btn--primary btn--lg"
                    target="_blank"
                    rel="noopener noreferrer"
-                   onclick="dataLayer.push({'event':'cta_click','cta_location':'hero'})">
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'hero_cta'})">
                     <i class="fas fa-truck-ramp-box"></i>
                     Jetzt kostenlos registrieren →
                 </a>
@@ -1996,8 +1989,8 @@
                 <span class="live-dot"></span>
                 Live-Verfügbarkeit
             </div>
-            <h2 class="avail__title">Ist unser Transporter frei?</h2>
-            <p class="avail__sub">Wähle Zeitraum und Standort und prüfe sofort die Verfügbarkeit — unsere Fahrzeuge stehen an Reitstallparkplätzen deutschlandweit bereit</p>
+            <h2 class="avail__title">Wann brauchst du einen Transporter?</h2>
+            <p class="avail__sub">Prüfe in Sekunden, ob ein Fahrzeug an deinem Wunschstandort frei ist.</p>
         </div>
 
         <div class="avail__card">
@@ -2067,8 +2060,8 @@
 
         <div class="section-header reveal">
             <span class="section-tag"><i class="fas fa-shield-halved"></i> Deine Bedenken — unsere Antworten</span>
-            <h2 class="section-title">Warum TheurerTrucks 2GO?</h2>
-            <p class="section-subtitle">Wir kennen deine Fragen — und haben die Antworten.</p>
+            <h2 class="section-title">Entspannt transportieren statt Stress</h2>
+            <p class="section-subtitle">Wir kennen die Herausforderungen beim Pferdetransport — und haben sie gelöst.</p>
         </div>
 
         <div class="trust-grid">
@@ -2129,17 +2122,17 @@
             <h2 class="video-showcase__title">Professionell gebaut — für dein Pferd</h2>
 
             <ul class="video-showcase__checklist">
-                <li><i class="fas fa-check-circle"></i> Pferde-Überwachungskamera</li>
-                <li><i class="fas fa-check-circle"></i> Komfortable Federung</li>
-                <li><i class="fas fa-check-circle"></i> Platz für 1–2 Pferde</li>
-                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 5 Sitzplätze</li>
+                <li><i class="fas fa-check-circle"></i> Pferde-Überwachungskamera während der Fahrt</li>
+                <li><i class="fas fa-check-circle"></i> Komfortable Federung für stressfreien Transport</li>
+                <li><i class="fas fa-check-circle"></i> Platz für 1 Großpferd oder 2 kleinere Pferde</li>
+                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 5 Sitzplätze inklusive</li>
             </ul>
 
             <a href="https://theurer-trucks-2go.fleetster.de"
                class="btn btn--primary"
                target="_blank"
                rel="noopener noreferrer"
-               onclick="dataLayer.push({'event':'cta_click','cta_location':'video_showcase'})">
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'video_cta'})">
                 <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
             </a>
         </div>
@@ -2364,7 +2357,7 @@
 
         <div class="section-header reveal">
             <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
-            <h2 class="section-title">Transporter in deiner Nähe finden</h2>
+            <h2 class="section-title">Unsere Standorte</h2>
             <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
         </div>
 
@@ -2381,12 +2374,12 @@
 
         <!-- CTA #3 -->
         <div class="locations__cta reveal delay-2">
-            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Direkt online buchen.</p>
+            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Registriere dich und buche an deinem nächsten Standort</p>
             <a href="https://theurer-trucks-2go.fleetster.de"
                class="btn btn--primary btn--lg"
                target="_blank"
                rel="noopener noreferrer"
-               onclick="dataLayer.push({'event':'cta_click','cta_location':'standortkarte'})">
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'map_cta'})">
                 <i class="fas fa-truck-ramp-box"></i> Jetzt Transporter buchen
             </a>
         </div>
@@ -2433,7 +2426,7 @@
 
         <div class="section-header reveal">
             <span class="section-tag"><i class="fas fa-play-circle"></i> Erklärvideo</span>
-            <h2 class="section-title">Alles auf einen Blick</h2>
+            <h2 class="section-title">Schau dir an, wie einfach es funktioniert</h2>
             <p class="section-subtitle">In wenigen Minuten zeigen wir dir, wie einfach die Buchung funktioniert.</p>
         </div>
 
@@ -2453,7 +2446,7 @@
                class="btn btn--primary btn--lg"
                target="_blank"
                rel="noopener noreferrer"
-               onclick="dataLayer.push({'event':'cta_click','cta_location':'explainer_video'})">
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'explainer_cta'})">
                 <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
             </a>
         </div>
@@ -2464,7 +2457,7 @@
 <!-- ================================================================
      PREISE & TARIFE (Task 13)
 ================================================================ -->
-<section class="section section--light" id="preise">
+<section class="section" id="preise">
     <div class="container">
 
         <div class="section-header reveal">
@@ -2554,7 +2547,7 @@
 <!-- ================================================================
      FAQ (Task 14)
 ================================================================ -->
-<section class="section" id="faq">
+<section class="section section--light" id="faq">
     <div class="container">
 
         <div class="section-header reveal">
@@ -2663,7 +2656,7 @@
                rel="noopener noreferrer"
                onclick="dataLayer.push({'event':'cta_click','cta_location':'final_cta'})">
                 <i class="fas fa-truck-ramp-box"></i>
-                Jetzt kostenlos registrieren
+                Jetzt kostenlos registrieren <i class="fas fa-arrow-right"></i>
             </a>
             <a href="#fahrzeug" class="btn btn--ghost btn--lg">
                 <i class="fas fa-images"></i>
@@ -2672,6 +2665,8 @@
         </div>
     </div>
 </section>
+
+</main>
 
 <!-- ================================================================
      FOOTER (Task 15)
@@ -2721,6 +2716,11 @@
                     <li>
                         <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
                             Kostenlos registrieren
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Anmelden
                         </a>
                     </li>
                     <li>
