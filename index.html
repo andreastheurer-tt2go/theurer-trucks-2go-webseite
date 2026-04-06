@@ -19,6 +19,69 @@
     <!-- Preload Hero Image -->
     <link rel="preload" as="image" href="img/truck-front.jpg">
 
+    <!-- Leaflet Karten-CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet Karten-JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- FAQPage Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Brauche ich einen speziellen Führerschein?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nein, dein normaler Führerschein Klasse B reicht vollständig aus. Unser STX Pferdetransporter hat ein zulässiges Gesamtgewicht unter 3,5 Tonnen — kein Anhängerführerschein (BE) und kein LKW-Führerschein nötig."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Wie funktioniert die Buchung?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Registriere dich kostenlos bei fleetster, wähle deinen Standort und deinen Wunschzeitraum, buche online und öffne das Fahrzeug am Abholtag per App. Der Schlüssel liegt im Handschuhfach."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Wo stehen die Transporter?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit — immer in der Nähe von Reitanlagen, damit du kurze Wege hast."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Was kostet die Miete?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ab 149 € pro Tag (inkl. MwSt. und Vollkaskoversicherung). Das Wochenend-Tarif kostet 420 €, die Wochenmiete 775 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,42 €/km. Diesel wird separat berechnet."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Ist das Fahrzeug versichert?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ja, unser Transporter ist zu 100 % vollkaskoversichert. Die Versicherung ist im Mietpreis enthalten — kein Aufpreis, keine bösen Überraschungen."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Wie viele Pferde passen in den Transporter?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Der STX Pferdetransporter bietet Platz für 1 Großpferd oder 2 kleinere Pferde. Die maximale Zuladung beträgt 950 kg."
+                }
+            }
+        ]
+    }
+    </script>
+
     <!-- Cookiebot -->
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="DEINE-COOKIEBOT-ID" data-blockingmode="auto" type="text/javascript"></script>
 
@@ -915,6 +978,767 @@
         }
 
         /* ============================================================
+           FAHRZEUG-SHOWCASE (Task 8)
+        ============================================================ */
+        .vehicle {
+            padding: 110px 0;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vehicle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 136, 207, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(56, 182, 255, 0.05) 0%, transparent 50%);
+        }
+
+        .vehicle .section-header { position: relative; z-index: 1; }
+
+        .vehicle__showcase {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 56px;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vehicle__main {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            background: var(--dark-soft);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .vehicle__main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.4s var(--ease);
+        }
+
+        .vehicle__main-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--primary);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            z-index: 2;
+        }
+
+        .vehicle__thumbs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .vehicle__thumb {
+            aspect-ratio: 4 / 3;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+
+        .vehicle__thumb:hover { opacity: 0.8; }
+
+        .vehicle__thumb.active {
+            border-color: var(--primary-bright);
+            opacity: 1;
+            box-shadow: 0 0 0 2px rgba(56, 182, 255, 0.3);
+        }
+
+        .vehicle__thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vehicle__info { padding-top: 10px; }
+
+        .vehicle__badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(56, 182, 255, 0.12);
+            color: var(--primary-bright);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            margin-bottom: 18px;
+        }
+
+        .vehicle__name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .vehicle__tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-bright);
+            margin-bottom: 20px;
+        }
+
+        .vehicle__desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+
+        .vehicle__specs {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .vehicle__spec {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .vehicle__spec:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(56, 182, 255, 0.2);
+        }
+
+        .vehicle__spec-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 136, 207, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-bright);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .vehicle__spec-text strong {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--white);
+        }
+
+        .vehicle__spec-text span {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* ============================================================
+           AUSSTATTUNGS-GALERIE (Task 8)
+        ============================================================ */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .gallery-grid__item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            cursor: pointer;
+        }
+
+        .gallery-grid__item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--ease);
+        }
+
+        .gallery-grid__item:hover img { transform: scale(1.08); }
+
+        .gallery-grid__item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+
+        .gallery-grid__item:hover::after { opacity: 1; }
+
+        .gallery-grid__label {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            right: 14px;
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.35s, transform 0.35s;
+        }
+
+        .gallery-grid__item:hover .gallery-grid__label {
+            opacity: 1;
+            transform: none;
+        }
+
+        .gallery-grid__item--wide { grid-column: span 2; }
+
+        /* ============================================================
+           SO GEHT'S — 4 SCHRITTE (Task 9)
+        ============================================================ */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: calc(12.5% + 12px);
+            right: calc(12.5% + 12px);
+            height: 2px;
+            background: repeating-linear-gradient(
+                to right,
+                var(--primary) 0,
+                var(--primary) 14px,
+                transparent 14px,
+                transparent 22px
+            );
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .step {
+            text-align: center;
+            padding: 0 12px;
+        }
+
+        .step__num {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 0 8px var(--light), var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .step__num i {
+            font-size: 1.6rem;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+
+        .step:hover .step__num {
+            background: var(--primary);
+            box-shadow: 0 0 0 8px var(--light), var(--shadow-blue);
+        }
+
+        .step:hover .step__num i { color: var(--white); }
+
+        .step__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .step__text {
+            font-size: 0.87rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           STANDORTKARTE (Task 10)
+        ============================================================ */
+        .locations__search {
+            display: flex;
+            gap: 12px;
+            max-width: 480px;
+            margin: 0 auto 40px;
+        }
+
+        .locations__search .form-input {
+            flex: 1;
+        }
+
+        .locations__map {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            height: 500px;
+            box-shadow: var(--shadow-lg);
+            border: 1.5px solid var(--border);
+        }
+
+        .locations__cta {
+            text-align: center;
+            margin-top: 36px;
+        }
+
+        /* ============================================================
+           TRUSTPILOT-BEWERTUNGEN (Task 11)
+        ============================================================ */
+        .trustpilot-section {
+            text-align: center;
+        }
+
+        .trustpilot-widget-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .trustpilot-fallback {
+            margin-top: 24px;
+            font-size: 0.87rem;
+            color: var(--text-light);
+        }
+
+        .trustpilot-fallback a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           ERKLÄRVIDEO VIMEO (Task 12)
+        ============================================================ */
+        .explainer {
+            text-align: center;
+        }
+
+        .explainer__video {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            margin: 0 auto 40px;
+            max-width: 900px;
+        }
+
+        .explainer__video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: var(--radius-lg);
+        }
+
+        /* ============================================================
+           PREISE & TARIFE (Task 13)
+        ============================================================ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 44px 30px;
+            border: 2px solid var(--border);
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .pricing-card.featured:hover {
+            box-shadow: var(--shadow-blue-lg);
+        }
+
+        .pricing-card__ribbon {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-grad);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 20px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+        }
+
+        .pricing-card__icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-ghost);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .pricing-card.featured .pricing-card__icon {
+            background: rgba(0, 136, 207, 0.12);
+        }
+
+        .pricing-card__name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .pricing-card__price {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+
+        .pricing-card__price sup {
+            font-size: 1.1rem;
+            vertical-align: super;
+            font-weight: 700;
+        }
+
+        .pricing-card__unit {
+            font-size: 0.84rem;
+            color: var(--text-light);
+            margin: 6px 0 28px;
+        }
+
+        .pricing-card__list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .pricing-card__list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.87rem;
+            color: var(--text);
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .pricing-card__list li:last-child { border-bottom: none; }
+        .pricing-card__list li i { color: var(--primary); font-size: 0.85rem; }
+
+        .pricing-note {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 0.84rem;
+            color: var(--text-light);
+        }
+
+        .pricing-note i { margin-right: 4px; }
+
+        /* ============================================================
+           FAQ (Task 14)
+        ============================================================ */
+        .faq-wrap {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .faq-item.open {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 136, 207, 0.08);
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 24px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-q h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+        }
+
+        .faq-toggle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .faq-item.open .faq-toggle {
+            background: var(--primary);
+            color: var(--white);
+            transform: rotate(45deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
+            padding: 0 24px;
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.85;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 500px;
+            padding: 0 24px 22px;
+        }
+
+        /* ============================================================
+           CTA-BAND (Task 15)
+        ============================================================ */
+        .cta-band {
+            background: var(--dark);
+            padding: 110px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 136, 207, 0.12) 0%, transparent 55%),
+                radial-gradient(circle at 80% 50%, rgba(56, 182, 255, 0.08) 0%, transparent 55%);
+        }
+
+        .cta-band__inner { position: relative; z-index: 1; }
+
+        .cta-band__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--white);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-band__sub {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.55);
+            max-width: 460px;
+            margin: 0 auto 44px;
+            line-height: 1.75;
+        }
+
+        .cta-band__actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           FOOTER (Task 15)
+        ============================================================ */
+        .footer {
+            background: #0a0d10;
+            padding: 72px 0 32px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.3fr;
+            gap: 48px;
+            margin-bottom: 52px;
+        }
+
+        .footer__logo { margin-bottom: 16px; }
+
+        .footer__logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .footer__desc {
+            font-size: 0.87rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer__social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer__social a:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer__col-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer__links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer__links a {
+            font-size: 0.87rem;
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__links a:hover { color: var(--primary-bright); }
+
+        .footer__contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.87rem;
+        }
+
+        .footer__contact-row i {
+            color: var(--primary-bright);
+            margin-top: 3px;
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        .footer__bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer__bar-links {
+            display: flex;
+            gap: 22px;
+        }
+
+        .footer__bar-links a {
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__bar-links a:hover { color: var(--primary-bright); }
+
+        /* ============================================================
            RESPONSIVE
         ============================================================ */
         @media (max-width: 1024px) {
@@ -937,6 +1761,24 @@
             .video-showcase__inner { grid-template-columns: 1fr; }
             .video-showcase__media { min-height: 320px; }
             .video-showcase__content { padding: 48px 32px; }
+
+            /* Fahrzeug: 1 Spalte auf Tablet */
+            .vehicle__showcase { grid-template-columns: 1fr; gap: 40px; }
+            .vehicle__thumbs { grid-template-columns: repeat(4, 1fr); }
+
+            /* Ausstattungs-Galerie: 2 Spalten auf Tablet */
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid__item--wide { grid-column: span 1; }
+
+            /* So geht's: 2 Spalten auf Tablet */
+            .steps { grid-template-columns: repeat(2, 1fr); }
+            .steps::before { display: none; }
+
+            /* Preise: 2+1 auf Tablet */
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); max-width: 700px; }
+
+            /* Footer: 2 Spalten auf Tablet */
+            .footer__grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 768px) {
@@ -961,10 +1803,33 @@
             }
 
             .section-header { margin-bottom: 48px; }
+
+            /* Fahrzeug: Padding anpassen */
+            .vehicle { padding: 80px 0; }
+
+            /* So geht's: 1 Spalte auf Mobile */
+            .steps { grid-template-columns: 1fr; }
+
+            /* Ausstattungs-Galerie: 1 Spalte auf Mobile */
+            .gallery-grid { grid-template-columns: 1fr; }
+
+            /* Standortkarte: reduzierte Höhe und gestapelte Suche */
+            .locations__map { height: 350px; }
+            .locations__search { flex-direction: column; }
+
+            /* Preise: 1 Spalte auf Mobile */
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+
+            /* Footer: 1 Spalte auf Mobile */
+            .footer__grid { grid-template-columns: 1fr; gap: 32px; }
+            .footer__bar { flex-direction: column; text-align: center; }
+            .footer__bar-links { justify-content: center; }
         }
 
         @media (max-width: 480px) {
             .hero__stats { grid-template-columns: 1fr 1fr; }
+            /* Fahrzeug-Thumbnails: 3 Spalten auf sehr kleinen Screens */
+            .vehicle__thumbs { grid-template-columns: repeat(3, 1fr); }
         }
 
         /* Reduzierte Bewegung für Barrierefreiheit */
@@ -1226,7 +2091,7 @@
 <!-- ================================================================
      VIDEO SHOWCASE
 ================================================================ -->
-<section class="video-showcase" id="fahrzeug">
+<section class="video-showcase" id="video-showcase">
     <div class="video-showcase__inner">
 
         <!-- Video links -->
@@ -1259,6 +2124,625 @@
 
     </div>
 </section>
+
+<!-- ================================================================
+     FAHRZEUG-DETAIL (Task 8)
+================================================================ -->
+<section class="vehicle section--dark" id="fahrzeug">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-truck"></i> Unser Fahrzeug</span>
+            <h2 class="section-title">Der STX Pferdetransporter</h2>
+            <p class="section-subtitle">Premium-Transport für 1 Großpferd oder 2 kleinere Pferde auf Renault Master Basis — fahrbar mit Führerschein Klasse B.</p>
+        </div>
+
+        <div class="vehicle__showcase">
+
+            <!-- Galerie -->
+            <div class="vehicle__gallery reveal">
+                <div class="vehicle__main">
+                    <span class="vehicle__main-badge">STX Pferdetransporter</span>
+                    <img id="mainVehicleImg" src="img/truck-front.jpg" alt="STX Pferdetransporter Frontansicht">
+                </div>
+                <div class="vehicle__thumbs">
+                    <button class="vehicle__thumb active" data-img="img/truck-front.jpg" aria-label="Frontansicht">
+                        <img src="img/truck-front.jpg" alt="Frontansicht">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/horse-stall.jpg" aria-label="Pferdeboxen">
+                        <img src="img/horse-stall.jpg" alt="Pferdeboxen">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/interior-corridor.jpg" aria-label="Innenraum">
+                        <img src="img/interior-corridor.jpg" alt="Innenraum">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/rearview-camera.jpg" aria-label="Rückfahrkamera">
+                        <img src="img/rearview-camera.jpg" alt="Rückfahrkamera">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/navigation.jpg" aria-label="Navigation">
+                        <img src="img/navigation.jpg" alt="Navigation">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/ventilation-lights.jpg" aria-label="Belüftung & LED">
+                        <img src="img/ventilation-lights.jpg" alt="Belüftung und LED">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/skylight.jpg" aria-label="Dachfenster">
+                        <img src="img/skylight.jpg" alt="Dachfenster">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/dashboard.jpg" aria-label="Armaturenbrett">
+                        <img src="img/dashboard.jpg" alt="Armaturenbrett">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fahrzeug-Infos -->
+            <div class="vehicle__info reveal delay-2">
+                <div class="vehicle__badge-tag"><i class="fas fa-star"></i> Premium-Qualität</div>
+                <h3 class="vehicle__name">STX Pferdetransporter</h3>
+                <p class="vehicle__tagline">Renault Master Basis &bull; 1 Großpferd oder 2 kleinere &bull; Klasse B</p>
+                <p class="vehicle__desc">
+                    Unser STX Pferdetransporter bietet höchsten Komfort und maximale Sicherheit für dein Pferd. Gepolsterte Einzelboxen mit Hengstausstattung, komfortable Federung, Softgummiboden und eine durchdachte Belüftung sorgen für stressfreien Transport — egal ob zum Turnier oder zum Tierarzt.
+                </p>
+
+                <div class="vehicle__specs">
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-horse"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>1 Großpferd oder 2 kleinere</strong>
+                            <span>Hengstausstattung mit hoher Trennwand · 950 kg Zuladung</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-id-card"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>Führerschein Klasse B</strong>
+                            <span>Unter 3,5 t — kein BE oder LKW-Schein nötig</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-camera"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>Rückfahr- &amp; Pferdeüberwachungskamera</strong>
+                            <span>Sicheres Rangieren und Pferdekontrolle</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-couch"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>Komfortable Federung &amp; Softgummiboden</strong>
+                            <span>Sanftes Fahrverhalten für maximales Tierwohl</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-users"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>5 Sitzplätze &amp; Klimaanlage</strong>
+                            <span>Platz für die ganze Crew</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>LED-Beleuchtung &amp; Dachluke mit Ventilator</strong>
+                            <span>Optimale Belüftung und natürliches Licht</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-trailer"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>Anhängerkupplung (2.500 kg)</strong>
+                            <span>Sattelkammer mit Haltern für Sättel &amp; Trensen</span>
+                        </div>
+                    </div>
+                    <div class="vehicle__spec">
+                        <div class="vehicle__spec-icon"><i class="fas fa-gauge-high"></i></div>
+                        <div class="vehicle__spec-text">
+                            <strong>Keine 80 km/h Beschränkung</strong>
+                            <span>Schneller am Ziel als mit Anhänger</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--primary btn--lg"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'fahrzeug_detail'})">
+                    <i class="fas fa-truck-ramp-box"></i> Jetzt buchen
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     AUSSTATTUNGS-GALERIE (Task 8)
+================================================================ -->
+<section class="section" id="ausstattung">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-images"></i> Ausstattung im Detail</span>
+            <h2 class="section-title">Komfort &amp; Sicherheit auf höchstem Niveau</h2>
+            <p class="section-subtitle">Jedes Detail ist auf das Wohl deines Pferdes ausgelegt — überzeuge dich selbst.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-grid__item gallery-grid__item--wide reveal">
+                <img src="img/horse-stall.jpg" alt="Pferdeboxen im Transporter" loading="lazy">
+                <span class="gallery-grid__label">Gepolsterte Pferdeboxen</span>
+            </div>
+            <div class="gallery-grid__item reveal delay-1">
+                <img src="img/rearview-camera.jpg" alt="Rückfahr- und Pferdeüberwachungskamera" loading="lazy">
+                <span class="gallery-grid__label">Rückfahr- &amp; Pferdeüberwachungskamera</span>
+            </div>
+            <div class="gallery-grid__item reveal delay-2">
+                <img src="img/navigation.jpg" alt="Navigationssystem" loading="lazy">
+                <span class="gallery-grid__label">Navigationssystem</span>
+            </div>
+            <div class="gallery-grid__item reveal delay-1">
+                <img src="img/ventilation-lights.jpg" alt="Belüftung und LED-Beleuchtung" loading="lazy">
+                <span class="gallery-grid__label">Belüftung &amp; LED-Licht</span>
+            </div>
+            <div class="gallery-grid__item reveal delay-2">
+                <img src="img/skylight.jpg" alt="Dachluke mit Beleuchtung" loading="lazy">
+                <span class="gallery-grid__label">Dachluke &amp; Beleuchtung</span>
+            </div>
+            <div class="gallery-grid__item gallery-grid__item--wide reveal delay-3">
+                <img src="img/interior-corridor.jpg" alt="Innenraum mit Trennwänden" loading="lazy">
+                <span class="gallery-grid__label">Professioneller Innenraum</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     SO GEHT'S — 4 SCHRITTE (Task 9)
+================================================================ -->
+<section class="section section--light" id="so-gehts">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-list-ol"></i> So einfach geht's</span>
+            <h2 class="section-title">In 4 Schritten zum Pferdetransport</h2>
+            <p class="section-subtitle">Von der Registrierung bis zum Losfahren — schnell, einfach und komplett digital.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step reveal">
+                <div class="step__num"><i class="fas fa-user-plus"></i></div>
+                <h3 class="step__title">Kostenlos registrieren</h3>
+                <p class="step__text">Erstelle deinen Account bei fleetster — kostenlos und in unter 2 Minuten.</p>
+            </div>
+            <div class="step reveal delay-1">
+                <div class="step__num"><i class="fas fa-location-dot"></i></div>
+                <h3 class="step__title">Standort wählen</h3>
+                <p class="step__text">Finde den nächsten Reitstall-Parkplatz mit einem verfügbaren Transporter.</p>
+            </div>
+            <div class="step reveal delay-2">
+                <div class="step__num"><i class="fas fa-calendar-check"></i></div>
+                <h3 class="step__title">Online buchen</h3>
+                <p class="step__text">Reserviere deinen Wunschzeitraum direkt über die App oder im Browser.</p>
+            </div>
+            <div class="step reveal delay-3">
+                <div class="step__num"><i class="fas fa-truck-ramp-box"></i></div>
+                <h3 class="step__title">Losfahren</h3>
+                <p class="step__text">Öffne das Fahrzeug per App, Schlüssel liegt im Handschuhfach — fertig!</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     STANDORTKARTE (Task 10)
+================================================================ -->
+<section class="section" id="standorte">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
+            <h2 class="section-title">Transporter in deiner Nähe finden</h2>
+            <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
+        </div>
+
+        <!-- PLZ-Suche -->
+        <div class="locations__search reveal">
+            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric">
+            <button class="btn btn--primary" onclick="searchLocation()">
+                <i class="fas fa-magnifying-glass"></i> Suchen
+            </button>
+        </div>
+
+        <!-- Karte -->
+        <div class="locations__map reveal delay-1" id="map"></div>
+
+        <!-- CTA #3 -->
+        <div class="locations__cta reveal delay-2">
+            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Direkt online buchen.</p>
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--primary btn--lg"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'standortkarte'})">
+                <i class="fas fa-truck-ramp-box"></i> Jetzt Transporter buchen
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     TRUSTPILOT-BEWERTUNGEN (Task 11)
+================================================================ -->
+<section class="section section--light trustpilot-section" id="bewertungen">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-star"></i> Kundenstimmen</span>
+            <h2 class="section-title">Das sagen unsere Nutzerinnen</h2>
+            <p class="section-subtitle">Echte Erfahrungen von Reiterinnen und Reitern, die mit TheurerTrucks 2GO unterwegs waren.</p>
+        </div>
+
+        <div class="trustpilot-widget-container reveal">
+            <!-- Trustpilot Widget -->
+            <div class="trustpilot-widget"
+                 data-locale="de-DE"
+                 data-template-id="DEINE-TEMPLATE-ID"
+                 data-businessunit-id="DEINE-BUSINESS-ID"
+                 data-style-height="240px"
+                 data-style-width="100%"
+                 data-theme="light">
+            </div>
+            <p class="trustpilot-fallback">
+                Alle Bewertungen auch direkt auf
+                <a href="https://www.trustpilot.com" target="_blank" rel="noopener noreferrer">Trustpilot</a> ansehen.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     ERKLÄRVIDEO VIMEO (Task 12)
+================================================================ -->
+<section class="section explainer" id="erklaervideo">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-play-circle"></i> Erklärvideo</span>
+            <h2 class="section-title">Alles auf einen Blick</h2>
+            <p class="section-subtitle">In wenigen Minuten zeigen wir dir, wie einfach die Buchung funktioniert.</p>
+        </div>
+
+        <!-- Vimeo 16:9 responsiv -->
+        <div class="explainer__video reveal">
+            <iframe
+                src="https://player.vimeo.com/video/1019195471?title=0&byline=0&portrait=0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                title="TheurerTrucks 2GO Erklärvideo">
+            </iframe>
+        </div>
+
+        <!-- CTA #4 -->
+        <div class="reveal delay-1">
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--primary btn--lg"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'explainer_video'})">
+                <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     PREISE & TARIFE (Task 13)
+================================================================ -->
+<section class="section section--light" id="preise">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-tag"></i> Preise &amp; Tarife</span>
+            <h2 class="section-title">Transparente Preise — kein Kleingedrucktes</h2>
+            <p class="section-subtitle">Faire Tarife für unseren STX Pferdetransporter. Alle Preise brutto inkl. MwSt. und Versicherung.</p>
+        </div>
+
+        <div class="pricing-grid">
+
+            <!-- Tagesmiete -->
+            <div class="pricing-card reveal">
+                <div class="pricing-card__icon"><i class="fas fa-sun"></i></div>
+                <div class="pricing-card__name">Tagesmiete</div>
+                <div class="pricing-card__price"><sup>€</sup>149</div>
+                <div class="pricing-card__unit">pro Tag (24 h) inkl. MwSt.</div>
+                <ul class="pricing-card__list">
+                    <li><i class="fas fa-check"></i> 200 Freikilometer</li>
+                    <li><i class="fas fa-check"></i> Vollkaskoversicherung inklusive</li>
+                    <li><i class="fas fa-check"></i> Rückfahr- &amp; Überwachungskamera</li>
+                    <li><i class="fas fa-check"></i> App-Öffnung &amp; digitale Abwicklung</li>
+                </ul>
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--outline btn--full"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'preise_tag'})">
+                    Jetzt buchen
+                </a>
+            </div>
+
+            <!-- Wochenendmiete (featured) -->
+            <div class="pricing-card featured reveal delay-1">
+                <div class="pricing-card__ribbon">Meistgebucht</div>
+                <div class="pricing-card__icon"><i class="fas fa-trophy"></i></div>
+                <div class="pricing-card__name">Wochenendmiete</div>
+                <div class="pricing-card__price"><sup>€</sup>420</div>
+                <div class="pricing-card__unit">Fr – So (72 h) inkl. MwSt.</div>
+                <ul class="pricing-card__list">
+                    <li><i class="fas fa-check"></i> 500 Freikilometer</li>
+                    <li><i class="fas fa-check"></i> Vollkaskoversicherung inklusive</li>
+                    <li><i class="fas fa-check"></i> Rückfahr- &amp; Überwachungskamera</li>
+                    <li><i class="fas fa-check"></i> App-Öffnung &amp; digitale Abwicklung</li>
+                    <li><i class="fas fa-check"></i> Ideal für Turniere &amp; Turnierreisen</li>
+                </ul>
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--primary btn--full"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'preise_wochenende'})">
+                    Jetzt buchen
+                </a>
+            </div>
+
+            <!-- Wochenmiete -->
+            <div class="pricing-card reveal delay-2">
+                <div class="pricing-card__icon"><i class="fas fa-calendar-week"></i></div>
+                <div class="pricing-card__name">Wochenmiete</div>
+                <div class="pricing-card__price"><sup>€</sup>775</div>
+                <div class="pricing-card__unit">pro Woche (7 Tage) inkl. MwSt.</div>
+                <ul class="pricing-card__list">
+                    <li><i class="fas fa-check"></i> 1.000 Freikilometer</li>
+                    <li><i class="fas fa-check"></i> Vollkaskoversicherung inklusive</li>
+                    <li><i class="fas fa-check"></i> Rückfahr- &amp; Überwachungskamera</li>
+                    <li><i class="fas fa-check"></i> App-Öffnung &amp; digitale Abwicklung</li>
+                    <li><i class="fas fa-check"></i> Sonderkonditionen möglich</li>
+                </ul>
+                <a href="https://theurer-trucks-2go.fleetster.de"
+                   class="btn btn--outline btn--full"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="dataLayer.push({'event':'cta_click','cta_location':'preise_woche'})">
+                    Jetzt buchen
+                </a>
+            </div>
+
+        </div>
+
+        <p class="pricing-note reveal">
+            <i class="fas fa-circle-info" style="color:var(--primary)"></i>
+            Alle Preise brutto inkl. MwSt. Mehrkilometer: 0,42 €/km. Dieselkosten werden separat berechnet. Genaue Preise siehst du auf der Buchungsplattform.
+        </p>
+
+    </div>
+</section>
+
+<!-- ================================================================
+     FAQ (Task 14)
+================================================================ -->
+<section class="section" id="faq">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-circle-question"></i> Häufige Fragen</span>
+            <h2 class="section-title">Deine Fragen — unsere Antworten</h2>
+            <p class="section-subtitle">Alles Wichtige für deine erste Buchung auf einen Blick.</p>
+        </div>
+
+        <div class="faq-wrap">
+
+            <div class="faq-item reveal">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Brauche ich einen speziellen Führerschein?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Nein, dein normaler Führerschein Klasse B reicht vollständig aus. Unser STX Pferdetransporter hat ein zulässiges Gesamtgewicht unter 3,5 Tonnen — kein Anhängerführerschein (BE) und kein LKW-Führerschein nötig. Einfach einsteigen und losfahren.
+                </div>
+            </div>
+
+            <div class="faq-item reveal delay-1">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Wie funktioniert die Buchung?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Registriere dich kostenlos bei fleetster, wähle deinen Standort und Wunschzeitraum, buche online und öffne das Fahrzeug am Abholtag per App. Der Schlüssel liegt im Handschuhfach — gewartet und versichert.
+                </div>
+            </div>
+
+            <div class="faq-item reveal delay-2">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Wo stehen die Transporter?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit — immer direkt an Reitanlagen, damit du kurze Wege hast und dein Pferd schnell verladen kannst.
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Was kostet die Miete?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Ab 149 € pro Tag (brutto inkl. MwSt. und Vollkaskoversicherung). Das Wochenend-Tarif kostet 420 €, die Wochenmiete 775 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,42 €/km. Diesel wird separat berechnet.
+                </div>
+            </div>
+
+            <div class="faq-item reveal delay-1">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Ist das Fahrzeug versichert?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Ja, unser Transporter ist zu 100 % vollkaskoversichert. Die Versicherung ist im Mietpreis enthalten — kein Aufpreis, keine bösen Überraschungen. Eventuelle Selbstbeteiligungen werden beim Buchungsvorgang angezeigt.
+                </div>
+            </div>
+
+            <div class="faq-item reveal delay-2">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Wie viele Pferde passen in den Transporter?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Der STX Pferdetransporter bietet Platz für 1 Großpferd oder 2 kleinere Pferde. Die maximale Zuladung beträgt 950 kg. Die Hengstausstattung mit hoher, verstellbarer Trennwand sorgt für maximale Sicherheit.
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Wie funktioniert das Verladen?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Die breite Verladerampe und der niedrige Einstieg machen das Einladen auch für scheue Pferde leicht. Separate Türen vor jeder Box und eine Pferdeüberwachungskamera sorgen für maximale Sicherheit während der Fahrt.
+                </div>
+            </div>
+
+            <div class="faq-item reveal delay-1">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    <h4>Was passiert bei einer Panne?</h4>
+                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                </div>
+                <div class="faq-a">
+                    Im Pannenfall erreichst du unseren Support über die App oder die Kontaktdaten im Fahrzeug. Alle nötigen Infos — Pannendienst, Notfallkontakt und Versicherungsdaten — sind im Fahrzeug hinterlegt und in der App abrufbar.
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     CTA-BAND (Task 15)
+================================================================ -->
+<section class="cta-band">
+    <div class="container cta-band__inner">
+        <h2 class="cta-band__title">Bereit für deinen ersten Transport?</h2>
+        <p class="cta-band__sub">Registriere dich jetzt kostenlos und buche unseren STX Pferdetransporter direkt online.</p>
+        <div class="cta-band__actions">
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--white btn--lg"
+               target="_blank"
+               rel="noopener noreferrer"
+               onclick="dataLayer.push({'event':'cta_click','cta_location':'final_cta'})">
+                <i class="fas fa-truck-ramp-box"></i>
+                Jetzt kostenlos registrieren
+            </a>
+            <a href="#fahrzeug" class="btn btn--ghost btn--lg">
+                <i class="fas fa-images"></i>
+                Fahrzeug ansehen
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     FOOTER (Task 15)
+================================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__grid">
+
+            <!-- Brand -->
+            <div>
+                <div class="footer__logo">
+                    <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO">
+                </div>
+                <p class="footer__desc">
+                    Car-Sharing für Pferdetransporter — sichere Mobilität für Pferd und Reiter. STX Transporter für 1 Großpferd oder 2 kleinere Pferde, abholbereit an Reitstallparkplätzen deutschlandweit.
+                </p>
+                <div class="footer__social">
+                    <a href="https://www.instagram.com/theurer_trucks_2go/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/theurertrucks2go" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div>
+                <div class="footer__col-title">Navigation</div>
+                <ul class="footer__links">
+                    <li><a href="#verfuegbarkeit">Verfügbarkeit prüfen</a></li>
+                    <li><a href="#so-gehts">So geht's</a></li>
+                    <li><a href="#fahrzeug">Unser Fahrzeug</a></li>
+                    <li><a href="#standorte">Standorte</a></li>
+                    <li><a href="#preise">Preise</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Konto & App -->
+            <div>
+                <div class="footer__col-title">Konto &amp; App</div>
+                <ul class="footer__links">
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Kostenlos registrieren
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://apps.apple.com/us/app/theurertrucks-2go/id1589088586" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-apple" style="margin-right:6px;"></i>App Store
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://play.google.com/store/apps/details?id=theurertrucks2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google-play" style="margin-right:6px;"></i>Google Play
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Kontakt -->
+            <div>
+                <div class="footer__col-title">Kontakt</div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-building"></i>
+                    <span>TheurerTrucks Renting GmbH</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Hamburger Str. 65, 23816 Leezen</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:info@theurer-trucks-2go.de" style="color:inherit;">info@theurer-trucks-2go.de</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer__bar">
+            <span>&copy; 2026 TheurerTrucks 2GO. Alle Rechte vorbehalten.</span>
+            <div class="footer__bar-links">
+                <a href="#">Impressum</a>
+                <a href="#">Datenschutz</a>
+                <a href="#">AGB</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <script>
         /* ── Navbar Scroll-Effekt ──────────────────────────────── */
@@ -1351,6 +2835,116 @@
             card.style.animation = 'shake 0.4s ease';
         }
 
+        /* ── Fahrzeug-Bildgalerie (Task 8) ───────────────────── */
+        const mainImg = document.getElementById('mainVehicleImg');
+        const thumbs  = document.querySelectorAll('.vehicle__thumb');
+
+        // Bild wechseln beim Klick auf Thumbnail
+        function switchImage(thumb) {
+            const newSrc = thumb.dataset.img;
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+                mainImg.src = newSrc;
+                mainImg.alt = thumb.querySelector('img').alt;
+                mainImg.style.opacity = '1';
+            }, 300);
+            document.querySelector('.vehicle__thumb.active')?.classList.remove('active');
+            thumb.classList.add('active');
+        }
+
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                switchImage(thumb);
+                currentThumbIndex = Array.from(thumbs).indexOf(thumb);
+                stopGalleryAutoplay();
+                startGalleryAutoplay();
+            });
+        });
+
+        // Auto-Rotate Galerie alle 5 Sekunden
+        let galleryAutoplay;
+        let currentThumbIndex = 0;
+
+        function startGalleryAutoplay() {
+            galleryAutoplay = setInterval(() => {
+                currentThumbIndex = (currentThumbIndex + 1) % thumbs.length;
+                switchImage(thumbs[currentThumbIndex]);
+            }, 5000);
+        }
+
+        function stopGalleryAutoplay() {
+            clearInterval(galleryAutoplay);
+        }
+
+        // Autoplay starten, wenn Thumbs vorhanden
+        if (thumbs.length > 0) startGalleryAutoplay();
+
+        /* ── FAQ Toggle (Task 14) ─────────────────────────────── */
+        function toggleFaq(el) {
+            const item   = el.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            // Alle offenen FAQs schließen
+            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        /* ── Leaflet Standortkarte (Task 10) ──────────────────── */
+        // Karte nur initialisieren wenn das Element existiert
+        const mapEl = document.getElementById('map');
+        let leafletMap = null;
+        if (mapEl) {
+            // Karte auf Deutschland zentrieren
+            leafletMap = L.map('map').setView([51.1657, 10.4515], 6);
+            const map = leafletMap;
+
+            // OpenStreetMap Kacheln laden
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Eigenes Marker-Icon mit Font Awesome
+            const blueIcon = L.divIcon({
+                html: '<i class="fas fa-location-dot" style="color:#0088CF;font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></i>',
+                className: '',
+                iconSize: [28, 36],
+                iconAnchor: [14, 36],
+                popupAnchor: [0, -36]
+            });
+
+            // Stub-Standorte mit Popup
+            const standorte = [
+                { lat: 53.5753, lng: 10.0153, name: 'Reitstall Müller', city: 'Hamburg' },
+                { lat: 52.5200, lng: 13.4050, name: 'Pferdehof am See', city: 'Berlin' },
+                { lat: 48.1351, lng: 11.5820, name: 'Reitanlage Süd', city: 'München' },
+                { lat: 50.9333, lng: 6.9500,  name: 'Gestüt Rheinland', city: 'Köln' },
+                { lat: 52.3759, lng: 9.7320,  name: 'Reitstall Nordheide', city: 'Hannover' }
+            ];
+
+            standorte.forEach(s => {
+                L.marker([s.lat, s.lng], { icon: blueIcon })
+                    .addTo(map)
+                    .bindPopup(
+                        `<strong>${s.name}</strong><br>${s.city}<br>` +
+                        `<a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer" ` +
+                        `style="color:#0088CF;font-weight:700;">Jetzt buchen →</a>`
+                    );
+            });
+        }
+
+        // PLZ-Suche (Stub — zentriert nur die Karte, API-Anbindung ausstehend)
+        function searchLocation() {
+            const plz = document.getElementById('plzInput')?.value?.trim();
+            if (!plz || plz.length !== 5) {
+                alert('Bitte gib eine gültige 5-stellige Postleitzahl ein.');
+                return;
+            }
+            // Stub: Karte etwas heranzoomen (echte Geo-API ausstehend)
+            if (leafletMap) {
+                leafletMap.setView([51.1657, 10.4515], 8);
+            }
+        }
+
         /* ── Scroll-Reveal via IntersectionObserver ───────────── */
         const io = new IntersectionObserver((entries) => {
             entries.forEach(e => {
@@ -1363,5 +2957,8 @@
 
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     </script>
+
+    <!-- Trustpilot Widget Bootstrap -->
+    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 </body>
 </html>
