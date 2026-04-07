@@ -1387,24 +1387,16 @@
         /* ============================================================
            TRUSTPILOT-BEWERTUNGEN (Task 11)
         ============================================================ */
-        .trustpilot-section {
-            text-align: center;
+        /* Trustpilot + Video nebeneinander */
+        .trustpilot-video-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            align-items: center;
         }
-
-        .trustpilot-widget-container {
-            max-width: 900px;
-            margin: 0 auto;
+        .trustpilot-video-grid__video {
+            order: -1;
         }
-
-        .trustpilot-fallback {
-            margin-top: 24px;
-            font-size: 0.87rem;
-            color: var(--text-light);
-        }
-
-        .trustpilot-fallback a {
-            color: var(--primary);
-            text-decoration: underline;
         }
 
         /* ============================================================
@@ -2131,6 +2123,9 @@
 
             .vehicle__showcase { grid-template-columns: 1.15fr 1fr; gap: 56px; }
 
+            .trustpilot-video-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
+            .trustpilot-video-grid__video { order: 0; }
+
             .steps { grid-template-columns: repeat(4, 1fr); }
             .steps::before { display: block; }
 
@@ -2790,7 +2785,7 @@
 <!-- ================================================================
      TRUSTPILOT-BEWERTUNGEN (Task 11)
 ================================================================ -->
-<section class="section section--light trustpilot-section" id="bewertungen">
+<section class="section section--light" id="bewertungen">
     <div class="container">
 
         <div class="section-header reveal">
@@ -2799,32 +2794,33 @@
             <p class="section-subtitle">Echte Erfahrungen von Reiterinnen und Reitern, die mit TheurerTrucks 2GO unterwegs waren.</p>
         </div>
 
-        <div class="trustpilot-widget-container reveal">
-            <!-- Trustpilot Widget -->
-            <div class="trustpilot-widget"
-                 data-locale="de-DE"
-                 data-template-id="DEINE-TEMPLATE-ID"
-                 data-businessunit-id="DEINE-BUSINESS-ID"
-                 data-style-height="240px"
-                 data-style-width="100%"
-                 data-theme="light">
+        <div class="trustpilot-video-grid reveal">
+            <!-- Trustpilot links -->
+            <div class="trustpilot-video-grid__reviews">
+                <div class="trustpilot-widget"
+                     data-locale="de-DE"
+                     data-template-id="DEINE-TEMPLATE-ID"
+                     data-businessunit-id="DEINE-BUSINESS-ID"
+                     data-style-height="350px"
+                     data-style-width="100%"
+                     data-theme="light">
+                </div>
+                <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 12px;">
+                    Alle Bewertungen auch direkt auf
+                    <a href="https://www.trustpilot.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600;">Trustpilot</a> ansehen.
+                </p>
             </div>
-            <p class="trustpilot-fallback">
-                Alle Bewertungen auch direkt auf
-                <a href="https://www.trustpilot.com" target="_blank" rel="noopener noreferrer">Trustpilot</a> ansehen.
-            </p>
-        </div>
-
-        <!-- Video-Loop eingebettet im Bewertungsbereich -->
-        <div class="reveal" style="margin-top: 48px;">
-            <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); max-width: 800px; margin: 0 auto;">
-                <video autoplay muted loop playsinline style="width: 100%; display: block;">
-                    <source src="img/truck-video.mp4" type="video/mp4">
-                </video>
+            <!-- Video rechts -->
+            <div class="trustpilot-video-grid__video">
+                <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow);">
+                    <video autoplay muted loop playsinline style="width: 100%; display: block;">
+                        <source src="img/truck-video.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <p style="text-align: center; color: var(--text-light); margin-top: 12px; font-size: 0.85rem;">
+                    <i class="fas fa-play-circle" style="color: var(--primary);"></i> Unser Transporter in Aktion
+                </p>
             </div>
-            <p style="text-align: center; color: var(--text-light); margin-top: 16px; font-size: 0.9rem;">
-                <i class="fas fa-play-circle" style="color: var(--primary);"></i> Unser STX Pferdetransporter in Aktion
-            </p>
         </div>
 
     </div>
