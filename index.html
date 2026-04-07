@@ -2685,7 +2685,7 @@
 
         <!-- PLZ-Suche -->
         <div class="locations__search reveal">
-            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric">
+            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
             <button class="btn btn--primary" onclick="searchLocation()">
                 <i class="fas fa-magnifying-glass"></i> Suchen
             </button>
@@ -3326,17 +3326,43 @@
             });
         }
 
-        // PLZ-Suche (Stub — zentriert nur die Karte, API-Anbindung ausstehend)
+        // PLZ-Suche mit Nominatim Geocoding (OpenStreetMap)
         function searchLocation() {
             const plz = document.getElementById('plzInput')?.value?.trim();
-            if (!plz || plz.length !== 5) {
+            if (!plz || plz.length !== 5 || !/^\d{5}$/.test(plz)) {
                 alert('Bitte gib eine gültige 5-stellige Postleitzahl ein.');
                 return;
             }
-            // Stub: Karte etwas heranzoomen (echte Geo-API ausstehend)
-            if (leafletMap) {
-                leafletMap.setView([51.1657, 10.4515], 8);
-            }
+            if (!leafletMap) return;
+
+            fetch('https://nominatim.openstreetmap.org/search?postalcode=' + plz + '&country=DE&format=json&limit=1')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.length > 0) {
+                        var lat = parseFloat(data[0].lat);
+                        var lng = parseFloat(data[0].lon);
+                        leafletMap.setView([lat, lng], 10);
+
+                        // Nächsten Standort-Marker finden und Popup öffnen
+                        var nearest = null;
+                        var nearestDist = Infinity;
+                        leafletMap.eachLayer(function(layer) {
+                            if (layer.getLatLng) {
+                                var d = leafletMap.distance([lat, lng], layer.getLatLng());
+                                if (d < nearestDist) {
+                                    nearestDist = d;
+                                    nearest = layer;
+                                }
+                            }
+                        });
+                        if (nearest) nearest.openPopup();
+                    } else {
+                        alert('PLZ nicht gefunden. Bitte prüfe deine Eingabe.');
+                    }
+                })
+                .catch(function() {
+                    alert('Suche fehlgeschlagen. Bitte versuche es erneut.');
+                });
         }
 
         /* ── Scroll-Reveal via IntersectionObserver ───────────── */
