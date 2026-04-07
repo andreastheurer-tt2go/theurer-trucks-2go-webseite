@@ -819,7 +819,27 @@
            VERTRAUENS-SEKTION (NEU)
         ============================================================ */
         /* 2-Spalten-Grid für Vertrauen-Karten */
-        .trust-grid {
+        /* Vertrauens-Layout: Video + Karten */
+        .trust-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+        .trust-layout__video {
+            order: -1;
+        }
+        .trust-video-wrap {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        .trust-video-wrap video {
+            width: 100%;
+            display: block;
+        }
+        .trust-layout__cards {
             display: grid;
             grid-template-columns: 1fr;
             gap: 16px;
@@ -2078,7 +2098,7 @@
             .avail__card { padding: 36px 32px; }
             .avail__btn { width: auto; }
 
-            .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+            .trust-layout__cards { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
             .video-showcase__media { min-height: 320px; }
 
@@ -2122,6 +2142,10 @@
             .video-showcase__inner { grid-template-columns: 1fr 1fr; min-height: 520px; }
 
             .vehicle__showcase { grid-template-columns: 1.15fr 1fr; gap: 56px; }
+
+            .trust-layout { grid-template-columns: auto 1fr; gap: 48px; align-items: center; }
+            .trust-layout__video { order: 0; }
+            .trust-video-wrap { max-width: 360px; }
 
             .trustpilot-video-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
             .trustpilot-video-grid__video { order: 0; }
@@ -2358,38 +2382,52 @@
             <p class="section-subtitle">Wir kennen die Herausforderungen beim Pferdetransport — und haben sie gelöst.</p>
         </div>
 
-        <div class="trust-grid">
+        <div class="trust-layout">
 
-            <!-- Karte 1: Führerschein -->
-            <div class="trust-card reveal">
-                <p class="trust-card__quote">Ich hab keinen Anhängerführerschein — darf ich den Transporter trotzdem fahren?</p>
-                <div class="trust-card__icon"><i class="fas fa-id-card"></i></div>
-                <h3 class="trust-card__title">Führerschein Klasse B reicht</h3>
-                <p class="trust-card__text">Unser STX Pferdetransporter wiegt unter 3,5 Tonnen — damit brauchst du nur deinen normalen PKW-Führerschein Klasse B. Kein BE, kein LKW-Schein, kein Sonderkurs. Einfach einsteigen und losfahren.</p>
+            <!-- Video links (Hochformat) -->
+            <div class="trust-layout__video reveal">
+                <div class="trust-video-wrap">
+                    <video autoplay muted loop playsinline>
+                        <source src="img/truck-video.mp4" type="video/mp4">
+                    </video>
+                </div>
             </div>
 
-            <!-- Karte 2: Sicherheit -->
-            <div class="trust-card reveal delay-1">
-                <p class="trust-card__quote">Hoffentlich verletzt sich mein Pferd nicht unterwegs…</p>
-                <div class="trust-card__icon"><i class="fas fa-heart-pulse"></i></div>
-                <h3 class="trust-card__title">Sicherheit auf höchstem Niveau</h3>
-                <p class="trust-card__text">Mit Pferde-Überwachungskamera, weichem Softgummiboden, LED-Beleuchtung und komfortabler Federung ist dein Pferd bestens geschützt. Du hast dein Tier jederzeit im Blick — für eine stressfreie Fahrt.</p>
-            </div>
+            <!-- Karten rechts -->
+            <div class="trust-layout__cards">
 
-            <!-- Karte 3: Verladen -->
-            <div class="trust-card reveal delay-2">
-                <p class="trust-card__quote">Was ist, wenn sich mein Pferd nicht verladen lässt?</p>
-                <div class="trust-card__icon"><i class="fas fa-horse"></i></div>
-                <h3 class="trust-card__title">Einfaches Verladen — ohne Stress</h3>
-                <p class="trust-card__text">Die breite Verladerampe und der niedrige Einstieg machen das Einladen auch für scheue Pferde leicht. Separate Türen vor jeder Box und viel Platz sorgen dafür, dass dein Pferd ruhig und sicher einsteigt.</p>
-            </div>
+                <!-- Karte 1: Führerschein -->
+                <div class="trust-card reveal">
+                    <p class="trust-card__quote">Ich hab keinen Anhängerführerschein — darf ich den Transporter trotzdem fahren?</p>
+                    <div class="trust-card__icon"><i class="fas fa-id-card"></i></div>
+                    <h3 class="trust-card__title">Führerschein Klasse B reicht</h3>
+                    <p class="trust-card__text">Unser STX Pferdetransporter wiegt unter 3,5 Tonnen — damit brauchst du nur deinen normalen PKW-Führerschein Klasse B. Kein BE, kein LKW-Schein, kein Sonderkurs.</p>
+                </div>
 
-            <!-- Karte 4: Kosten -->
-            <div class="trust-card reveal delay-3">
-                <p class="trust-card__quote">Lohnt sich ein eigener Anhänger wirklich noch?</p>
-                <div class="trust-card__icon"><i class="fas fa-piggy-bank"></i></div>
-                <h3 class="trust-card__title">Nur zahlen wenn du fährst</h3>
-                <p class="trust-card__text">Kein Kauf, keine Wartung, kein Stellplatz, keine TÜV-Sorgen. Mit TheurerTrucks 2GO zahlst du nur wenn du den Transporter wirklich brauchst — bereits ab 165 €/Tag inkl. Versicherung.</p>
+                <!-- Karte 2: Sicherheit -->
+                <div class="trust-card reveal delay-1">
+                    <p class="trust-card__quote">Hoffentlich verletzt sich mein Pferd nicht unterwegs…</p>
+                    <div class="trust-card__icon"><i class="fas fa-heart-pulse"></i></div>
+                    <h3 class="trust-card__title">Sicherheit auf höchstem Niveau</h3>
+                    <p class="trust-card__text">Mit Pferde-Überwachungskamera, weichem Softgummiboden, LED-Beleuchtung und komfortabler Federung ist dein Pferd bestens geschützt.</p>
+                </div>
+
+                <!-- Karte 3: Verladen -->
+                <div class="trust-card reveal delay-2">
+                    <p class="trust-card__quote">Was ist, wenn sich mein Pferd nicht verladen lässt?</p>
+                    <div class="trust-card__icon"><i class="fas fa-horse"></i></div>
+                    <h3 class="trust-card__title">Einfaches Verladen — ohne Stress</h3>
+                    <p class="trust-card__text">Die breite Verladerampe und der niedrige Einstieg machen das Einladen auch für scheue Pferde leicht.</p>
+                </div>
+
+                <!-- Karte 4: Kosten -->
+                <div class="trust-card reveal delay-3">
+                    <p class="trust-card__quote">Lohnt sich ein eigener Anhänger wirklich noch?</p>
+                    <div class="trust-card__icon"><i class="fas fa-piggy-bank"></i></div>
+                    <h3 class="trust-card__title">Nur zahlen wenn du fährst</h3>
+                    <p class="trust-card__text">Kein Kauf, keine Wartung, kein Stellplatz, keine TÜV-Sorgen. Ab 165 €/Tag inkl. Versicherung.</p>
+                </div>
+
             </div>
 
         </div>
@@ -2824,16 +2862,6 @@
                 </p>
             </div>
             <!-- Video rechts -->
-            <div class="trustpilot-video-grid__video">
-                <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow);">
-                    <video autoplay muted loop playsinline style="width: 100%; display: block;">
-                        <source src="img/truck-video.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <p style="text-align: center; color: var(--text-light); margin-top: 12px; font-size: 0.85rem;">
-                    <i class="fas fa-play-circle" style="color: var(--primary);"></i> Unser Transporter in Aktion
-                </p>
-            </div>
         </div>
 
     </div>
