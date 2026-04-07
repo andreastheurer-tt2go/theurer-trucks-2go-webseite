@@ -2527,38 +2527,51 @@
 
         </div>
 
-        <!-- Preisrechner -->
+        <!-- Fahrt-Rechner -->
         <div class="calculator reveal">
             <div class="calculator__header">
-                <h3><i class="fas fa-calculator" style="color: var(--primary); margin-right: 8px;"></i> Preisrechner</h3>
+                <h3><i class="fas fa-route" style="color: var(--primary); margin-right: 8px;"></i> Was kostet deine Fahrt?</h3>
             </div>
             <div class="calculator__body">
                 <div class="calculator__left">
-                    <span class="calculator__label">Mietdauer</span>
-                    <div class="calculator__days" id="calcDays">
-                        <button class="calculator__day-btn active" data-days="1" data-price="165" data-km="150" onclick="selectDay(this)">1 Tag<span>150 km</span></button>
-                        <button class="calculator__day-btn" data-days="2" data-price="324" data-km="300" onclick="selectDay(this)">2 Tage<span>300 km</span></button>
-                        <button class="calculator__day-btn" data-days="3" data-price="466" data-km="450" onclick="selectDay(this)">3 Tage<span>450 km</span></button>
-                        <button class="calculator__day-btn" data-days="4" data-price="590" data-km="600" onclick="selectDay(this)">4 Tage<span>600 km</span></button>
-                        <button class="calculator__day-btn" data-days="5" data-price="698" data-km="750" onclick="selectDay(this)">5 Tage<span>750 km</span></button>
-                        <button class="calculator__day-btn" data-days="6" data-price="788" data-km="900" onclick="selectDay(this)">6 Tage<span>900 km</span></button>
-                        <button class="calculator__day-btn" data-days="7" data-price="860" data-km="1050" onclick="selectDay(this)">7 Tage<span>1.050 km</span></button>
+                    <span class="calculator__label"><i class="fas fa-road" style="color: var(--primary); margin-right: 6px;"></i> Wie weit ist dein Ziel?</span>
+                    <div class="calculator__km-input" style="margin-bottom: 24px;">
+                        <input type="number" id="calcDistance" value="100" min="0" step="10" oninput="updateTripCalc()" style="width: 120px;">
+                        <span>km (einfache Strecke)</span>
                     </div>
-                    <span class="calculator__label">Zusätzliche Kilometer</span>
-                    <div class="calculator__km-input">
-                        <input type="number" id="calcExtraKm" value="0" min="0" step="50" oninput="updateCalc()">
-                        <span>km à 0,46 €</span>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 24px;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i> Gesamtstrecke Hin &amp; Rück: <strong id="calcRoundTrip">200</strong> km
+                    </p>
+
+                    <span class="calculator__label"><i class="fas fa-calendar" style="color: var(--primary); margin-right: 6px;"></i> Wie lange brauchst du den Transporter?</span>
+                    <div class="calculator__days" id="calcDays">
+                        <button class="calculator__day-btn active" data-days="1" data-price="165" data-km="150" onclick="selectTripDay(this)">1 Tag</button>
+                        <button class="calculator__day-btn" data-days="2" data-price="324" data-km="300" onclick="selectTripDay(this)">2 Tage</button>
+                        <button class="calculator__day-btn" data-days="3" data-price="466" data-km="450" onclick="selectTripDay(this)">3 Tage</button>
+                        <button class="calculator__day-btn" data-days="4" data-price="590" data-km="600" onclick="selectTripDay(this)">4 Tage</button>
+                        <button class="calculator__day-btn" data-days="5" data-price="698" data-km="750" onclick="selectTripDay(this)">5 Tage</button>
+                        <button class="calculator__day-btn" data-days="6" data-price="788" data-km="900" onclick="selectTripDay(this)">6 Tage</button>
+                        <button class="calculator__day-btn" data-days="7" data-price="860" data-km="1050" onclick="selectTripDay(this)">7 Tage</button>
                     </div>
                 </div>
                 <div class="calculator__right">
-                    <span class="calculator__label">Gesamtkosten</span>
+                    <span class="calculator__label">Deine Kosten</span>
                     <div class="calculator__summary">
-                        <div class="calculator__row"><span>Mietpreis</span><strong id="calcBasePrice">165,00 €</strong></div>
-                        <div class="calculator__row"><span>Freikilometer</span><span id="calcFreeKm">150 km</span></div>
-                        <div class="calculator__row"><span>Zusätzliche Kilometer</span><strong id="calcExtraPrice">0,00 €</strong></div>
+                        <div class="calculator__row"><span>Mietpreis (<span id="calcDaysLabel">1 Tag</span>)</span><strong id="calcBasePrice">165,00 €</strong></div>
+                        <div class="calculator__row"><span>Freikilometer im Tarif</span><span id="calcFreeKm">150 km</span></div>
+                        <div class="calculator__row"><span>Deine Gesamtstrecke</span><span id="calcTotalKm">200 km</span></div>
+                        <div class="calculator__row" id="calcExtraRow" style="display: none;"><span>Mehrkilometer (<span id="calcExtraKmCount">0</span> km × 0,46 €)</span><strong id="calcExtraPrice">0,00 €</strong></div>
                         <hr class="calculator__divider">
-                        <div class="calculator__total"><span>Total</span><span id="calcTotal">165,00 €</span></div>
+                        <div class="calculator__total"><span>Gesamt</span><span id="calcTotal">165,00 €</span></div>
+                        <p id="calcMessage" style="font-size: 0.82rem; color: var(--primary); margin-top: 8px; font-weight: 600;">
+                            <i class="fas fa-check-circle"></i> Deine Fahrt ist in den Freikilometern enthalten!
+                        </p>
                     </div>
+                    <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer"
+                       class="btn btn--primary btn--full" style="margin-top: 20px;"
+                       onclick="dataLayer.push({'event':'cta_click','cta_location':'trip_calculator'})">
+                        Jetzt buchen <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -3330,27 +3343,48 @@
 
         document.querySelectorAll('.counter-band__number').forEach(el => counterObserver.observe(el));
 
-        // Preisrechner
-        let selectedDayBtn = document.querySelector('.calculator__day-btn.active');
+        // Fahrt-Rechner
+        let selectedTripBtn = document.querySelector('.calculator__day-btn.active');
 
-        function selectDay(btn) {
+        function selectTripDay(btn) {
             document.querySelectorAll('.calculator__day-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            selectedDayBtn = btn;
-            updateCalc();
+            selectedTripBtn = btn;
+            updateTripCalc();
         }
 
-        function updateCalc() {
-            const basePrice = parseInt(selectedDayBtn.dataset.price);
-            const freeKm = parseInt(selectedDayBtn.dataset.km);
-            const extraKm = Math.max(0, parseInt(document.getElementById('calcExtraKm').value) || 0);
+        function updateTripCalc() {
+            const distance = Math.max(0, parseInt(document.getElementById('calcDistance').value) || 0);
+            const roundTrip = distance * 2;
+            const basePrice = parseInt(selectedTripBtn.dataset.price);
+            const freeKm = parseInt(selectedTripBtn.dataset.km);
+            const days = parseInt(selectedTripBtn.dataset.days);
+            const extraKm = Math.max(0, roundTrip - freeKm);
             const extraPrice = extraKm * 0.46;
             const total = basePrice + extraPrice;
 
+            // Anzeige aktualisieren
+            document.getElementById('calcRoundTrip').textContent = roundTrip.toLocaleString('de-DE');
+            document.getElementById('calcDaysLabel').textContent = days === 1 ? '1 Tag' : days + ' Tage';
             document.getElementById('calcBasePrice').textContent = basePrice.toFixed(2).replace('.', ',') + ' €';
             document.getElementById('calcFreeKm').textContent = freeKm.toLocaleString('de-DE') + ' km';
-            document.getElementById('calcExtraPrice').textContent = extraPrice.toFixed(2).replace('.', ',') + ' €';
+            document.getElementById('calcTotalKm').textContent = roundTrip.toLocaleString('de-DE') + ' km';
             document.getElementById('calcTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
+
+            // Mehrkilometer ein-/ausblenden
+            const extraRow = document.getElementById('calcExtraRow');
+            const message = document.getElementById('calcMessage');
+            if (extraKm > 0) {
+                extraRow.style.display = 'flex';
+                document.getElementById('calcExtraKmCount').textContent = extraKm.toLocaleString('de-DE');
+                document.getElementById('calcExtraPrice').textContent = extraPrice.toFixed(2).replace('.', ',') + ' €';
+                message.innerHTML = '<i class="fas fa-info-circle"></i> ' + extraKm.toLocaleString('de-DE') + ' km über den Freikilometern — Aufpreis: ' + extraPrice.toFixed(2).replace('.', ',') + ' €';
+                message.style.color = 'var(--text-light)';
+            } else {
+                extraRow.style.display = 'none';
+                message.innerHTML = '<i class="fas fa-check-circle"></i> Deine Fahrt ist in den Freikilometern enthalten!';
+                message.style.color = 'var(--primary)';
+            }
         }
     </script>
 
