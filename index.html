@@ -1837,6 +1837,241 @@
         /* Avail-Button volle Breite */
         .avail__btn { width: 100%; justify-content: center; }
 
+        /* Zahlen-Banner */
+        .counter-band {
+            background: var(--dark);
+            padding: 48px 0;
+        }
+        .counter-band__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            text-align: center;
+        }
+        .counter-band__item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .counter-band__icon {
+            font-size: 1.8rem;
+            color: var(--primary-bright);
+            margin-bottom: 4px;
+        }
+        .counter-band__number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+        .counter-band__label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Preisrechner */
+        .calculator {
+            max-width: 800px;
+            margin: 48px auto 0;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .calculator__header {
+            background: var(--light);
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+        .calculator__header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+        .calculator__body {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+        .calculator__left {
+            padding: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+        .calculator__right {
+            padding: 28px;
+            background: var(--light);
+        }
+        .calculator__label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .calculator__days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .calculator__day-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 12px 8px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+        .calculator__day-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .calculator__day-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-blue);
+        }
+        .calculator__day-btn span {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        .calculator__day-btn.active span {
+            color: rgba(255,255,255,0.75);
+        }
+        .calculator__km-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .calculator__km-input input {
+            width: 100px;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            text-align: center;
+            transition: var(--transition);
+        }
+        .calculator__km-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0,136,207,0.1);
+        }
+        .calculator__km-input span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .calculator__summary {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .calculator__row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.92rem;
+            color: var(--text);
+        }
+        .calculator__row strong {
+            color: var(--text-dark);
+        }
+        .calculator__divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 4px 0;
+        }
+        .calculator__total {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+        .calculator__total span:last-child {
+            color: var(--primary);
+        }
+
+        /* Fahrzeug-Features-Diagramm */
+        .features-diagram {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .features-diagram__img {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .features-diagram__labels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .features-diagram__label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        .features-diagram__label:hover {
+            background: rgba(56, 182, 255, 0.1);
+            border-color: rgba(56, 182, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .features-diagram__label i {
+            color: var(--primary-bright);
+            font-size: 1rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .features-diagram__label-text strong {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--white);
+            margin-bottom: 2px;
+        }
+        .features-diagram__label-text span {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 360px) {
+            .features-diagram__labels { grid-template-columns: 1fr; }
+        }
+
         /* ---- TABLET (ab 769px) ---- */
         @media (min-width: 769px) {
             .container { padding: 0 28px; }
@@ -1867,6 +2102,8 @@
 
             .cta-band__actions { flex-direction: row; gap: 14px; align-items: center; }
             .cta-band__actions .btn { width: auto; }
+
+            .counter-band__grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         /* ---- DESKTOP (ab 1025px) ---- */
@@ -1902,6 +2139,9 @@
             .pricing-grid { grid-template-columns: repeat(3, 1fr); max-width: 980px; }
 
             .footer__grid { grid-template-columns: 2fr 1fr 1fr 1.3fr; gap: 48px; }
+
+            .calculator__body { grid-template-columns: 1.2fr 1fr; }
+            .calculator__left { border-bottom: none; border-right: 1px solid var(--border); }
         }
 
         /* Reduzierte Bewegung für Barrierefreiheit */
@@ -2111,6 +2351,29 @@
     </div>
 </section>
 
+<!-- Zahlen-Banner -->
+<section class="counter-band">
+    <div class="container">
+        <div class="counter-band__grid">
+            <div class="counter-band__item reveal">
+                <div class="counter-band__icon"><i class="fas fa-truck"></i></div>
+                <div class="counter-band__number" data-target="63">63</div>
+                <div class="counter-band__label">Fahrzeuge</div>
+            </div>
+            <div class="counter-band__item reveal delay-1">
+                <div class="counter-band__icon"><i class="fas fa-location-dot"></i></div>
+                <div class="counter-band__number" data-target="51">51</div>
+                <div class="counter-band__label">Standorte</div>
+            </div>
+            <div class="counter-band__item reveal delay-2">
+                <div class="counter-band__icon"><i class="fas fa-users"></i></div>
+                <div class="counter-band__number" data-target="15677">15.677</div>
+                <div class="counter-band__label">registrierte Nutzer</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ================================================================
      VERTRAUENS-SEKTION
 ================================================================ -->
@@ -2168,61 +2431,70 @@
 <section class="video-showcase" id="vorteile-showcase">
     <div class="video-showcase__inner">
 
-        <!-- Vorteile-Grafik links -->
-        <div class="video-showcase__media" style="display: flex; align-items: center; justify-content: center; padding: 40px;">
-            <div class="vorteile-grafik">
-                <div class="vorteile-grafik__center">
-                    <img src="img/truck-front.jpg" alt="STX Pferdetransporter" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 4px solid var(--primary-bright); box-shadow: 0 0 40px rgba(56, 182, 255, 0.3);">
-                </div>
-                <div class="vorteile-grafik__items">
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-video" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>Pferdeüberwachungskamera</span>
+        <!-- Fahrzeug-Diagramm links -->
+        <div class="video-showcase__media" style="display: flex; align-items: center; justify-content: center; padding: 40px 20px; background: transparent;">
+            <div class="features-diagram">
+                <img src="img/truck-front.jpg" alt="STX Pferdetransporter mit Features" class="features-diagram__img">
+                <div class="features-diagram__labels">
+                    <div class="features-diagram__label">
+                        <i class="fas fa-lightbulb"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Entspannte Pferde</strong>
+                            <span>Dank speziellem Tag- &amp; Nachtfahrlicht</span>
+                        </div>
                     </div>
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-road" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>Komfortable Federung</span>
+                    <div class="features-diagram__label">
+                        <i class="fas fa-video"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Alles im Blick</strong>
+                            <span>Kameras für Rückfahr- &amp; Pferdeüberwachung</span>
+                        </div>
                     </div>
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-shield-halved" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>Rutschfester Gummiboden</span>
+                    <div class="features-diagram__label">
+                        <i class="fas fa-car"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Einfaches Handling</strong>
+                            <span>Mit PKW-Führerschein fahrbar</span>
+                        </div>
                     </div>
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-wind" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>Dachluke & Ventilator</span>
+                    <div class="features-diagram__label">
+                        <i class="fas fa-shield-halved"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Stabiles Pferdeabteil</strong>
+                            <span>Für sicheren Transport</span>
+                        </div>
                     </div>
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-lightbulb" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>LED-Beleuchtung</span>
+                    <div class="features-diagram__label">
+                        <i class="fas fa-arrow-down-wide-short"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Leichtes Verladen</strong>
+                            <span>Breite &amp; flache Verladerampe</span>
+                        </div>
                     </div>
-                    <div class="vorteile-grafik__item">
-                        <i class="fas fa-suitcase" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
-                        <span>Sattelkammer</span>
+                    <div class="features-diagram__label">
+                        <i class="fas fa-cloud"></i>
+                        <div class="features-diagram__label-text">
+                            <strong>Extra Komfort</strong>
+                            <span>Durch weiche Federung</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Inhalt rechts -->
+        <!-- CTA rechts -->
         <div class="video-showcase__content">
             <div class="video-showcase__tag"><i class="fas fa-star"></i> Deine Vorteile</div>
             <h2 class="video-showcase__title">Professionell gebaut — für dein Pferd</h2>
-
-            <ul class="video-showcase__checklist">
-                <li><i class="fas fa-check-circle"></i> Pferde-Überwachungskamera während der Fahrt</li>
-                <li><i class="fas fa-check-circle"></i> Komfortable Federung für stressfreien Transport</li>
-                <li><i class="fas fa-check-circle"></i> Platz für 1 Großpferd oder 2 kleinere Pferde</li>
-                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 3 Sitzplätze inklusive</li>
-                <li><i class="fas fa-check-circle"></i> Rutschfester Gummiboden &amp; LED-Beleuchtung</li>
-                <li><i class="fas fa-check-circle"></i> Dachluke mit Ventilator für frische Luft</li>
-            </ul>
-
+            <p class="video-showcase__text" style="color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 32px;">
+                Der STX Pferdetransporter auf Renault Master Basis wurde speziell für den sicheren und komfortablen Transport deines Pferdes entwickelt. Jedes Detail — von der rutschfesten Rampe bis zur Überwachungskamera — ist auf das Wohlbefinden von Pferd und Reiter ausgelegt.
+            </p>
             <a href="https://theurer-trucks-2go.fleetster.de"
                class="btn btn--primary"
                target="_blank"
                rel="noopener noreferrer"
                onclick="dataLayer.push({'event':'cta_click','cta_location':'video_cta'})">
-                <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
+                Jetzt kostenlos registrieren <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 
@@ -2593,6 +2865,42 @@
                 </a>
             </div>
 
+        </div>
+
+        <!-- Preisrechner -->
+        <div class="calculator reveal">
+            <div class="calculator__header">
+                <h3><i class="fas fa-calculator" style="color: var(--primary); margin-right: 8px;"></i> Preisrechner</h3>
+            </div>
+            <div class="calculator__body">
+                <div class="calculator__left">
+                    <span class="calculator__label">Mietdauer</span>
+                    <div class="calculator__days" id="calcDays">
+                        <button class="calculator__day-btn active" data-days="1" data-price="165" data-km="150" onclick="selectDay(this)">1 Tag<span>150 km</span></button>
+                        <button class="calculator__day-btn" data-days="2" data-price="324" data-km="300" onclick="selectDay(this)">2 Tage<span>300 km</span></button>
+                        <button class="calculator__day-btn" data-days="3" data-price="466" data-km="450" onclick="selectDay(this)">3 Tage<span>450 km</span></button>
+                        <button class="calculator__day-btn" data-days="4" data-price="590" data-km="600" onclick="selectDay(this)">4 Tage<span>600 km</span></button>
+                        <button class="calculator__day-btn" data-days="5" data-price="698" data-km="750" onclick="selectDay(this)">5 Tage<span>750 km</span></button>
+                        <button class="calculator__day-btn" data-days="6" data-price="788" data-km="900" onclick="selectDay(this)">6 Tage<span>900 km</span></button>
+                        <button class="calculator__day-btn" data-days="7" data-price="860" data-km="1050" onclick="selectDay(this)">7 Tage<span>1.050 km</span></button>
+                    </div>
+                    <span class="calculator__label">Zusätzliche Kilometer</span>
+                    <div class="calculator__km-input">
+                        <input type="number" id="calcExtraKm" value="0" min="0" step="50" oninput="updateCalc()">
+                        <span>km à 0,46 €</span>
+                    </div>
+                </div>
+                <div class="calculator__right">
+                    <span class="calculator__label">Gesamtkosten</span>
+                    <div class="calculator__summary">
+                        <div class="calculator__row"><span>Mietpreis</span><strong id="calcBasePrice">165,00 €</strong></div>
+                        <div class="calculator__row"><span>Freikilometer</span><span id="calcFreeKm">150 km</span></div>
+                        <div class="calculator__row"><span>Zusätzliche Kilometer</span><strong id="calcExtraPrice">0,00 €</strong></div>
+                        <hr class="calculator__divider">
+                        <div class="calculator__total"><span>Total</span><span id="calcTotal">165,00 €</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <p class="pricing-note reveal">
@@ -3051,6 +3359,54 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+        // Zahlen-Animation
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.dataset.target);
+                    const duration = 2000;
+                    const start = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = Math.round(eased * target);
+                        el.textContent = current.toLocaleString('de-DE');
+                        if (progress < 1) requestAnimationFrame(update);
+                    }
+                    requestAnimationFrame(update);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.counter-band__number').forEach(el => counterObserver.observe(el));
+
+        // Preisrechner
+        let selectedDayBtn = document.querySelector('.calculator__day-btn.active');
+
+        function selectDay(btn) {
+            document.querySelectorAll('.calculator__day-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedDayBtn = btn;
+            updateCalc();
+        }
+
+        function updateCalc() {
+            const basePrice = parseInt(selectedDayBtn.dataset.price);
+            const freeKm = parseInt(selectedDayBtn.dataset.km);
+            const extraKm = Math.max(0, parseInt(document.getElementById('calcExtraKm').value) || 0);
+            const extraPrice = extraKm * 0.46;
+            const total = basePrice + extraPrice;
+
+            document.getElementById('calcBasePrice').textContent = basePrice.toFixed(2).replace('.', ',') + ' €';
+            document.getElementById('calcFreeKm').textContent = freeKm.toLocaleString('de-DE') + ' km';
+            document.getElementById('calcExtraPrice').textContent = extraPrice.toFixed(2).replace('.', ',') + ' €';
+            document.getElementById('calcTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
+        }
     </script>
 
     <!-- Trustpilot Widget Bootstrap -->
