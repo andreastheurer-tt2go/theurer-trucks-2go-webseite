@@ -2015,117 +2015,61 @@
             color: var(--primary);
         }
 
-        /* Interaktive Hotspot-Grafik */
-        .hotspot-wrap {
+        /* Fahrzeug-Features-Diagramm */
+        .features-diagram {
             position: relative;
-            display: inline-block;
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .features-diagram__img {
             width: 100%;
             border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .hotspot-wrap__img {
-            width: 100%;
-            display: block;
+        .features-diagram__labels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
         }
-        .hotspot {
-            position: absolute;
-            z-index: 10;
-            cursor: pointer;
-        }
-        .hotspot__dot {
-            width: 28px;
-            height: 28px;
-            background: var(--primary);
-            border: 3px solid var(--white);
-            border-radius: 50%;
-            box-shadow: 0 2px 12px rgba(0, 136, 207, 0.5);
-            position: relative;
-            transition: var(--transition);
-            animation: hotspot-pulse 2.5s infinite;
-        }
-        .hotspot__dot::after {
-            content: '+';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--white);
-            font-weight: 800;
-            font-size: 14px;
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1;
-        }
-        @keyframes hotspot-pulse {
-            0%   { box-shadow: 0 0 0 0 rgba(0, 136, 207, 0.5); }
-            70%  { box-shadow: 0 0 0 12px rgba(0, 136, 207, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 136, 207, 0); }
-        }
-        .hotspot:hover .hotspot__dot,
-        .hotspot.active .hotspot__dot {
-            background: var(--primary-bright);
-            transform: scale(1.15);
-            animation: none;
-        }
-
-        /* Tooltip */
-        .hotspot__tooltip {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 220px;
-            background: rgba(15, 20, 25, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(56, 182, 255, 0.25);
-            border-radius: var(--radius);
-            padding: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s var(--ease), visibility 0.3s;
-            pointer-events: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        .hotspot__tooltip--right { left: 40px; }
-        .hotspot__tooltip--left { right: 40px; }
-
-        .hotspot:hover .hotspot__tooltip,
-        .hotspot.active .hotspot__tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-        .hotspot__icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(0, 136, 207, 0.2);
-            border-radius: 8px;
+        .features-diagram__label {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        .features-diagram__label:hover {
+            background: rgba(56, 182, 255, 0.1);
+            border-color: rgba(56, 182, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .features-diagram__label i {
             color: var(--primary-bright);
             font-size: 1rem;
+            margin-top: 2px;
+            flex-shrink: 0;
         }
-        .hotspot__tooltip strong {
+        .features-diagram__label-text strong {
             display: block;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--white);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
-        .hotspot__tooltip span {
+        .features-diagram__label-text span {
             font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.65);
-            line-height: 1.5;
+            color: rgba(255,255,255,0.6);
             line-height: 1.4;
         }
 
-        /* Hotspot-Tooltips auf kleinen Screens: kleiner und zentriert */
-        @media (max-width: 480px) {
-            .hotspot__tooltip { width: 170px; padding: 12px; }
-            .hotspot__dot { width: 24px; height: 24px; }
-            .hotspot__dot::after { font-size: 12px; }
+        @media (max-width: 360px) {
+            .features-diagram__labels { grid-template-columns: 1fr; }
         }
 
         /* ---- TABLET (ab 769px) ---- */
@@ -2621,76 +2565,11 @@
         <div class="section-header" style="margin-bottom: 40px;">
             <span class="section-tag" style="background: rgba(0,136,207,0.15); border-color: rgba(56,182,255,0.2); color: var(--primary-bright);"><i class="fas fa-star"></i> Deine Vorteile</span>
             <h2 class="section-title" style="color: var(--white);">Professionell gebaut — für dein Pferd</h2>
-            <p class="section-subtitle" style="color: rgba(255,255,255,0.65);">Tippe auf die Punkte um mehr über die Features zu erfahren.</p>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.65);">Der STX Pferdetransporter vereint Sicherheit, Komfort und einfache Handhabung in einem Fahrzeug.</p>
         </div>
-
-        <!-- Interaktive Fahrzeug-Grafik -->
-        <div class="hotspot-container reveal" style="max-width: 900px; margin: 0 auto 40px;">
-            <div class="hotspot-wrap">
-                <img src="img/truck-front.jpg" alt="STX Pferdetransporter" class="hotspot-wrap__img">
-
-                <!-- Hotspot 1: Entspannte Pferde — oben links (Beleuchtung) -->
-                <div class="hotspot" style="top: 18%; left: 22%;" data-hotspot="1">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--right">
-                        <div class="hotspot__icon"><i class="fas fa-lightbulb"></i></div>
-                        <strong>Entspannte Pferde</strong>
-                        <span>Dank speziellem Tag- &amp; Nachtfahrlicht</span>
-                    </div>
-                </div>
-
-                <!-- Hotspot 2: Alles im Blick — oben rechts (Kamera) -->
-                <div class="hotspot" style="top: 15%; left: 72%;" data-hotspot="2">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--left">
-                        <div class="hotspot__icon"><i class="fas fa-video"></i></div>
-                        <strong>Alles im Blick</strong>
-                        <span>Kameras für Rückfahr- &amp; Pferdeüberwachung</span>
-                    </div>
-                </div>
-
-                <!-- Hotspot 3: Einfaches Handling — rechts Mitte (Cockpit) -->
-                <div class="hotspot" style="top: 42%; left: 85%;" data-hotspot="3">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--left">
-                        <div class="hotspot__icon"><i class="fas fa-car"></i></div>
-                        <strong>Einfaches Handling</strong>
-                        <span>Fahrbar mit PKW-Führerschein Klasse B</span>
-                    </div>
-                </div>
-
-                <!-- Hotspot 4: Stabiles Pferdeabteil — links Mitte -->
-                <div class="hotspot" style="top: 45%; left: 15%;" data-hotspot="4">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--right">
-                        <div class="hotspot__icon"><i class="fas fa-shield-halved"></i></div>
-                        <strong>Stabiles Pferdeabteil</strong>
-                        <span>Für sicheren Transport deines Pferdes</span>
-                    </div>
-                </div>
-
-                <!-- Hotspot 5: Leichtes Verladen — unten Mitte (Rampe) -->
-                <div class="hotspot" style="top: 82%; left: 35%;" data-hotspot="5">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--right">
-                        <div class="hotspot__icon"><i class="fas fa-arrow-down-wide-short"></i></div>
-                        <strong>Leichtes Verladen</strong>
-                        <span>Breite &amp; flache Verladerampe</span>
-                    </div>
-                </div>
-
-                <!-- Hotspot 6: Extra Komfort — unten rechts (Federung) -->
-                <div class="hotspot" style="top: 78%; left: 75%;" data-hotspot="6">
-                    <div class="hotspot__dot"></div>
-                    <div class="hotspot__tooltip hotspot__tooltip--left">
-                        <div class="hotspot__icon"><i class="fas fa-cloud"></i></div>
-                        <strong>Extra Komfort</strong>
-                        <span>Durch weiche Federung für Pferd &amp; Fahrer</span>
-                    </div>
-                </div>
-            </div>
+        <div class="reveal" style="max-width: 900px; margin: 0 auto 40px;">
+            <img src="img/Pferdetransporter_auf_Abruf.png" alt="STX Pferdetransporter mit Features — Entspannte Pferde, Alles im Blick, Einfaches Handling, Stabiles Pferdeabteil, Leichtes Verladen, Extra Komfort" style="width: 100%; border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
         </div>
-
         <div style="text-align: center;">
             <a href="https://theurer-trucks-2go.fleetster.de"
                class="btn btn--primary btn--lg"
@@ -3429,22 +3308,6 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-        // Hotspot Touch-Support (Tap auf Mobile statt Hover)
-        document.querySelectorAll('.hotspot').forEach(hotspot => {
-            hotspot.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const wasActive = hotspot.classList.contains('active');
-                // Alle anderen schließen
-                document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-                // Toggle aktuellen
-                if (!wasActive) hotspot.classList.add('active');
-            });
-        });
-        // Tap außerhalb schließt alle Tooltips
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-        });
 
         // Zahlen-Animation
         const counterObserver = new IntersectionObserver((entries) => {
