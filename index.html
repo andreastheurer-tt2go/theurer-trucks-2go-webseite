@@ -921,6 +921,37 @@
             display: block;
         }
 
+        /* Vorteile-Grafik (Kreis mit Feature-Items) */
+        .vorteile-grafik {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+        .vorteile-grafik__items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .vorteile-grafik__item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            font-family: 'Open Sans', sans-serif;
+            transition: var(--transition);
+        }
+        .vorteile-grafik__item:hover {
+            background: rgba(56, 182, 255, 0.1);
+            border-color: rgba(56, 182, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
         .video-showcase__content {
             display: flex;
             flex-direction: column;
@@ -1973,7 +2004,7 @@
                     Jetzt kostenlos registrieren →
                 </a>
                 <a href="#so-gehts" class="btn btn--ghost btn--lg">
-                    <i class="fas fa-circle-play"></i>
+                    <i class="fas fa-arrow-down"></i>
                     So funktioniert's
                 </a>
             </div>
@@ -1998,8 +2029,8 @@
                     <div class="hero__stat-lbl">Führerschein</div>
                 </div>
                 <div class="hero__stat">
-                    <div class="hero__stat-val">1–2</div>
-                    <div class="hero__stat-lbl">Pferde pro Fahrt</div>
+                    <div class="hero__stat-val">50+</div>
+                    <div class="hero__stat-lbl">Standorte deutschlandweit</div>
                 </div>
             </div>
         </div>
@@ -2134,26 +2165,56 @@
 <!-- ================================================================
      VIDEO SHOWCASE
 ================================================================ -->
-<section class="video-showcase" id="video-showcase">
+<section class="video-showcase" id="vorteile-showcase">
     <div class="video-showcase__inner">
 
-        <!-- Video links -->
-        <div class="video-showcase__media">
-            <video autoplay muted loop playsinline>
-                <source src="img/truck-video.mp4" type="video/mp4">
-            </video>
+        <!-- Vorteile-Grafik links -->
+        <div class="video-showcase__media" style="display: flex; align-items: center; justify-content: center; padding: 40px;">
+            <div class="vorteile-grafik">
+                <div class="vorteile-grafik__center">
+                    <img src="img/truck-front.jpg" alt="STX Pferdetransporter" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 4px solid var(--primary-bright); box-shadow: 0 0 40px rgba(56, 182, 255, 0.3);">
+                </div>
+                <div class="vorteile-grafik__items">
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-video" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>Pferdeüberwachungskamera</span>
+                    </div>
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-road" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>Komfortable Federung</span>
+                    </div>
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-shield-halved" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>Rutschfester Gummiboden</span>
+                    </div>
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-wind" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>Dachluke & Ventilator</span>
+                    </div>
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-lightbulb" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>LED-Beleuchtung</span>
+                    </div>
+                    <div class="vorteile-grafik__item">
+                        <i class="fas fa-suitcase" style="color: var(--primary-bright); font-size: 1.2rem;"></i>
+                        <span>Sattelkammer</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Inhalt rechts -->
         <div class="video-showcase__content">
-            <div class="video-showcase__tag"><i class="fas fa-play-circle"></i> Erlebe unseren Transporter</div>
+            <div class="video-showcase__tag"><i class="fas fa-star"></i> Deine Vorteile</div>
             <h2 class="video-showcase__title">Professionell gebaut — für dein Pferd</h2>
 
             <ul class="video-showcase__checklist">
                 <li><i class="fas fa-check-circle"></i> Pferde-Überwachungskamera während der Fahrt</li>
                 <li><i class="fas fa-check-circle"></i> Komfortable Federung für stressfreien Transport</li>
                 <li><i class="fas fa-check-circle"></i> Platz für 1 Großpferd oder 2 kleinere Pferde</li>
-                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 5 Sitzplätze inklusive</li>
+                <li><i class="fas fa-check-circle"></i> Sattelkammer &amp; 3 Sitzplätze inklusive</li>
+                <li><i class="fas fa-check-circle"></i> Rutschfester Gummiboden &amp; LED-Beleuchtung</li>
+                <li><i class="fas fa-check-circle"></i> Dachluke mit Ventilator für frische Luft</li>
             </ul>
 
             <a href="https://theurer-trucks-2go.fleetster.de"
@@ -2257,7 +2318,7 @@
                     <div class="vehicle__spec">
                         <div class="vehicle__spec-icon"><i class="fas fa-users"></i></div>
                         <div class="vehicle__spec-text">
-                            <strong>5 Sitzplätze &amp; Klimaanlage</strong>
+                            <strong>3 Sitzplätze &amp; Klimaanlage</strong>
                             <span>Platz für die ganze Crew</span>
                         </div>
                     </div>
@@ -2398,6 +2459,18 @@
             <p class="trustpilot-fallback">
                 Alle Bewertungen auch direkt auf
                 <a href="https://www.trustpilot.com" target="_blank" rel="noopener noreferrer">Trustpilot</a> ansehen.
+            </p>
+        </div>
+
+        <!-- Video-Loop eingebettet im Bewertungsbereich -->
+        <div class="reveal" style="margin-top: 48px;">
+            <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); max-width: 800px; margin: 0 auto;">
+                <video autoplay muted loop playsinline style="width: 100%; display: block;">
+                    <source src="img/truck-video.mp4" type="video/mp4">
+                </video>
+            </div>
+            <p style="text-align: center; color: var(--text-light); margin-top: 16px; font-size: 0.9rem;">
+                <i class="fas fa-play-circle" style="color: var(--primary);"></i> Unser STX Pferdetransporter in Aktion
             </p>
         </div>
 
