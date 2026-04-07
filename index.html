@@ -571,20 +571,26 @@
         }
 
         .hero__trust {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .hero__trust-stars {
             display: flex;
             gap: 2px;
             color: #00b67a;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
         }
         .hero__trust-text {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.9);
             font-family: 'Open Sans', sans-serif;
         }
         .hero__trust-text strong {
