@@ -1,0 +1,120 @@
+<h2>Design: Verfügbarkeitsprüfung</h2>
+<p class="subtitle">Direkt unter dem Hero — erste Interaktion erzeugt Commitment</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Verfügbarkeitsprüfung — Desktop</div>
+    <div class="mockup-body" style="padding: 48px; background: #f7fafc;">
+
+      <div style="max-width: 700px; margin: 0 auto;">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 32px;">
+          <span style="background: rgba(0,136,207,0.08); color: #0088CF; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 99px; font-family: sans-serif; border: 1px solid rgba(0,136,207,0.12);">Verfügbarkeit prüfen</span>
+          <h2 style="font-family: sans-serif; font-size: 28px; font-weight: 800; margin-top: 14px; color: #1a202c; letter-spacing: -0.5px;">Wann brauchst du einen Transporter?</h2>
+          <p style="color: #718096; font-size: 15px; margin-top: 8px; font-family: sans-serif;">Prüfe in Sekunden, ob ein Fahrzeug an deinem Wunschstandort frei ist.</p>
+        </div>
+
+        <!-- Form -->
+        <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: end;">
+
+            <div>
+              <label style="font-family: sans-serif; font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Abholung</label>
+              <div style="border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; font-family: sans-serif; font-size: 14px; color: #718096; display: flex; align-items: center; gap: 8px;">
+                <span style="color: #0088CF;">&#128197;</span> Datum & Uhrzeit wählen
+              </div>
+            </div>
+
+            <div>
+              <label style="font-family: sans-serif; font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Rückgabe</label>
+              <div style="border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; font-family: sans-serif; font-size: 14px; color: #718096; display: flex; align-items: center; gap: 8px;">
+                <span style="color: #0088CF;">&#128197;</span> Datum & Uhrzeit wählen
+              </div>
+            </div>
+
+            <div>
+              <div style="background: #0088CF; color: white; padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 16px rgba(0,136,207,0.3); cursor: pointer;">
+                Verfügbarkeit prüfen
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Result Preview -->
+        <div style="margin-top: 20px; background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; border-left: 4px solid #38B6FF;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <span style="color: #38B6FF; font-size: 20px;">&#10003;</span>
+            <span style="font-family: sans-serif; font-weight: 700; color: #1a202c; font-size: 16px;">3 Transporter verfügbar</span>
+          </div>
+          <p style="font-family: sans-serif; font-size: 14px; color: #718096; margin-bottom: 16px;">An folgenden Standorten ist ein STX Pferdetransporter für deinen Zeitraum frei:</p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f7fafc; border-radius: 10px; font-family: sans-serif;">
+              <div>
+                <span style="font-weight: 600; font-size: 14px; color: #1a202c;">Reitstall Müller</span>
+                <span style="color: #718096; font-size: 13px; margin-left: 8px;">Hamburg (12 km entfernt)</span>
+              </div>
+              <span style="background: #0088CF; color: white; padding: 8px 18px; border-radius: 99px; font-weight: 700; font-size: 13px; cursor: pointer;">Buchen</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f7fafc; border-radius: 10px; font-family: sans-serif;">
+              <div>
+                <span style="font-weight: 600; font-size: 14px; color: #1a202c;">Pferdehof Schneider</span>
+                <span style="color: #718096; font-size: 13px; margin-left: 8px;">Norderstedt (18 km entfernt)</span>
+              </div>
+              <span style="background: #0088CF; color: white; padding: 8px 18px; border-radius: 99px; font-weight: 700; font-size: 13px; cursor: pointer;">Buchen</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Design-Entscheidungen</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+
+    <div style="padding: 20px; background: rgba(0,136,207,0.05); border-radius: 12px; border: 1px solid rgba(0,136,207,0.1);">
+      <p style="font-weight: 700; margin-bottom: 6px;">Position direkt unter Hero</p>
+      <p style="font-size: 14px; color: #718096;">Erzeugt sofort eine Interaktion — psychologisch: wer schon ein Datum eingegeben hat, ist mental näher an der Buchung. "Micro-Commitment" Prinzip.</p>
+    </div>
+
+    <div style="padding: 20px; background: rgba(0,136,207,0.05); border-radius: 12px; border: 1px solid rgba(0,136,207,0.1);">
+      <p style="font-weight: 700; margin-bottom: 6px;">Ergebnis mit Standorten + Entfernung</p>
+      <p style="font-size: 14px; color: #718096;">Zeigt nicht nur "verfügbar/nicht verfügbar" sondern konkrete Standorte mit Entfernung. Macht das Angebot greifbar. "Buchen"-Button leitet zur fleetster-Registrierung.</p>
+    </div>
+
+    <div style="padding: 20px; background: rgba(0,136,207,0.05); border-radius: 12px; border: 1px solid rgba(0,136,207,0.1);">
+      <p style="font-weight: 700; margin-bottom: 6px;">Zunächst als Stub</p>
+      <p style="font-size: 14px; color: #718096;">Wie besprochen startet die Verfügbarkeitsprüfung als Demo/Stub. Die Fleetster-API-Integration (Bookings + Cars Endpoints) wird später angebunden.</p>
+    </div>
+
+    <div style="padding: 20px; background: rgba(0,136,207,0.05); border-radius: 12px; border: 1px solid rgba(0,136,207,0.1);">
+      <p style="font-weight: 700; margin-bottom: 6px;">Kein PLZ-Feld im ersten Schritt</p>
+      <p style="font-size: 14px; color: #718096;">Nur Datum — weniger Felder = mehr Conversions. Die Standortfilterung kann später über die Standortkarte oder eine optionale PLZ-Erweiterung erfolgen.</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Offene Frage</h3>
+  <p>Soll die Verfügbarkeitsprüfung auch einen <strong>Standort-Filter</strong> haben (z.B. PLZ oder Bundesland), oder reicht erstmal nur das Datum?</p>
+  <div class="options" style="margin-top: 12px;">
+    <div class="option" data-choice="nur-datum" onclick="toggleSelect(this)">
+      <div class="letter">1</div>
+      <div class="content">
+        <h3>Nur Datum</h3>
+        <p>Minimaler Aufwand, zeigt alle verfügbaren Standorte deutschlandweit</p>
+      </div>
+    </div>
+    <div class="option" data-choice="datum-plz" onclick="toggleSelect(this)">
+      <div class="letter">2</div>
+      <div class="content">
+        <h3>Datum + PLZ/Umkreis</h3>
+        <p>Nutzer gibt PLZ ein und bekommt nur Standorte im Umkreis — relevantere Ergebnisse, aber ein Feld mehr</p>
+      </div>
+    </div>
+  </div>
+</div>
