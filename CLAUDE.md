@@ -28,44 +28,58 @@ npx serve .
 
 ```
 TT2GO_Neue_WEBSEITE/
-├── index.html              # Die komplette Webseite (~3400 Zeilen)
-├── img/                    # Bilder + Video
-│   ├── truck-front.jpg     # Hero-Hintergrundbild + Galerie
-│   ├── Pferdetransporter_auf_Abruf.png  # Infografik Vorteile (7,2 MB — komprimieren!)
-│   ├── truck-video.mp4     # Stiller Loop (Hochformat)
-│   ├── horse-stall.jpg, interior-corridor.jpg, dashboard.jpg,
-│   │   rearview-camera.jpg, ventilation-lights.jpg, skylight.jpg, navigation.jpg
+├── index.html                      # Hauptseite (~3500 Zeilen)
+├── impressum.html                  # Impressum-Unterseite
+├── agb.html                        # AGB-Unterseite (§1-§23)
+├── datenschutz.html                # Datenschutz mit PDF-Link
+├── weiterleitung-registrierung.html # Tracking-Interstitial (3s Countdown → fleetster)
+├── registrierung-erfolgreich.html  # Danke-Seite nach Registrierung
+├── img/
+│   ├── truck-front.jpg             # Hero-Hintergrundbild (optimiert, 826 KB)
+│   ├── Pferdetransporter_auf_Abruf.jpg  # Infografik Vorteile (optimiert, 240 KB)
+│   ├── truck-video.mp4             # Stiller Loop (Hochformat, 3,9 MB)
+│   ├── STX-Transporter/            # 11 Profi-Fotos (Exterior + Interior)
+│   └── horse-stall.jpg, interior-corridor.jpg, dashboard.jpg, ...
 ├── Logo/
 │   └── TT2GO-Logo-rgb_56-182-255 (Website).png
 ├── robots.txt
 ├── sitemap.xml
-├── docs/superpowers/
-│   ├── specs/2026-04-06-tt2go-webseite-design.md
-│   └── plans/2026-04-06-tt2go-webseite-implementierung.md
-├── Testprojekt/            # Altes Testprojekt (Referenz)
-├── Kundenavatar/           # Zielgruppenanalyse PDF
-├── Screenshots/            # Referenz-Screenshots
-└── TT2GO Preisblatt Stand 15.01.2024.pdf
+├── .gitignore
+├── CLAUDE.md / DETAILS.md / HISTORY.md
+└── README.md
 ```
+
+## GitHub Repository
+
+- **Repo:** `https://github.com/andreastheurer-tt2go/theurer-trucks-2go-webseite`
+- **Hosting:** GitHub Pages (Deploy from branch `main`, root `/`)
+- **Live-URL:** `https://andreastheurer-tt2go.github.io/theurer-trucks-2go-webseite/`
 
 ## Seitenstruktur (Reihenfolge der Sektionen)
 
 1. **Navbar** — fixiert, Scroll-Effekt, CTA "Jetzt registrieren"
-2. **Hero** — truck-front.jpg Hintergrund, Headline, Trustpilot-Sterne, 2 CTAs, Stat-Bar
+2. **Hero** — truck-front.jpg Hintergrund, Headline, Trustpilot-Sterne (klickbar → #bewertungen), 2 CTAs, Stat-Bar
 3. **Verfügbarkeitsprüfung** — Datum + Stations-Dropdown (Stub, Fleetster-API kommt)
 4. **Vertrauens-Sektion** — Video (Hochformat) links + 4 Angst-zu-Lösung-Karten rechts
-5. **Deine Vorteile** — Infografik-Bild (Pferdetransporter_auf_Abruf.png) + CTA
+5. **Deine Vorteile** — Infografik-Bild (Pferdetransporter_auf_Abruf.jpg) + CTA
 6. **Zahlen-Banner** — 63 Fahrzeuge | 51 Standorte | 15.677 Nutzer (blauer Gradient)
-7. **Preise & Tarife** — 3 Karten + Fahrt-Rechner + Preisblatt-Link
-8. **So geht's** — 5 Schritte
-9. **Standortkarte** — Leaflet/OpenStreetMap, PLZ-Suche mit Nominatim Geocoding + CTA
-10. **Fahrzeug-Detail** — Bildergalerie (8 Thumbnails, Auto-Rotate) + 5 Specs
-11. **Trustpilot-Bewertungen** — Widget (Platzhalter-IDs)
-12. **Erklärvideo** — Vimeo Embed (1019195471) + CTA
-13. **FAQ** — 8 Fragen, Akkordeon, Schema.org FAQPage JSON-LD
-14. **CTA-Band** — Finaler Push, blauer Gradient
-15. **Sticky Mobile CTA** — fixiert am unteren Bildschirmrand (nur Mobile)
-16. **Footer** — 4 Spalten + Footer-Bar
+7. **Trustpilot-Bewertungen** — Grid-Widget (4 Spalten Desktop, Höhe begrenzt auf Mobile)
+8. **Preise & Tarife** — 3 Karten + Fahrt-Rechner (Gesamtstrecke) + Preisblatt-Link
+9. **Standortkarte** — Leaflet/OpenStreetMap, PLZ-Suche mit Nominatim, Popup → Verfügbarkeitsprüfer mit Vorauswahl
+10. **So geht's** — 5 Schritte + Erklärvideo (Vimeo 1019195471) eingebettet
+11. **Fahrzeug-Detail** — Bildergalerie (11 STX-Profifotos, 6 Spalten Desktop, Auto-Rotate) + 5 Specs
+12. **FAQ** — 31 Fragen in 5 Kategorien mit Tabs, Schema.org FAQPage JSON-LD (8 Fragen)
+13. **CTA-Band** — Finaler Push, blauer Gradient
+14. **Sticky Mobile CTA** — fixiert am unteren Bildschirmrand (nur Mobile)
+15. **Footer** — 4 Spalten, Logo weiß invertiert + Footer-Bar
+
+## Unterseiten
+
+- **impressum.html** — Impressum (TheurerTrucks Renting GmbH, HRB 23518 KI)
+- **agb.html** — AGB §1-§23 (Stand 28.01.2024)
+- **datenschutz.html** — Datenschutz-Übersicht + PDF-Link auf Google Drive
+- **weiterleitung-registrierung.html** — Tracking-Interstitial: 3s Countdown, GTM Event `generate_lead`, dann Redirect zu fleetster
+- **registrierung-erfolgreich.html** — Danke-Seite: GTM Event `sign_up`, App-Download-Links
 
 ## CSS-Architektur
 
@@ -112,11 +126,12 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 
 ## Tracking & Consent
 
-- **GTM:** Container-ID `GTM-P4D6Z66` (einziger Script-Tag)
-- **Cookiebot:** Platzhalter `DEINE-COOKIEBOT-ID` — muss ersetzt werden
-- **Trustpilot:** Platzhalter `DEINE-TEMPLATE-ID` und `DEINE-BUSINESS-ID`
+- **GTM:** Container-ID `GTM-P4D6Z66` (auf allen Seiten inkl. Unterseiten)
+- **Cookiebot:** Domain-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` (auf allen Seiten)
+- **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
+- **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
-- **Conversion:** Facebook Pixel auf fleetster-Dankeseite trackt Registrierungen
+- **Conversion-Funnel:** Alle CTAs → `weiterleitung-registrierung.html` (GTM `generate_lead`) → fleetster → `registrierung-erfolgreich.html` (GTM `sign_up`)
 
 ## Fleetster-API (deferred)
 
@@ -128,21 +143,33 @@ Drei Stubs die noch API-Anbindung brauchen:
 API-Docs: `https://www.fleetster.net/mobility-api`
 Swagger: `https://my.fleetster.net/swagger/` (Credentials nötig)
 
-## Offene Punkte vor Go-Live
+## Erledigte Go-Live-Punkte
 
-- [ ] Impressum/Datenschutz/AGB-Seiten erstellen (Footer-Links sind `#`)
-- [ ] Cookiebot-ID eintragen
-- [ ] Trustpilot Widget-IDs eintragen
-- [ ] Bilder optimieren (PNG 7,2 MB → WebP komprimieren)
-- [ ] Trustpilot-Score im Hero an echten Wert anpassen
-- [ ] YouTube-Link im Footer eintragen
-- [ ] Domain & Hosting einrichten
+- [x] Impressum/Datenschutz/AGB-Seiten erstellt
+- [x] Cookiebot-ID eingetragen (`3d40de5d-ceaa-46b5-97af-cc86c9aed0fd`)
+- [x] Trustpilot Widget-IDs eingetragen (Hero + Grid)
+- [x] Bilder optimiert (PNG 7,2 MB → JPG 240 KB)
+- [x] YouTube-Link im Footer eingetragen
+- [x] GitHub Pages Hosting eingerichtet
+- [x] Tracking-Seiten erstellt (Soft-Conversion + Conversion)
+- [x] FAQ komplett überarbeitet (31 Fragen, 5 Kategorien)
+
+## Offene Punkte
+
+- [ ] Eigene Domain verbinden (GitHub Pages → Custom Domain)
 - [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
+- [ ] Fleetster-API anbinden (Cloudflare Worker als Proxy)
+- [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
+- [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
 
 ## Externe Links
 
 - Buchungsplattform: `https://theurer-trucks-2go.fleetster.de`
+- GitHub Repo: `https://github.com/andreastheurer-tt2go/theurer-trucks-2go-webseite`
 - Facebook: `https://www.facebook.com/theurertrucks2go`
 - Instagram: `https://www.instagram.com/theurer_trucks_2go/`
+- YouTube: `https://www.youtube.com/@theurertrucks`
 - App Store: `https://apps.apple.com/us/app/theurertrucks-2go/id1589088586`
 - Google Play: `https://play.google.com/store/apps/details?id=theurertrucks2go.fleetster.de`
+- Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/view`
+- AGB PDF: `https://drive.google.com/file/d/129aQ5Sidqh6mkAiQgQuYl9M7R8Zg6HaI/view`

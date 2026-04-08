@@ -65,26 +65,33 @@ Die Seite kombiniert emotionalen Einstieg mit starkem Produkt-Showcase:
 2. Starker Produkt-Showcase (Infografik, Fahrzeug-Galerie)
 3. Mehrere CTAs entlang des Scroll-Funnels
 
-### CTA-Positionen (alle → fleetster-Registrierung)
+### CTA-Positionen (alle → weiterleitung-registrierung.html → fleetster)
 
 | Position | GTM-Label | Zweck |
 |---|---|---|
 | Navbar | `navbar` | Dauerhaft sichtbar |
 | Hero | `hero_cta` | Fängt Entschlossene sofort |
 | Vorteile-Showcase | `video_cta` | Nach emotionalem Höhepunkt |
-| Standortkarte | `map_cta` | Standort gefunden = Handlungsimpuls |
-| Erklärvideo | `explainer_cta` | Letzte Zweifel ausgeräumt |
+| Standortkarte | scrollt zu #verfuegbarkeit | Standort gefunden = Verfügbarkeit prüfen |
 | CTA-Band | `final_cta` | Letzter Push am Ende |
 | Sticky Mobile | `mobile_sticky` | Immer sichtbar auf Mobile |
 | Fahrt-Rechner | `trip_calculator` | Nach Preisberechnung |
 | Preiskarten | `preise_tag/wochenende/woche` | Direkt bei den Preisen |
 
-### Tracking
+### Conversion-Funnel (2-stufig)
 
-- **Primäre Conversion:** Klick auf "Jetzt kostenlos registrieren" (alle CTAs)
-- **Sekundäre Conversion:** Erfolgreiche Registrierung bei fleetster (Facebook Pixel auf Dankeseite)
-- **Scroll-Depth, CTA-Performance:** Über GTM konfigurierbar
+1. **Soft-Conversion:** CTA-Klick → `weiterleitung-registrierung.html` → GTM Event `generate_lead` → 3s Countdown → Redirect zu fleetster
+2. **Finale Conversion:** Nach Registrierung bei fleetster → Redirect zu `registrierung-erfolgreich.html` → GTM Event `sign_up`
+
+In GTM konfigurieren:
+- Trigger auf `generate_lead` → Meta Pixel "Lead", Google Ads "Klick-Conversion"
+- Trigger auf `sign_up` → Meta Pixel "CompleteRegistration", Google Ads "Registrierungs-Conversion"
+
+### Tracking-Hinweise
+
 - Facebook-Lead-Qualität ist schlechter als Google, Google lässt sich nicht weiter skalieren
+- Scroll-Depth und CTA-Performance über GTM konfigurierbar
+- Jeder CTA hat ein eindeutiges `cta_location` Label für A/B-Analyse
 
 ## Fahrzeug-Details (STX Pferdetransporter)
 
@@ -148,11 +155,11 @@ Längere Mietzeiträume nach Rücksprache möglich.
 ### Fahrt-Rechner Logik
 
 Der Fahrt-Rechner auf der Webseite berechnet:
-1. Nutzer gibt Entfernung zum Ziel ein (einfache Strecke)
-2. Gesamtstrecke = Entfernung × 2 (Hin + Rück)
-3. Nutzer wählt Tage (1-7)
-4. Wenn Gesamtstrecke > Freikilometer: Mehrkilometer × 0,46 € = Aufpreis
-5. Gesamtkosten = Tarif + Aufpreis
+1. Nutzer gibt Gesamtstrecke ein (km, Default: 150)
+2. Nutzer wählt Tage (1-7)
+3. Wenn Gesamtstrecke > Freikilometer: Mehrkilometer × 0,46 € = Aufpreis
+4. Gesamtkosten = Tarif + Aufpreis
+5. Hinweis unter Tagesauswahl: "Längere Buchungszeiträume auf Anfrage möglich — info@theurer-trucks-2go.de"
 
 ## JavaScript-Funktionen
 
@@ -181,20 +188,67 @@ Der Fahrt-Rechner auf der Webseite berechnet:
 ## Schema.org Structured Data
 
 Im `<head>` als JSON-LD:
-- **FAQPage** — 6 Fragen für Google Rich Snippets
+- **FAQPage** — 8 SEO-relevante Fragen für Google Rich Snippets
 - **Organization** — TheurerTrucks Renting GmbH mit Adresse und Social Links
 
 Noch nicht implementiert (optional):
 - LocalBusiness (für Standorte)
 - Product (für den STX Pferdetransporter)
 
-## Design-Entscheidungen aus der Session
+## FAQ-Kategorien (31 Fragen)
+
+| Kategorie | Anzahl | Themen |
+|---|---|---|
+| Buchung & Registrierung | 6 | Ablauf, Registrierung, Führerscheinverifizierung, zweiter Fahrer, Mindestalter |
+| Fahrzeug & Ausstattung | 13 | Führerschein, Maße, Zuladung, Anhängelast, Lüfter, Einstreuen, Heunetz, Wasser |
+| Während der Fahrt | 8 | Schlüssel, App-Öffnung, Verladen, Seite, Pferdeabteil, Tanken, AdBlue |
+| Kosten & Versicherung | 4 | Preise, Versicherung, Selbstbeteiligung, Kaution |
+| Rückgabe & Notfälle | 5 | Rückgabe, One-Way, Schadenfall, Notfallnummer, Kontakt |
+
+## Standortkarte → Verfügbarkeitsprüfer Integration
+
+Popup-Links in der Karte zeigen "Verfügbarkeit prüfen" statt "Jetzt buchen". Beim Klick:
+1. `selectStation(value)` wird aufgerufen
+2. Das Stations-Dropdown im Verfügbarkeitsprüfer wird auf den gewählten Standort gesetzt
+3. Seite scrollt smooth zum Verfügbarkeitsprüfer (#verfuegbarkeit)
+
+## Bildoptimierung
+
+| Bild | Vorher | Nachher | Methode |
+|---|---|---|---|
+| Infografik | 7.200 KB (PNG) | 240 KB (JPG) | Skaliert auf 1200px, Qualität 80% |
+| Hero | 900 KB | 826 KB | Skaliert auf 1920px, Qualität 80% |
+| Dashboard | 532 KB | 105 KB | Skaliert auf 800px, Qualität 75% |
+| STX-Fotos | 140-500 KB | Unverändert | Bereits optimiert (1200px) |
+| **img/ Gesamt** | **16 MB** | **8,6 MB** | (inkl. 3,9 MB Video) |
+
+Alle Bilder haben SEO-optimierte Alt-Texte mit Keywords.
+
+## Design-Entscheidungen aus den Sessions
 
 1. **Statisches Hero-Bild statt Video-Loop** — bessere Performance + Mobile-freundlicher
 2. **Stilles MP4-Video in Vertrauens-Sektion** — links neben den Karten im Hochformat, unterstützt die empathische Botschaft visuell
 3. **Infografik-Bild statt interaktiver Hotspots** — Hotspot-Version wurde getestet und verworfen, statisches Bild wirkt besser
-4. **Fahrt-Rechner statt Tarif-Rechner** — denkt in Fahrten ("Wie weit ist dein Ziel?") statt in Tarifen, spricht Julias Sprache
-5. **Zahlen-Banner mit blauem Gradient** — als optische Trennung zwischen dunklen Sektionen
+4. **Fahrt-Rechner statt Tarif-Rechner** — Gesamtstrecke eingeben statt einfache Strecke, spricht Julias Sprache
+5. **Zahlen-Banner mit blauem Gradient** — als optische Trennung zwischen Sektionen
 6. **5 statt 4 Schritte** — "App downloaden" als eigener Schritt hinzugefügt
-7. **Trustpilot-Sterne im Hero** — Glasmorphismus-Pill als Trust-Element
-8. **Preise früh in der Seite** — direkt nach Vertrauens-Sektion statt erst am Ende
+7. **Trustpilot-Sterne im Hero** — Glasmorphismus-Pill, klickbar → scrollt zu Bewertungen
+8. **Trustpilot direkt vor Preisen** — Social Proof vor der Preis-Entscheidung
+9. **Standorte direkt nach Preisen** — Preis gesehen → nächsten Standort finden
+10. **Erklärvideo in So-geht's integriert** — keine eigene Sektion mehr, unter den 5 Schritten
+11. **2-stufiger Conversion-Funnel** — Interstitial-Seite für Soft-Conversion-Tracking
+12. **Trustpilot Mobile-Höhe begrenzt** — 480px max-height verhindert endloses Scrollen
+13. **Footer-Logo weiß invertiert** — `filter: brightness(0) invert(1)` für Sichtbarkeit auf dunklem Hintergrund
+14. **Vertrauens-Karte 4 geändert** — "Lohnt sich ein Anhänger?" → "Wie schnell bekomme ich ein Fahrzeug?" (24/7 Verfügbarkeit)
+
+## Geplante Fleetster-API-Integration
+
+Architektur-Entscheidung: **Cloudflare Worker als Proxy** für alle API-Calls.
+
+| Endpoint | Zweck | Cache |
+|---|---|---|
+| `/api/availability` | Live-Verfügbarkeit prüfen | Kein Cache |
+| `/api/stations` | Standorte für Karte + Dropdown | 24h |
+| `/api/stats` | Fahrzeuge/Standorte/Nutzer für Zahlen-Banner | 30 Tage |
+
+API-Key bleibt als Environment Variable im Worker — nie im Frontend sichtbar.

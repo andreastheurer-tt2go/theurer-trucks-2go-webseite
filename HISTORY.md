@@ -46,39 +46,84 @@ Entwicklungshistorie der TheurerTrucks 2GO Webseite.
 
 ### Sektionsreihenfolge mehrfach optimiert
 
-Finale Reihenfolge:
-1. Hero → 2. Verfügbarkeit → 3. Vertrauen (mit Video) → 4. Vorteile (Infografik) → 5. Zahlen-Banner → 6. Preise → 7. So geht's → 8. Standorte → 9. Fahrzeug-Detail → 10. Trustpilot → 11. Erklärvideo → 12. FAQ → 13. CTA-Band → 14. Footer
+Finale Reihenfolge (Stand 08.04.2026):
+1. Hero → 2. Verfügbarkeit → 3. Vertrauen (mit Video) → 4. Vorteile (Infografik) → 5. Zahlen-Banner → 6. Trustpilot → 7. Preise → 8. Standorte → 9. So geht's (mit Erklärvideo) → 10. Fahrzeug-Detail → 11. FAQ → 12. CTA-Band → 13. Footer
 
-### Commits (chronologisch)
+---
 
-1. `feat: Projekt-Setup mit Assets und HTML-Grundgerüst`
-2. `feat: CSS-Basis, Navbar, Hero, Verfügbarkeit, Vertrauen, Video-Showcase`
-3. `feat: Fahrzeug, Ausstattung, So-gehts, Standorte, Trustpilot, Erklärvideo, Preise, FAQ, CTA-Band, Footer`
-4. `feat: SEO-Dateien und Accessibility-Feinschliff`
-5. `fix: Spec-Abweichungen korrigiert`
-6. `Entferne Ausstattungs-Galerie Sektion`
-7. `refactor: CSS auf Mobile-First umgebaut + Sticky Mobile CTA`
-8. `fix: 4 inhaltliche Korrekturen`
-9. `fix: Preise aktualisiert gemäß Preisblatt Stand 15.01.2024`
-10. `fix: Vorteile-Sektion — Infografik-Bild statt Kacheln`
-11. `fix: Zahlen-Banner unter "So einfach geht's" verschoben`
-12. `fix: Video neben Trustpilot-Bewertungen (Side-by-Side Layout)`
-13. `fix: Dieselkosten-Hinweis angepasst`
-14. `feat: Zahlen-Banner, Preisrechner und Fahrzeug-Features-Diagramm`
-15. `fix: Deine Vorteile über Preise verschoben`
-16. `Revert "feat: Interaktive Hotspot-Grafik"` (Nutzer-Feedback: nicht gut)
-17. `fix: Sektionsreihenfolge optimiert`
-18. `fix: Zahlen-Banner zwischen Vertrauen und Preise verschoben`
-19. `feat: Video in Vertrauens-Sektion integriert`
-20. `feat: 5 Schritte statt 4`
-21. `feat: PLZ-Suche mit Nominatim Geocoding`
-22. `fix: STX Fahrzeug-Specs angepasst`
-23. `fix: Redundanten Fahrzeug-Header entfernt`
-24. `fix: Zahlen-Banner blauer Gradient`
-25. `feat: Trustpilot-Sterne im Hero`
-26. `fix: Trustpilot Hero-Widget Glasmorphismus`
-27. `feat: Fahrt-Rechner ersetzt Preisrechner`
+## Session 2 — 07./08.04.2026
+
+### Weitere Anpassungen
+
+- **Vertrauens-Karte 4 geändert** — "Lohnt sich ein Anhänger?" → "Wie schnell bekomme ich ein Fahrzeug?" (24/7 Verfügbarkeit)
+- **Preisrechner auf Gesamtstrecke** umgestellt (statt einfache Strecke × 2), Default 150 km
+- **Preisrechner Aufpreis-Nachricht** entfernt, Hinweis für längere Buchungszeiträume ergänzt (mit mailto-Link)
+- **Trustpilot Starter-Widget im Hero** → zurück zu statischen Sternen mit Glasmorphismus-Pill, klickbar → scrollt zu #bewertungen
+- **Trustpilot Grid-Widget** eingebettet (Template `539adbd6dec7e10e686debee`), volle Containerbreite für 4 Spalten auf Desktop
+- **Trustpilot direkt vor Preise** verschoben
+- **Standortkarte unter Preise** verschoben
+- **Erklärvideo in So-geht's** integriert (eigene Sektion entfernt), weiße Balken am iframe entfernt
+- **Standortkarte Popup-Links** → "Verfügbarkeit prüfen" statt "Jetzt buchen", Standort wird im Dropdown vorausgewählt
+- **Sektions-Hintergrundfarben** korrigiert (abwechselnd weiß ↔ hellgrau ↔ dunkel)
+- **Fahrzeug-Specs** bereinigt: 3 entfernt (Großpferd, Federung, 80km/h), Navi ergänzt
+- **Redundanter Fahrzeug-Header** entfernt
+- **Footer** — Logo weiß invertiert (52px), Text gekürzt, YouTube-Link eingetragen
+
+### FAQ komplett überarbeitet
+
+- 31 Fragen in 5 Kategorien mit Tab-Navigation
+- Kategorien: Buchung & Registrierung, Fahrzeug & Ausstattung, Während der Fahrt, Kosten & Versicherung, Rückgabe & Notfälle
+- "Alle"-Tab entfernt, Default = Buchung & Registrierung
+- Schriftgrößen vergrößert (Fragen 1.05rem, Antworten 0.95rem)
+- Schema.org FAQPage JSON-LD auf 8 Fragen aktualisiert
+
+### Unterseiten erstellt
+
+- **impressum.html** — Vollständiges Impressum
+- **agb.html** — Alle 23 Paragraphen (§1-§23, Stand 28.01.2024)
+- **datenschutz.html** — Kerninformationen + PDF-Download-Link auf Google Drive
+- **weiterleitung-registrierung.html** — 3s Countdown-Animation, GTM Event `generate_lead`, Redirect zu fleetster
+- **registrierung-erfolgreich.html** — Danke-Seite mit App-Download-Links, GTM Event `sign_up`
+- Footer-Links in index.html aktualisiert (# → .html)
+- Alle CTA-Links in index.html → `weiterleitung-registrierung.html` (statt direkt fleetster)
+
+### Neue Fahrzeugbilder
+
+- 11 professionelle STX-Fotos eingebaut (5 Exterior, 6 Interior)
+- Galerie: 6 Spalten auf Desktop, Auto-Rotate 5s
+- Alle Alt-Texte SEO-optimiert mit Keywords
+
+### Tracking & Consent
+
+- Cookiebot-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` eingetragen
+- Trustpilot Widget-IDs eingetragen (Hero Starter + Bewertungen Grid)
+- YouTube-Link im Footer eingetragen
+- Instagram-Link verifiziert
+
+### Bildoptimierung
+
+- Infografik PNG (7,2 MB) → JPG (240 KB) — 97% Ersparnis
+- Dashboard komprimiert (532 KB → 105 KB)
+- Duplikat STX-Bild entfernt, altes PNG gelöscht
+- Alle Alt-Texte SEO-optimiert
+- Gesamt img/: 16 MB → 8,6 MB
+
+### Mobile-Optimierung
+
+- Trustpilot-Widget Höhe auf Mobile begrenzt (480px max-height)
+- "Alle Bewertungen auf Trustpilot ansehen" Link ergänzt
+
+### Deployment
+
+- GitHub Repository erstellt: `andreastheurer-tt2go/theurer-trucks-2go-webseite`
+- `.gitignore` erstellt (Testprojekt, PDFs, Screenshots, .DS_Store ausgeschlossen)
+- Erfolgreich zu GitHub gepusht
+- GitHub Pages aktiviert (Deploy from branch main, root /)
+- **Seite ist live**
 
 ### Offene Punkte
 
-Siehe CLAUDE.md → "Offene Punkte vor Go-Live"
+- [ ] Eigene Domain verbinden
+- [ ] Fleetster-API anbinden (Cloudflare Worker als Proxy)
+- [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
+- [ ] In fleetster Redirect-URL auf Erfolgsseite setzen
