@@ -1,0 +1,154 @@
+{
+  "name": "TT2GO - Statische Daten (Standorte + Zahlen)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "tt2go-data",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" },
+              { "name": "Cache-Control", "value": "public, max-age=86400" }
+            ]
+          }
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://my.fleetster.net/users/auth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ email: $env.FLEETSTER_EMAIL, password: $env.FLEETSTER_PASSWORD }) }}",
+        "options": {}
+      },
+      "id": "auth-login",
+      "name": "Fleetster Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst token = response._id;\nreturn [{ json: { token } }];"
+      },
+      "id": "extract-token",
+      "name": "Token extrahieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://my.fleetster.net/locations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ $json.token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-locations",
+      "name": "Standorte abrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://my.fleetster.net/vehicles",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-vehicles",
+      "name": "Fahrzeuge abrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://my.fleetster.net/users?limit=0",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-users",
+      "name": "Nutzer abrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 600]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {},
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "Daten zusammenführen",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Standorte aus dem ersten Input\nconst locationsRaw = $('Standorte abrufen').first().json;\nconst vehiclesRaw = $('Fahrzeuge abrufen').first().json;\nconst usersRaw = $('Nutzer abrufen').first().json;\n\n// Locations können als Array oder einzelnes Objekt kommen\nconst locations = Array.isArray(locationsRaw) ? locationsRaw : [locationsRaw];\nconst vehicles = Array.isArray(vehiclesRaw) ? vehiclesRaw : [vehiclesRaw];\nconst users = Array.isArray(usersRaw) ? usersRaw : [usersRaw];\n\n// Standorte formatieren\nconst stations = locations\n  .filter(loc => !loc.deleted)\n  .filter(loc => loc.extended?.GeoPosition?.latitude)\n  .map(loc => ({\n    id: loc._id,\n    name: loc.name || '',\n    city: loc.city || '',\n    postcode: loc.postcode || '',\n    street: (loc.streetName || '') + ' ' + (loc.streetNumber || ''),\n    lat: loc.extended.GeoPosition.latitude,\n    lng: loc.extended.GeoPosition.longitude,\n    comment: loc.comment || ''\n  }))\n  .sort((a, b) => a.name.localeCompare(b.name));\n\n// Fahrzeuge pro Standort zählen\nconst vehiclesByLocation = {};\nvehicles.forEach(v => {\n  if (v.locationId && !v.deleted) {\n    vehiclesByLocation[v.locationId] = (vehiclesByLocation[v.locationId] || 0) + 1;\n  }\n});\n\n// Standorte mit Fahrzeuganzahl anreichern\nstations.forEach(s => {\n  s.vehicleCount = vehiclesByLocation[s.id] || 0;\n});\n\nconst result = {\n  stations: stations,\n  stats: {\n    vehicles: vehicles.filter(v => !v.deleted).length,\n    stations: stations.length,\n    users: users.length\n  },\n  updated: new Date().toISOString()\n};\n\nreturn [{ json: result }];"
+      },
+      "id": "format-response",
+      "name": "JSON formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Content-Type", "value": "application/json" },
+              { "name": "Access-Control-Allow-Origin", "value": "*" },
+              { "name": "Cache-Control", "value": "public, max-age=86400" }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Response senden",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1560, 400]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Fleetster Login", "type": "main", "index": 0 }]] },
+    "Fleetster Login": { "main": [[{ "node": "Token extrahieren", "type": "main", "index": 0 }]] },
+    "Token extrahieren": { "main": [[{ "node": "Standorte abrufen", "type": "main", "index": 0 }, { "node": "Fahrzeuge abrufen", "type": "main", "index": 0 }, { "node": "Nutzer abrufen", "type": "main", "index": 0 }]] },
+    "Standorte abrufen": { "main": [[{ "node": "JSON formatieren", "type": "main", "index": 0 }]] },
+    "Fahrzeuge abrufen": { "main": [[{ "node": "JSON formatieren", "type": "main", "index": 0 }]] },
+    "Nutzer abrufen": { "main": [[{ "node": "JSON formatieren", "type": "main", "index": 0 }]] },
+    "JSON formatieren": { "main": [[{ "node": "Response senden", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

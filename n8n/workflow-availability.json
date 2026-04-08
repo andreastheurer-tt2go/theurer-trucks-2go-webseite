@@ -1,0 +1,133 @@
+{
+  "name": "TT2GO - Verfügbarkeitsprüfung (Live)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tt2go-availability",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" },
+              { "name": "Access-Control-Allow-Headers", "value": "Content-Type" }
+            ]
+          }
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst stationId = body?.stationId || '';\nconst startDate = body?.startDate || '';\nconst endDate = body?.endDate || '';\n\nif (!stationId || !startDate || !endDate) {\n  return [{ json: { error: 'Parameter fehlen: stationId, startDate, endDate erforderlich' } }];\n}\n\nreturn [{ json: { stationId, startDate, endDate } }];"
+      },
+      "id": "validate-input",
+      "name": "Parameter validieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://my.fleetster.net/users/auth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ email: $env.FLEETSTER_EMAIL, password: $env.FLEETSTER_PASSWORD }) }}",
+        "options": {}
+      },
+      "id": "auth-login",
+      "name": "Fleetster Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const authResponse = $input.first().json;\nconst token = authResponse._id;\nconst params = $('Parameter validieren').first().json;\nreturn [{ json: { token, ...params } }];"
+      },
+      "id": "extract-token",
+      "name": "Token extrahieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://my.fleetster.net/vehicles?locationId={{ $json.stationId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ $json.token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-vehicles",
+      "name": "Fahrzeuge am Standort",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://my.fleetster.net/bookings?state=created&state=keyreleased&startDate%5B%24lte%5D={{ encodeURIComponent($('Token extrahieren').first().json.endDate) }}&endDate%5B%24gte%5D={{ encodeURIComponent($('Token extrahieren').first().json.startDate) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-bookings",
+      "name": "Buchungen im Zeitraum",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "const vehiclesRaw = $('Fahrzeuge am Standort').first().json;\nconst bookingsRaw = $('Buchungen im Zeitraum').first().json;\nconst params = $('Token extrahieren').first().json;\n\nconst vehicles = Array.isArray(vehiclesRaw) ? vehiclesRaw : [vehiclesRaw];\nconst bookings = Array.isArray(bookingsRaw) ? bookingsRaw : (bookingsRaw ? [bookingsRaw] : []);\n\n// Fahrzeuge am gewählten Standort (nicht gelöscht)\nconst stationVehicles = vehicles.filter(v => !v.deleted && v.locationId === params.stationId);\n\n// Gebuchte Fahrzeug-IDs im Zeitraum\nconst bookedVehicleIds = new Set(\n  bookings\n    .filter(b => b.vehicleId && stationVehicles.some(v => v._id === b.vehicleId))\n    .map(b => b.vehicleId)\n);\n\n// Verfügbare Fahrzeuge = am Standort minus gebuchte\nconst availableVehicles = stationVehicles.filter(v => !bookedVehicleIds.has(v._id));\n\nreturn [{\n  json: {\n    available: availableVehicles.length > 0,\n    availableCount: availableVehicles.length,\n    totalAtStation: stationVehicles.length,\n    stationId: params.stationId,\n    startDate: params.startDate,\n    endDate: params.endDate\n  }\n}];"
+      },
+      "id": "check-availability",
+      "name": "Verfügbarkeit berechnen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 350]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Content-Type", "value": "application/json" },
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Response senden",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1560, 350]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Parameter validieren", "type": "main", "index": 0 }]] },
+    "Parameter validieren": { "main": [[{ "node": "Fleetster Login", "type": "main", "index": 0 }]] },
+    "Fleetster Login": { "main": [[{ "node": "Token extrahieren", "type": "main", "index": 0 }]] },
+    "Token extrahieren": { "main": [[{ "node": "Fahrzeuge am Standort", "type": "main", "index": 0 }, { "node": "Buchungen im Zeitraum", "type": "main", "index": 0 }]] },
+    "Fahrzeuge am Standort": { "main": [[{ "node": "Verfügbarkeit berechnen", "type": "main", "index": 0 }]] },
+    "Buchungen im Zeitraum": { "main": [[{ "node": "Verfügbarkeit berechnen", "type": "main", "index": 0 }]] },
+    "Verfügbarkeit berechnen": { "main": [[{ "node": "Response senden", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

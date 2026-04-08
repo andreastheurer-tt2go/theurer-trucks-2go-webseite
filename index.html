@@ -3454,6 +3454,14 @@
 </footer>
 
     <script>
+        // ============================================================
+        // API-Konfiguration — Webhook-URLs hier eintragen
+        // ============================================================
+        var TT2GO_API = {
+            dataUrl:  '',   // z.B. 'https://dein-vps.de/webhook/tt2go-data'
+            availUrl: ''    // z.B. 'https://dein-vps.de/webhook/tt2go-availability'
+        };
+
         /* ── Navbar Scroll-Effekt ──────────────────────────────── */
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
@@ -3505,11 +3513,12 @@
             }
         })();
 
-        /* ── Verfügbarkeitsprüfung (Stub) ─────────────────────── */
+        /* ── Verfügbarkeitsprüfung (API oder Stub) ────────────── */
         function checkAvailability() {
-            const start  = document.getElementById('startDate').value;
-            const end    = document.getElementById('endDate').value;
-            const result = document.getElementById('availResult');
+            var start     = document.getElementById('startDate').value;
+            var end       = document.getElementById('endDate').value;
+            var stationId = document.getElementById('stationSelect').value;
+            var result    = document.getElementById('availResult');
 
             // Pflichtfelder prüfen
             if (!start || !end) {
@@ -3522,18 +3531,72 @@
             }
 
             // Lade-Animation während der Prüfung
-            const btn = document.querySelector('.avail__btn');
-            const origHTML = btn.innerHTML;
-            btn.innerHTML  = '<i class="fas fa-spinner fa-spin"></i> Wird geprüft…';
-            btn.disabled   = true;
+            var btn      = document.querySelector('.avail__btn');
+            var origHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird geprüft…';
+            btn.disabled  = true;
 
-            // Demo: nach 1,2 Sekunden Ergebnis anzeigen (API-Anbindung ausstehend)
-            setTimeout(() => {
+            function resetBtn() {
                 btn.innerHTML = origHTML;
                 btn.disabled  = false;
-                result.classList.add('visible');
-                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 1200);
+            }
+
+            function showStubResult() {
+                // Fallback: positives Ergebnis nach 1,2 Sekunden anzeigen
+                setTimeout(function() {
+                    resetBtn();
+                    result.innerHTML =
+                        '<div class="avail__result-icon"><i class="fas fa-check"></i></div>' +
+                        '<div class="avail__result-text" style="flex:1">' +
+                        '<strong>Transporter verfügbar!</strong>' +
+                        '<p>Unser STX Pferdetransporter steht für deinen Zeitraum bereit — jetzt direkt buchen:</p>' +
+                        '</div>' +
+                        '<a href="weiterleitung-registrierung.html" class="btn btn--primary" target="_blank" rel="noopener noreferrer">' +
+                        'Jetzt buchen <i class="fas fa-arrow-right"></i></a>';
+                    result.classList.add('visible');
+                    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 1200);
+            }
+
+            if (TT2GO_API.availUrl) {
+                // API-Anfrage an n8n Webhook
+                fetch(TT2GO_API.availUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ stationId: stationId, startDate: start, endDate: end })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    resetBtn();
+                    if (data.available) {
+                        var count = data.count ? data.count + ' Transporter' : 'Transporter';
+                        result.innerHTML =
+                            '<div class="avail__result-icon"><i class="fas fa-check"></i></div>' +
+                            '<div class="avail__result-text" style="flex:1">' +
+                            '<strong>' + count + ' verfügbar!</strong>' +
+                            '<p>Unser STX Pferdetransporter steht für deinen Zeitraum bereit — jetzt direkt buchen:</p>' +
+                            '</div>' +
+                            '<a href="weiterleitung-registrierung.html" class="btn btn--primary" target="_blank" rel="noopener noreferrer">' +
+                            'Jetzt buchen <i class="fas fa-arrow-right"></i></a>';
+                    } else {
+                        result.innerHTML =
+                            '<div class="avail__result-icon" style="background:var(--warning,#e67e22)"><i class="fas fa-times"></i></div>' +
+                            '<div class="avail__result-text" style="flex:1">' +
+                            '<strong>Leider kein Transporter verfügbar</strong>' +
+                            '<p>Für diesen Zeitraum ist kein Transporter frei. Bitte versuche einen anderen Zeitraum oder Standort.</p>' +
+                            '</div>';
+                    }
+                    result.classList.add('visible');
+                    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                })
+                .catch(function() {
+                    console.warn('Verfügbarkeits-API nicht erreichbar — zeige Fallback-Ergebnis');
+                    showStubResult();
+                });
+            } else {
+                // Kein API-URL konfiguriert — Stub-Verhalten
+                showStubResult();
+            }
         }
 
         /* Schüttel-Animation bei fehlenden Pflichtfeldern */
@@ -3618,54 +3681,121 @@
         }
 
         /* ── Leaflet Standortkarte (Task 10) ──────────────────── */
+        // Fallback-Standorte (werden verwendet wenn kein API-URL konfiguriert ist)
+        var fallbackStations = [
+            { id: 'hamburg',  lat: 53.5753, lng: 10.0153, name: 'Reitstall Müller',    city: 'Hamburg' },
+            { id: 'berlin',   lat: 52.5200, lng: 13.4050, name: 'Pferdehof am See',    city: 'Berlin' },
+            { id: 'muenchen', lat: 48.1351, lng: 11.5820, name: 'Reitanlage Süd',      city: 'München' },
+            { id: 'koeln',    lat: 50.9333, lng: 6.9500,  name: 'Gestüt Rheinland',    city: 'Köln' },
+            { id: 'hannover', lat: 52.3759, lng: 9.7320,  name: 'Reitstall Nordheide', city: 'Hannover' }
+        ];
+
         // Karte nur initialisieren wenn das Element existiert
-        const mapEl = document.getElementById('map');
-        let leafletMap = null;
+        var mapEl = document.getElementById('map');
+        var leafletMap = null;
+        var blueIcon = null;
+
         if (mapEl) {
             // Karte auf Deutschland zentrieren
             leafletMap = L.map('map').setView([51.1657, 10.4515], 6);
-            const map = leafletMap;
 
             // OpenStreetMap Kacheln laden
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19
-            }).addTo(map);
+            }).addTo(leafletMap);
 
             // Eigenes Marker-Icon mit Font Awesome
-            const blueIcon = L.divIcon({
+            blueIcon = L.divIcon({
                 html: '<i class="fas fa-location-dot" style="color:#0088CF;font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></i>',
                 className: '',
                 iconSize: [28, 36],
                 iconAnchor: [14, 36],
                 popupAnchor: [0, -36]
             });
+        }
 
-            // Stub-Standorte mit Popup
-            const standorte = [
-                { lat: 53.5753, lng: 10.0153, name: 'Reitstall Müller', city: 'Hamburg', value: 'hamburg' },
-                { lat: 52.5200, lng: 13.4050, name: 'Pferdehof am See', city: 'Berlin', value: 'berlin' },
-                { lat: 48.1351, lng: 11.5820, name: 'Reitanlage Süd', city: 'München', value: 'muenchen' },
-                { lat: 50.9333, lng: 6.9500,  name: 'Gestüt Rheinland', city: 'Köln', value: 'koeln' },
-                { lat: 52.3759, lng: 9.7320,  name: 'Reitstall Nordheide', city: 'Hannover', value: 'hannover' }
-            ];
+        // Marker-Referenzen speichern um sie später ersetzen zu können
+        var currentMarkers = [];
 
-            standorte.forEach(s => {
-                L.marker([s.lat, s.lng], { icon: blueIcon })
-                    .addTo(map)
-                    .bindPopup(
-                        `<strong>${s.name}</strong><br>${s.city}<br>` +
-                        `<a href="#verfuegbarkeit" onclick="selectStation('${s.value}')" ` +
-                        `style="color:#0088CF;font-weight:700;">Verfügbarkeit prüfen →</a>`
-                    );
+        // Standorte in Karte und Dropdown eintragen
+        function populateStations(stations) {
+            // Bestehende Marker entfernen
+            currentMarkers.forEach(function(m) { m.remove(); });
+            currentMarkers = [];
+
+            // Dropdown leeren und neu befüllen
+            var select = document.getElementById('stationSelect');
+            if (select) {
+                select.innerHTML = '<option value="">— Standort wählen —</option>';
+                stations.forEach(function(s) {
+                    var opt = document.createElement('option');
+                    opt.value       = s.id;
+                    opt.textContent = (s.city ? s.city + ' – ' : '') + s.name;
+                    select.appendChild(opt);
+                });
+            }
+
+            // Marker zur Karte hinzufügen
+            if (leafletMap && blueIcon) {
+                stations.forEach(function(s) {
+                    var marker = L.marker([s.lat, s.lng], { icon: blueIcon })
+                        .addTo(leafletMap)
+                        .bindPopup(
+                            '<strong>' + s.name + '</strong><br>' + (s.city || '') + '<br>' +
+                            '<a href="#verfuegbarkeit" onclick="selectStation(\'' + s.id + '\')" ' +
+                            'style="color:#0088CF;font-weight:700;">Verfügbarkeit prüfen →</a>'
+                        );
+                    currentMarkers.push(marker);
+                });
+            }
+        }
+
+        // Zähler-Band-Zahlen aus API aktualisieren
+        function updateStats(stats) {
+            // stats kann z.B. { stations: 63, vehicles: 51, trips: 15677 } sein
+            var counterEls = document.querySelectorAll('.counter-band__number[data-target]');
+            var keys = Object.keys(stats);
+            counterEls.forEach(function(el, i) {
+                if (i < keys.length) {
+                    var val = stats[keys[i]];
+                    el.dataset.target = val;
+                    el.textContent    = val.toLocaleString('de-DE');
+                }
             });
+        }
+
+        // Standorte + Zahlen laden (API oder Fallback)
+        function loadStationData() {
+            if (TT2GO_API.dataUrl) {
+                fetch(TT2GO_API.dataUrl)
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data.stations) populateStations(data.stations);
+                        if (data.stats)    updateStats(data.stats);
+                    })
+                    .catch(function() {
+                        console.warn('API nicht erreichbar — verwende Fallback-Daten');
+                        populateStations(fallbackStations);
+                    });
+            } else {
+                populateStations(fallbackStations);
+            }
         }
 
         // Standort aus Karte auswählen → Verfügbarkeitsprüfer vorausfüllen
         function selectStation(value) {
             var select = document.getElementById('stationSelect');
             if (select) {
-                select.value = value;
+                // Versuche direkten Match, sonst durchsuche Options
+                var found = false;
+                for (var i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === value) {
+                        select.value = value;
+                        found = true;
+                        break;
+                    }
+                }
             }
             document.getElementById('verfuegbarkeit').scrollIntoView({ behavior: 'smooth' });
         }
@@ -3745,6 +3875,9 @@
         }, { threshold: 0.5 });
 
         document.querySelectorAll('.counter-band__number').forEach(el => counterObserver.observe(el));
+
+        // Standortdaten laden (API oder Fallback)
+        loadStationData();
 
         // Fahrt-Rechner
         let selectedTripBtn = document.querySelector('.calculator__day-btn.active');
