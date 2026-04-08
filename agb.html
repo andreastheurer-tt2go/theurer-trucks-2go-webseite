@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGB — TheurerTrucks 2GO</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES
+        ============================================================ */
+        :root {
+            --primary:          #0088CF;
+            --primary-bright:   #38B6FF;
+            --primary-dark:     #006fa8;
+            --primary-deeper:   #005a8c;
+            --primary-light:    #e8f4fb;
+            --primary-ghost:    rgba(0, 136, 207, 0.08);
+            --primary-grad:     linear-gradient(135deg, #0088CF 0%, #38B6FF 100%);
+            --primary-grad-r:   linear-gradient(135deg, #38B6FF 0%, #0088CF 100%);
+
+            --dark:             #0f1419;
+            --dark-soft:        #1a2028;
+            --dark-medium:      #2a3038;
+            --text:             #4a5568;
+            --text-light:       #718096;
+            --text-dark:        #1a202c;
+
+            --light:            #f7fafc;
+            --white:            #ffffff;
+            --border:           #e2e8f0;
+            --border-light:     #edf2f7;
+
+            --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow:           0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg:        0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-blue:      0 4px 24px rgba(0, 136, 207, 0.28);
+            --shadow-blue-lg:   0 12px 40px rgba(0, 136, 207, 0.35);
+
+            --radius-sm:        8px;
+            --radius:           12px;
+            --radius-lg:        20px;
+            --radius-xl:        28px;
+            --radius-full:      999px;
+
+            --ease:             cubic-bezier(0.4, 0, 0.2, 1);
+            --transition:       all 0.3s var(--ease);
+        }
+
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.15;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+        /* Obere Akzentlinie */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-grad);
+            z-index: 9999;
+        }
+
+        /* ============================================================
+           LAYOUT HELPERS
+        ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ============================================================
+           BUTTONS
+        ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 32px;
+            border-radius: var(--radius-full);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            white-space: nowrap;
+            min-height: 48px;
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-blue-lg);
+        }
+
+        /* ============================================================
+           NAVBAR
+        ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 3px;
+            inset-inline: 0;
+            z-index: 900;
+            padding: 20px 0;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 var(--border), var(--shadow-sm);
+        }
+
+        .navbar__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .navbar__logo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar__logo img {
+            height: 42px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .navbar__logo img {
+            height: 38px;
+            filter: none;
+        }
+
+        .navbar__back {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.85);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .navbar.scrolled .navbar__back { color: var(--text-dark); }
+        .navbar__back:hover,
+        .navbar.scrolled .navbar__back:hover { color: var(--primary); }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer {
+            background: #0a0d10;
+            padding: 72px 0 32px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-bottom: 52px;
+        }
+
+        .footer__logo { margin-bottom: 16px; }
+
+        .footer__logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .footer__desc {
+            font-size: 0.87rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer__social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer__social a:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer__col-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer__links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer__links a {
+            font-size: 0.87rem;
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__links a:hover { color: var(--primary-bright); }
+
+        .footer__contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.87rem;
+        }
+
+        .footer__contact-row i {
+            color: var(--primary-bright);
+            margin-top: 3px;
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        .footer__bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            font-size: 0.82rem;
+            flex-wrap: wrap;
+        }
+
+        .footer__bar-links {
+            display: flex;
+            gap: 22px;
+        }
+
+        .footer__bar-links a {
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__bar-links a:hover { color: var(--primary-bright); }
+
+        /* ============================================================
+           LEGAL CONTENT
+        ============================================================ */
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+        }
+
+        .legal-content h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 8px;
+        }
+
+        .legal-content .legal-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .legal-content h2 {
+            font-size: 1.3rem;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .legal-content h3 {
+            font-size: 1.1rem;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .legal-content ul, .legal-content ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            line-height: 1.8;
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-content a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .legal-content .contact-block {
+            background: var(--light);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        /* Zurück-Link */
+        .legal-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            text-decoration: none;
+        }
+
+        .legal-back:hover { text-decoration: underline; }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (min-width: 769px) {
+            .container { padding: 0 28px; }
+            .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .footer__bar { flex-direction: row; text-align: left; justify-content: space-between; gap: 0; }
+        }
+
+        @media (min-width: 1025px) {
+            .footer__grid { grid-template-columns: 2fr 1fr 1fr 1.3fr; gap: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVBAR
+================================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO Logo">
+            </a>
+            <a href="index.html" class="navbar__back">
+                <i class="fas fa-arrow-left"></i> Zurück zur Startseite
+            </a>
+            <div style="flex:1"></div>
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--primary"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fas fa-truck-ramp-box"></i> Jetzt registrieren
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="legal-content">
+        <a href="index.html" class="legal-back"><i class="fas fa-arrow-left"></i> Zurück zur Startseite</a>
+        <h1>Allgemeine Geschäftsbedingungen</h1>
+        <p class="legal-date">AGB TheurerTrucks Renting GmbH &mdash; TheurerTrucks 2GO &nbsp;&middot;&nbsp; Stand: 28.01.2024</p>
+
+
+        <h2>§ 1 Gegenstand</h2>
+        <p>Die TheurerTrucks Renting GmbH („Anbieter") vermietet registrierten Kunden („Kunden") bei bestehender Verfügbarkeit Kraftfahrzeuge zur kurzzeitigen Nutzung („Kurzzeitmiete"). Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für die Registrierung (Abschluss des Kundenvertrages) und die Kurzzeitmiete der TheurerTrucks Renting GmbH -eigenen Fahrzeuge über das Kundenportal. Durch den Abschluss des Kundenvertrages erwirbt der Kunde keinen Anspruch auf die Kurzzeitmiete zu der zum Zeitpunkt der Registrierung gültigen Preisliste. Es gelten ausschließlich die aktuellen Preise zum Zeitpunkt der Buchung (siehe § 17 dieser AGB).</p>
+
+        <h2>§ 2 Fahrtberechtigung</h2>
+        <p>Fahrtberechtigt sind Personen, die einen Kundenvertrag mit dem Anbieter abgeschlossen haben (Kunde). Ist der Kunde eine juristische Person, kann er Personen benennen (Beauftragte), die in seinem Namen und auf seine Rechnung fahrtberechtigt sind. Das Fahrzeug darf ebenfalls mit Zustimmung und in Anwesenheit des Kunden im Fahrzeug von einer anderen Person geführt werden. Der Kunde hat sicherzustellen, dass die Fahrtberechtigten die Regelungen dieser AGB beachten und bei Fahrten fahrtüchtig und im Besitz einer gültigen Fahrerlaubnis sind. Der Kunde hat das Handeln der Fahrtberechtigten wie eigenes Handeln zu vertreten. Der Kunde muss jederzeit nachweisen können, wer das Fahrzeug gelenkt hat (z. B. bei Bußgeldbescheiden).</p>
+
+        <h2>§ 3 Buchungspflicht</h2>
+        <p>Der Kunde verpflichtet sich vor jeder Nutzung eines Fahrzeugs, dieses unter Angabe des Nutzungszeitraumes beim Anbieter zu buchen. Evtl. vorliegende Buchungsbeschränkungen sind zu beachten. Der Kunde hat kein Anrecht auf ein bestimmtes Fahrzeug. Der Anbieter ist berechtigt, ein gleich- oder höherwertiges Fahrzeug zur gebuchten Fahrzeugklasse bereitzustellen. Für die Internet-Buchung angezeigten Fahrzeugmodelle sind Beispiele und können vom bereitgestellten Fahrzeug abweichen. Der Anbieter kann die Entgegennahme von Buchungen von angemessenen Vorauszahlungen auf den Mietpreis durch den Kunden abhängig machen.</p>
+
+        <h2>§ 4 Nutzungsdauer</h2>
+        <p>Die Nutzungsdauer umfasst den Buchungszeitraum. Er umfasst mindestens einen Tag (24h) und kann nur jeweils um ganze Tage verlängert werden. Bei verspäteter Rückgabe behält sich der Anbieter vor, den vollen Tagespreis zu berechnen, sobald die vereinbarte Rückgabezeit überschritten wird.</p>
+
+        <h2>§ 5 Stornierungen</h2>
+        <p>Kann ein Kunde das gebuchte Fahrzeug nicht nutzen, kann eine Stornierung erfolgen. Die Stornierung einer Buchung ist für den Kunden kostenfrei, wenn sie mindestens 72 Stunden vor Beginn der vorgesehenen Nutzung erfolgt. In allen anderen Fällen ist der Anbieter berechtigt, Stornokosten in Höhe von 50 % des Nutzungsentgelts gemäß gültiger Preisliste, jedoch maximal den Preis für einen Nutzungstag, zu erheben, sofern der Kunde nicht nachweist, dass dem Anbieter kein oder nur ein geringerer Schaden entstanden ist. Verkürzungen von Buchungen werden wie Stornierungen des verkürzten Zeitraumes behandelt. Der Anbieter informiert den Kunden, wenn die gebuchte Fahrzeugklasse nicht zur Verfügung gestellt werden kann. Der Kunde kann dann die Buchung kostenfrei stornieren. Fahrzeugmieten die weder angetreten, noch storniert wurden, werden mit 100% der Buchungskosten berechnet.</p>
+
+        <h2>§ 6 Überprüfen des Fahrzeugs vor Fahrtantritt</h2>
+        <p>Der Kunde ist verpflichtet, das Fahrzeug vor Fahrtantritt auf erkennbare Mängel/Schäden zu überprüfen und mit der in der App bereitgestellten Schadensliste abzugleichen. Festgestellte und/oder wahrnehmbare Mängel (z. B. sicht- und hörbare) sind dem Anbieter vor oder unmittelbar zu Fahrtantritt über die Schadensliste in der App anzuzeigen und wenn möglich mit einem Foto zu dokumentieren. Ist die Fahrt mit den festgestellten Mängeln aus Sicherheitsgründen nicht möglich, ist dies unverzüglich dem Anbieter telefonisch (Tel.-Nr. +49 4552 994 1286) zu melden. Meldet der Kunde keine Neuschäden vor oder unmittelbar zu Fahrtantritt, gilt das Fahrzeug als optisch und technisch einwandfrei, mit Ausnahme der bereits in der Schadensliste enthaltenen Schäden. Wenn am Fahrzeug Schäden vorliegen, die vermuten lassen, dass die Sicherheit des Betriebes des Fahrzeugs beeinträchtigt ist, ist die Benutzung des gebuchten Fahrzeugs nur mit ausdrücklicher Zustimmung des Anbieters zulässig. Die Zustimmung zur Fahrzeugnutzung wird nicht ungerechtfertigt verweigert.</p>
+
+        <h2>§ 7 Mitführen einer gültigen Fahrerlaubnis</h2>
+        <p>Der Kunde verpflichtet sich, bei jeder Fahrt seine gültige Fahrerlaubnis mitzuführen. Die Fahrtberechtigung gem. § 2 dieser AGB ist an den fortdauernden, ununterbrochenen Besitz einer Fahrerlaubnis und die Einhaltung aller darin enthaltenen Bedingungen gebunden. Sie erlischt im Falle des Entzuges, der vorübergehenden Sicherstellung oder des Verlustes der Fahrerlaubnis unmittelbar. Der Kunde ist verpflichtet, den Anbieter vom Wegfall oder der Einschränkung der Fahrerlaubnis unverzüglich in Kenntnis zu setzen.</p>
+
+        <h2>§ 8 Benutzung der Fahrzeuge</h2>
+        <p>Der Kunde hat die Fahrzeuge sorgsam zu behandeln und gemäß den Anweisungen in den Handbüchern, den Fahrzeugunterlagen und den Herstellerangaben zu benutzen, sowie die Betriebsflüssigkeiten und den Reifendruck zu prüfen. Durchfahrtshöhen und -breiten sowie zulässige Zuladung und Gesamtgewicht sind zu beachten. Das Leergewicht des Fahrzeugs beträgt mit vollem AdBlue und Dieseltank 2.580 kg. Somit ist eine Zuladung von 920 kg möglich (zulässiges Gesamtgewicht beträgt 3.500 kg). Ladung ist vorschriftsmäßig zu sichern. Das Fahrzeug ist sauber zu hinterlassen und ordnungsgemäß gegen Diebstahl zu sichern. Das Pferdeabteil des Fahrzeuges ist besenrein zu hinterlassen. Rauchen in den Fahrzeugen ist generell nicht gestattet. Die Station ist pfleglich zu behandeln, eventuell vorhandene Tore oder Absperrungen sind nach der Durchfahrt zu verschließen. Bei einer über gewöhnliche Gebrauchsspuren hinausgehenden Verschmutzung des Innenraums eines Fahrzeugs, sowie des Pferdeabteiles durch den Kunden bzw. dessen Ladung, werden Reinigungskosten in Höhe des Aufwands oder pauschal gemäß Preisliste berechnet, sofern der Kunde keine geringeren Reinigungskosten nachweist. Als nicht sauber bzw. verschmutzt im vorstehenden Sinne gilt ein Fahrzeug insbesondere, wenn der Innenraum Flecken, Abfall, Grünschnitt, Asche, Tabakrauch, Verschmutzung durch den Transport von Tieren, Straßenschmutz, Schlamm oder ähnliches aufweist sowie die Verschmutzung des Fahrzeugäußeren über gewöhnliche, witterungsbedingte Gebrauchsspuren hinausgeht. Besenrein im Vorstehenden Sinne ist ein Fahrzeug wenn keine Reste von Einstreu, Unrat oder Pferdefutter im Pferdebereich sowie der Sattelkammer verbleiben. Bei starker Verschmutzung des Bodens, sowie der Wände ist ggf. ein Auswaschen des Pferdeabteiles durchzuführen. Eine gewerbliche Personenbeförderung ist nur in Ausnahmefällen und unter Beachtung bestehender Gesetze und Vorschriften erlaubt.</p>
+        <p>Das Fahrzeug muss gemäß den Vorgaben zur Fahrzeugrückgabe dieser AGB abgestellt werden. Muss das Fahrzeug infolge unterlassener Reinigung/Betankung durch den Anbieter gereinigt/betankt werden, so ist der Anbieter berechtigt, für den hierfür entstandenen Aufwand vorbehaltlich des Nachweises höherer Kosten einen pauschalierten Schadenersatz von 50,00 € zu verlangen. Dem Kunden bleibt der Nachweis vorbehalten, dass kein bzw. ein geringerer Schaden entstanden sei. Verursacht der Kunde einen Technikereinsatz und/oder einen Einsatz dritter Hilfskräfte durch die unsachgemäße Bedienung von Fahrzeug oder Zugangstechnik oder Nichteinhaltung von Regeln (z. B. Anlassen eines Stromverbrauchers, mehrfache falsche PIN-Eingabe, nicht ordnungsgemäße Rückgabe, verursachte Abschleppnotwendigkeit), werden dem Kunden Kosten gegen Nachweis in Rechnung gestellt. Dem Kunden bleibt der Nachweis vorbehalten, dass der Anbieter kein oder nur ein geringerer Aufwand entstanden ist. Reparatur- und Abschleppaufträge sowie sonstige kostenauslösende Maßnahmen darf der Kunde nur nach vorheriger Zustimmung des Anbieters beauftragen. Dem Kunden ist es verboten, das Fahrzeug zu folgenden Zwecken bzw. in folgender Weise zu nutzen:</p>
+        <ul>
+            <li>a. zur Weitervermietung und Weitergabe an nicht fahrberechtigte Dritte.</li>
+            <li>b. zu motorsportlichen Zwecken, z. B. für Rennen.</li>
+            <li>c. für Sicherheitstrainings und sonstige Fahrzeugtests.</li>
+            <li>d. zur Begehung von Straftaten.</li>
+            <li>e. zur Beförderung von leicht entzündlichen, giftigen oder sonst gefährlichen Stoffen.</li>
+            <li>f. zum Transport von Gegenständen, die (z. B. aufgrund Größe, Form oder Gewicht) die Fahrsicherheit beeinträchtigen oder das Fahrzeug/den Innenraum beschädigen können.</li>
+            <li>g. für Fahrten außerhalb der Europäischen Union.</li>
+            <li>h. als Fahrzeugführer unter dem Einfluss von Alkohol (es gilt eine Promillegrenze von 0,0‰), Drogen, Medikamenten oder sonstigen berauschenden Mittel, die die Fahrtüchtigkeit beeinträchtigen können.</li>
+            <li>i. zur Beförderung von Kindern oder Kleinkindern ohne erforderliche Kindersitzvorrichtung. Zur Installation von Kindersitzvorrichtungen sind zwingend sämtliche Herstellerhinweise und ggf. Vorgaben des Anbieters zu beachten.</li>
+            <li>j. im Fahrzeug zu rauchen. Bei Verstoß gegen das Rauchverbot wird eine Vertragsstrafe von 25,00 € erhoben.</li>
+        </ul>
+        <p>Bei der Verwendung des Fahrzeuges für die Fahrt zu oder während Veranstaltungen, ganz gleich, welchen Charakters (privat, kommerziell, kulturell, politisch, überparteilich usw.) gewährleistet der Fahrberechtigte, dass weder durch ihn, noch durch Mitfahrer und sonstige Begleitpersonen selbst Handlungen begangen werden, die verfassungs- oder gesetzeswidriges Gedankengut darstellen und/oder verbreiten. Insbesondere ist eine Nutzung des Fahrzeuges im Zusammenhang mit Veranstaltungen, bei denen in Wort oder in Schrift die Freiheit und die Würde des Menschen verächtlich gemacht oder Symbole verwendet und gezeigt werden, die im Geist verfassungsfeindlicher oder verfassungswidriger Organisationen stehen oder diese repräsentieren, ausdrücklich untersagt. Bei Nutzung des Fahrzeuges im Zusammenhang mit Veranstaltungen und Demonstrationen verpflichtet sich der Fahrberechtigte unabhängig von der vorherigen Regelung, das Fahrzeug nicht innerhalb öffentlich bekanntgegebener Aufzugsstrecken und Versammlungsorte abzustellen. Die Nutzung des Fahrzeugs zu oder während politischer Veranstaltungen und Demonstrationen ist vorab anzuzeigen. Auf das Recht zur fristlosen Vertragskündigung in § 18 bei Fahrzeugnutzung zu vorstehend dargestellten verbotenen Zwecken wird ausdrücklich verwiesen.</p>
+
+        <h2>§ 9 Haftung des Anbieters</h2>
+        <p>Die Haftung des Anbieters, mit Ausnahme der Haftung bei der Verletzung des Lebens, des Körpers oder der Gesundheit des Kunden, ist auf Vorsatz und grobe Fahrlässigkeit des Anbieters oder seiner gesetzlichen Vertreter oder Erfüllungsgehilfen beschränkt, soweit nicht Deckung im Rahmen der für das Fahrzeug abgeschlossenen Haftpflichtversicherung besteht. Hiervon unberührt bleibt die Haftung des Anbieters bei Verletzung wesentlicher Vertragspflichten, sowie eine etwaige Haftung des Anbieters nach dem Produkthaftungsgesetz. Fundsachen sind dem Anbieter zu melden und auszuhändigen; eine Haftung dafür wird seitens des Anbieters nicht übernommen.</p>
+
+        <h2>§ 10 Haftung des Kunden</h2>
+        <p>a. Der Kunde haftet nach den gesetzlichen Regeln, sofern er das Fahrzeug beschädigt, entwendet oder seine Pflichten aus dem Kundenvertrag verletzt hat. Haftung des Kunden erstreckt sich auch auf die Schadennebenkosten, wie z. B. Sachverständigenkosten, Abschleppkosten, Wertminderung und Nutzungsausfall. Hat der Kunde seine Haftung aus Unfällen, für Schäden des Anbieters durch Vereinbarung gesonderter Versicherungsleistungen ausgeschlossen und/oder beschränkt, bleibt seine Haftung in allen Fällen des Vorsatzes oder der groben Fahrlässigkeit sowie in den Fällen bestehen, die zum Entzug des Versicherungsschutzes wegen eines Fehlverhaltens des Kunden führen.</p>
+        <p>b. Der Kunde haftet für von ihm begangene Gesetzesverstöße, insbesondere Verkehrs- und Ordnungswidrigkeiten während der Nutzungszeit und im Zusammenhang mit dem Abstellen des Fahrzeuges. Der Kunde verpflichtet sich, den Anbieter von sämtlichen Buß- und Verwarngeldern, Gebühren, Kosten und Auslagen freizustellen, die anlässlich vorgenannter Verstöße, Behörden oder Gerichte oder sonstige Dritte vom Anbieter erheben. Entstehen dem Anbieter aus der Bearbeitung solcher Ordnungswidrigkeiten und Straftaten Kosten, so hat diese der Kunde zu ersetzen. Der Anbieter ist vorbehaltlich des Nachweises eines höheren Schadens zur Geltendmachung einer Schadenspauschale von 15,00 € berechtigt. Dem Kunden bleibt der Nachweis vorbehalten, dass kein bzw. ein geringerer Schaden entstanden sei.</p>
+        <p>c. Von der Haftungsbegrenzung auf die Selbstbeteiligung sind insbesondere Schäden nicht erfasst, die durch Fehlbehandlung und/oder -bedienung des Fahrzeuges entstanden sind, insbesondere Ignorieren von Warnleuchten, unsachgemäßes Be- und Entladen und unzureichend gesicherte Ladung, Nichtbeachtung von Durchfahrtshöhen oder -breiten, sowie Nichtbeachtung der maximalen Zuladung. Entsteht dem Anbieter im Falle eines schuldhaften Verstoßes des Kunden gegen seine Pflichten gemäß § 9 (Benutzung der Fahrzeuge) dieser AGB ein Schaden, haftet der Kunde über den Selbstbehalt hinaus vollumfänglich für den gesamten Schaden.</p>
+        <p>d. Der Kunde ist verpflichtet, dem Anbieter die Änderung seiner Anschrift unverzüglich mitzuteilen. Anschriftenermittlungen kann der Anbieter dem Kunden in Höhe seines tatsächlichen Aufwands oder pauschaliert mit 25,– EUR in Rechnung stellen, sofern der Kunde nicht einen geringeren Aufwand nachweist.</p>
+        <p>e. Vorsätzliche und grob fahrlässige Schadensverursachung: Für Schäden, die der Kunde oder seine Erfüllungsgehilfen bzw. Fahrberechtigte vorsätzlich herbeiführen, besteht kein Versicherungsschutz und die Haftung des Kunden ist nicht auf die vereinbarte Selbstbeteiligung beschränkt. Bei grob fahrlässiger Schadensverursachung ist der Haftungsumfang des Kunden ohne Begrenzung auf eine vereinbarte Selbstbeteiligung in einem der Schwere des Verschuldens entsprechenden Verhältnis im Sinne des § 81 Abs. 2 VVG zu bemessen.</p>
+        <p>f. Verletzung vertraglicher Pflichten (Obliegenheiten): Der Kunde haftet vollumfänglich ohne Rücksicht auf eine vereinbarte Selbstbeteiligung, wenn eine vom Kunden zu erfüllende Obliegenheit, insbesondere bei Verstoß gegen seine Pflichten aus § 13 (Unfälle, Diebstahl und Anzeigepflicht), vorsätzlich verletzt wurde. Für den Fall einer grob fahrlässigen Verletzung einer vom Kunden zu erfüllenden Obliegenheit ist ohne Rücksicht auf die Selbstbeteiligung der Haftungsumfang des Kunden in einem der Schwere des Verschuldens entsprechenden Verhältnis im Sinne des § 28 Abs. 2, 3 VVG zu bemessen. Die Beweislast für das Nichtvorliegen einer groben Fahrlässigkeit trägt der Kunde. Abweichend hiervon verbleibt es bei der vereinbarten Selbstbeteiligung pro Schadensfall, soweit die Verletzung der Obliegenheit weder für den Eintritt des Schadenfalls noch für die Feststellung oder den Umfang des Schadens des Anbieters ursächlich ist. Dies gilt nicht, wenn die Obliegenheit arglistig verletzt wurde.</p>
+        <p>g. Geltungsumfang dieser Regelung: Sämtliche vorstehende Regelungen gelten neben dem Kunden auch für die berechtigten Fahrer, wobei eine vertragliche vereinbarte Selbstbeteiligung nicht zu Gunsten nicht fahrtberechtigter Dritter gilt.</p>
+
+        <h2>§ 11 Versicherung</h2>
+        <p>Für alle Fahrzeuge besteht eine Haftpflicht-, Teilkasko- und Vollkaskoversicherung. Die jeweiligen Selbstbeteiligungen und die Möglichkeit der Inanspruchnahme weiteren Versicherungsschutzes durch den Kunden ergeben sich aus der gültigen Preisliste. Die Inanspruchnahme von Versicherungsleistungen ist nur nach vorheriger Zustimmung des Anbieters zulässig.</p>
+
+        <h2>§ 12 Unfälle, Diebstahl und Anzeigepflicht</h2>
+        <p>Nach einem Unfall, Diebstahl, Brand, Wildschaden oder sonstigen Schäden ist der Kunde verpflichtet, immer dann die Polizei zu rufen, wenn an dem Ereignis ein Dritter als Geschädigter oder möglicher (Mit-)Verursacher beteiligt ist oder fremdes Eigentum, außer dem Mietwagen, zu Schaden kam. Bei Schadensereignissen mit Drittbeteiligung darf der Kunde ein Schuldanerkenntnis erst nach vorheriger Zustimmung des Anbieters abgeben. Der Kunde ist verpflichtet, den Anbieter zunächst unverzüglich telefonisch über Schadensereignisse zu informieren und den Anbieter nachfolgend über alle Einzelheiten schriftlich in allen Punkten vollständig und sorgfältig zu unterrichten. Ereignet sich der Schaden im Inland, ohne dass der Kunde bzw. sein Beauftragter hierbei verletzt wurden, hat die schriftliche Unterrichtung spätestens zwei Tage nach dem Schadensereignis, ansonsten innerhalb von 14 Tagen nach dem Schadensereignis zu erfolgen. Der Anbieter kann dem Kunden für den mit der Schadensabwicklung verbundenen Aufwand bei einem vom Kunden teilweise oder gänzlich verschuldeten Unfall eine Aufwandspauschale in Höhe von 100,00 € berechnen, soweit der Kunde dem Anbieter nicht nachweist, dass diesem kein oder nur ein wesentlich geringerer Schaden entstanden ist.</p>
+
+        <h2>§ 13 Rückgabe der Fahrzeuge</h2>
+        <p>Der Kunde ist verpflichtet, das Fahrzeug mit Ablauf der vereinbarten Nutzungsdauer ordnungsgemäß zurückzugeben. Die Rückgabe gilt als ordnungsgemäß, wenn das Fahrzeug mit allen übergebenen Papieren ordnungsgemäß geschlossen (Türen und Fenster verriegelt, Lenkradschloss eingerastet, Lichter ausgeschaltet), die Fahrt im Buchungsportal beendet und der Fahrzeugschlüssel mit RFID Anhänger am vorgeschriebenen Ort im Handschuhfach deponiert wurde. Sofern nicht gesondert gestattet, muss das Fahrzeug am Anmietort zurückgegeben werden. Unabhängig von den vereinbarten Nutzungsentgelten können diese bis zur tatsächlichen Rückgabe des Fahrzeugs an den Anbieter berechnet werden. Die Geltendmachung eines weiteren Schadens im Falle einer Verletzung der Rückgabepflicht des Kunden ist dem Anbieter vorbehalten. Sofern die Fahrzeuge mit GPS-Ortung ausgestattet sind, erfolgt bei Rückgabe der Fahrzeuge eine Ortung der Position des jeweiligen Fahrzeugs.</p>
+
+        <h2>§ 14 Verspätungen</h2>
+        <p>Kann der Kunde den in der Buchung bekannt gegebenen Rückgabezeitpunkt nicht einhalten, muss er die Buchungsdauer vor Ablauf des zunächst vereinbarten Rückgabezeitpunktes verlängern. Ist eine Verlängerung wegen einer nachfolgenden Buchung nicht möglich und kann die ursprüngliche Rückgabezeit tatsächlich durch den Kunden nicht eingehalten werden, ist der Anbieter berechtigt, die über die Buchungszeit hinausgehende Zeit in Rechnung zu stellen. Bei verspäteter Rückgabe des Fahrzeugs kann der Anbieter darüber hinaus anstelle des ihm konkret entstandenen Schadens eine von der Verspätungsdauer abhängige Schadenspauschale erheben, soweit der Kunde dem Anbieter nicht nachweist, dass diesem kein oder nur ein wesentlich geringerer Schaden entstanden ist. Sofern die verspätete Rückgabe keine nachfolgenden Buchungen behindert, wird die erste Stunde nach regulärem Buchungsende nicht berechnet. Für eine über diese Stunde hinausgehende verspätete Rückgabe wird der reguläre Tagesmietpreis berechnet.</p>
+
+        <h2>§ 15 Technikereinsatz</h2>
+        <p>Verursacht der Kunde einen Technikereinsatz durch nicht sachgemäße Bedienung des Fahrzeugs bzw. der Zugangstechnik oder durch Nichteinhalten der Regeln (insbesondere bei unzureichender Betankung, Anlassen eines Stromverbrauchers, mehrmalige Eingabe einer falschen PIN), so werden dem Kunden Kosten gemäß Preisliste und Aufwand in Rechnung gestellt, sofern der Kunde keinen geringeren Aufwand nachweist.</p>
+
+        <h2>§ 16 Entgelte, Zahlungsbedingungen, Kaution</h2>
+        <p>Der Anbieter stellt dem Kunden Entgelte für die Nutzung der Fahrzeuge im gewählten Tarif gemäß der jeweils gültigen und dem Kunden bekanntgegebenen Tarif- und Preislisten in Rechnung. Die jeweils aktuellen Preislisten sind im Internet unter <a href="https://www.theurer-trucks-2go.de/agb/">www.theurer-trucks-2go.de/agb/</a> abrufbar. Die Abrechnung der Leistungen erfolgt gemäß den in den gültigen Tarif- und Preislisten angegebenen Perioden und Bedingungen. Für die Abrechnung der Fahrten gilt die sich aus der Buchung ergebende Nutzungsdauer bzw. die vom Bordcomputer ermittelte Wegstrecke. Die Rechnungsstellung erfolgt per E-Mail. Rechnungsbeträge werden beim Buchungsstart über das hinterlegte Zahlungsmittel (SEPA-Lastschrift, Kreditkarte oder SOFORT-Überweisung) nach den durch den Mieter eingegebenen Daten zu Mietzeit und Fahrtstrecke automatisch abgerechnet. Nach Beendigung der Miete am Buchungsende werden Differenzen aus geplanten und tatsächlichen Kosten gutgeschrieben oder ggf. nachberechnet. Die Nachberechnung oder Gutschrift bei SOFORT-Überweisung erfolgt über eine SEPA Last- bzw. Gutschrift. Kann die Lastschrift aufgrund mangelnder Kontodeckung nicht eingelöst werden, gerät der Kunde nach Ablauf von zehn Tagen in Verzug. Im Falle des Verzuges schuldet der Kunde die gesetzlichen Verzugszinsen und -kosten, sowie Bearbeitungsgebühren in Höhe von 25,00 €. Die Geltendmachung eines weitergehenden Verzugsschadens bleibt hiervon unberührt. Für sämtliche Mahnschreiben werden pauschale Mahngebühren in Höhe von je 5,00 € erhoben. Dem Kunden bleibt der Nachweis vorbehalten, dass Mahnkosten nicht oder in geringerem Umfang entstanden sind.</p>
+
+        <h2>§ 17 Aufrechnung, Einwendungsausschluss</h2>
+        <p>Dem Kunden steht ein Zurückbehaltungsrecht nur wegen Gegenansprüchen aus dem Vertragsverhältnis zu. Gegen Forderungen des Anbieters kann der Kunde nur mit unbestrittenen oder rechtskräftig festgestellten Gegenforderungen aufrechnen.</p>
+
+        <h2>§ 18 Vertragsänderungen</h2>
+        <p>Änderungen der AGB sind nur zulässig, soweit hierdurch das Vertragsgefüge nicht grundlegend umgestaltet, insbesondere das Äquivalenzverhältnis von Leistung und Gegenleistung nicht zum Nachteil des Kunden verschoben wird. Zulässig sind sie insbesondere bei nachträglichem Entstehen einer Regelungslücke oder Störung des Äquivalenzverhältnisses, z. B. durch Veränderung der Gesetzeslage, Rechtsprechung oder Marktgegebenheiten bzw. aufgrund neuer technischer Entwicklungen. Der Anbieter behält sich die Anpassung der Preislisten vor. Änderungen der AGB und der Preise werden dem Kunden in Textform oder per E-Mail mindestens sechs Wochen vor der Änderung bekanntgegeben. Die Änderungen gelten als genehmigt, wenn der Kunde nicht innerhalb eines Monats nach Bekanntgabe in Textform oder per E-Mail Widerspruch beim Anbieter erhebt. Auf diese Rechtsfolge wird ihn TheurerTrucks 2GO bei der Bekanntgabe besonders hinweisen. Macht der Kunde von diesem Recht keinen Gebrauch, wird der Vertrag zu den geänderten Bedingungen bzw. Preisen fortgeführt. Widerspricht der Kunde, hat jede Partei das Recht, den Vertrag mit einer Frist von zehn Tagen per E-Mail oder in Textform zu kündigen.</p>
+
+        <h2>§ 19 Kündigung, Sperrung</h2>
+        <p>Der Kundenvertrag wird auf unbestimmte Zeit abgeschlossen und kann von beiden Parteien mit einer Frist von 6 Wochen zum Quartalsende schriftlich gekündigt werden. Wurde bei besonderen Tarifen eine Mindestlaufzeit vereinbart, so ist die ordentliche Kündigung für beide Parteien erstmals mit einer Frist von 6 Wochen zum Ende dieser Mindestlaufzeit möglich. Das Recht zur außerordentlichen Kündigung des Kundenvertrages bleibt den Parteien vorbehalten. Der Anbieter kann den Kundenvertrag aus wichtigem Grund, bei dem es sich um einen erheblichen, vom Kunden zu vertretenden Grund handeln muss, ohne Einhaltung einer Kündigungsfrist kündigen. Als wichtiger Grund zur Kündigung gilt die verbotswidrige Nutzung des Fahrzeuges gemäß den Regelungen in § 9. Wird dem Anbieter eine Nutzung des Fahrzeugs in einem solchen Zusammenhang unmittelbar bekannt, ist der Anbieter zur sofortigen Kündigung des Nutzungsverhältnisses berechtigt. Ein später bekannt gewordener Verstoß berechtigt den Anbieter, unter Hinweis hierauf, ein erneutes Nutzungsverhältnis zu verweigern. Als wichtiger Grund gilt auch die Insolvenz des Kunden. Bei Tarifen mit Mindestlaufzeit steht dem Kunden das Recht zur außerordentlichen Kündigung auch bei Änderungen der Preisliste zu, worüber der Anbieter den Kunden in der Änderungsmitteilung informieren wird. Anstelle einer außerordentlichen Kündigung ist der Anbieter auch berechtigt, den Kunden aus wichtigen Gründen für bestimmte Zeit für Anmietungen zu sperren. Dies gilt insbesondere, solange nicht unerhebliche Forderungen des Anbieters aus früheren Vermietungen noch nicht ausgeglichen wurden, bei mangelnder Mithilfe bei der Klärung von Schadensfällen oder bei wiederholten Verstößen des Kunden gegen wesentliche Vertragspflichten. Der Anbieter informiert den Kunden schriftlich über die Dauer und den Grund der Sperrung.</p>
+
+        <h2>§ 20 Datenschutz</h2>
+        <p>Der Anbieter ist berechtigt, personenbezogene Daten des Kunden elektronisch zu verarbeiten, zu speichern, zu übermitteln und zu nutzen, soweit dies zur Durchführung des Kundenvertrages erforderlich ist. Bei Ordnungswidrigkeiten oder Verstößen gegen die StVO und StVZO werden die personenbezogenen Daten des Kunden im notwendigen Umfang an die Straßenverkehrs- bzw. Ordnungsbehörden übermittelt. Eine sonstige Weitergabe darf nach dem Bundesdatenschutzgesetz nur dann erfolgen, wenn dies zur Wahrung berechtigter Interessen des Anbieters, der im Vertrag bezeichneten Personen und Unternehmen oder der Allgemeinheit erforderlich ist und dadurch schutzwürdige Belange des Kunden nicht beeinträchtigt werden. Der Anbieter verpflichtet sich, Daten des Kunden nicht an Dritte mit dem Zweck der kommerziellen Verwertung oder für die Markt- und Meinungsforschung weiterzugeben. Eine Weitergabe von Daten in anonymisierter Form für wissenschaftliche Zwecke ist gestattet. Der Anbieter kann dem Kunden nach vorheriger Einwilligung regelmäßig Informationen über die Weiterentwicklung des Carsharings als Druckerzeugnis oder in elektronischer Form zur Verfügung stellen. Bei Fahrzeugen die mit GPS-Ortung ausgerüstet sind, erfolgt bei Rückgabe der Fahrzeuge eine Positionsbestimmung. Darüber hinaus erfolgt keine Ortung der Fahrzeuge während der ordnungsgemäßen Nutzung durch den Kunden. Bei Verstoß gegen die Rückgabepflichten oder in sonstigen Fällen vertragswidrigen Verhaltens des Kunden, die eine Fahrzeugortung notwendig machen, ist der Anbieter ebenfalls berechtigt, Positionsbestimmungen vorzunehmen. Weitere Informationen entnehmen Sie bitte unseren <a href="datenschutz.html">Datenschutzrichtlinien</a>.</p>
+
+        <h2>§ 21 SCHUFA-Klausel/Bonitätsprüfung</h2>
+        <p>Der Anbieter behält sich vor, der SCHUFA Holding AG (SCHUFA) Daten über die Aufnahme und Beendigung des Kundenvertrages zu übermitteln und von der SCHUFA bzw. einer sonstigen Wirtschaftsauskunftsdatei Auskünfte über den Kunden zu erhalten. Der Anbieter behält sich bei negativer Auskunft vor, Kaution vor Leistungserbringung zu erheben oder keinen Kundenvertrag einzugehen. Unabhängig davon wird der Anbieter der SCHUFA auch Daten aufgrund nichtvertragsgemäßen Verhaltens übermitteln. Diese Meldungen dürfen nach dem Bundesdatenschutzgesetz nur erfolgen, soweit dies nach Abwägung aller betroffenen Interessenten zulässig ist.</p>
+
+        <h2>§ 22 Vertragswidriges Verhalten</h2>
+        <p>Bei folgenden vom Kunden zu vertretenden Tatbeständen kann der Anbieter für den ihm zusätzlich entstehenden Verwaltungsaufwand eine Kostenpauschale bis in Höhe von 250,00 € erheben, soweit der Kunde dem Anbieter nicht nachweist, dass diesem kein oder nur ein wesentlich geringerer Schaden entstanden ist: Fahrten ohne Buchung; Überlassen des Fahrzeugs an Nichtberechtigte; um mehr als 24 Stunden verzögerte Fahrzeugrückgabe, missbräuchliche Benutzung oder Entwendung von Fahrzeugausrüstung (Verbandskasten, Warndreieck, Abschleppwerkzeuge, Anbindevorrichtungen, Gurtverriegelung im Pferdeabteil, oder sonstigen eingebauten Teilen).</p>
+
+        <h2>§ 23 Sonstige Bestimmungen</h2>
+        <p>Es gilt deutsches Recht. Mündliche Nebenabsprachen bestehen nicht. Die Rechtsunwirksamkeit einzelner Teile und Bestimmungen des Kundenvertrages und dieser AGB berühren deren Gültigkeit im Übrigen nicht. Für alle Streitigkeiten aus oder im Zusammenhang mit dem Kundenvertrag wird als Gerichtsstand der Sitz der Firma in Leezen vereinbart.</p>
+    </div>
+</main>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__grid">
+
+            <!-- Brand -->
+            <div>
+                <div class="footer__logo">
+                    <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO">
+                </div>
+                <p class="footer__desc">
+                    Car-Sharing für Pferdetransporter — sichere Mobilität für Pferd und Reiter. STX Transporter für 1 Großpferd oder 2 kleinere Pferde, abholbereit an Reitstallparkplätzen deutschlandweit.
+                </p>
+                <div class="footer__social">
+                    <a href="https://www.instagram.com/theurer_trucks_2go/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/theurertrucks2go" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div>
+                <div class="footer__col-title">Navigation</div>
+                <ul class="footer__links">
+                    <li><a href="index.html#verfuegbarkeit">Verfügbarkeit prüfen</a></li>
+                    <li><a href="index.html#so-gehts">So geht's</a></li>
+                    <li><a href="index.html#fahrzeug">Unser Fahrzeug</a></li>
+                    <li><a href="index.html#standorte">Standorte</a></li>
+                    <li><a href="index.html#preise">Preise</a></li>
+                    <li><a href="index.html#faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Konto & App -->
+            <div>
+                <div class="footer__col-title">Konto &amp; App</div>
+                <ul class="footer__links">
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Kostenlos registrieren
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Anmelden
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://apps.apple.com/us/app/theurertrucks-2go/id1589088586" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-apple" style="margin-right:6px;"></i>App Store
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://play.google.com/store/apps/details?id=theurertrucks2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google-play" style="margin-right:6px;"></i>Google Play
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Kontakt -->
+            <div>
+                <div class="footer__col-title">Kontakt</div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-building"></i>
+                    <span>TheurerTrucks Renting GmbH</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Hamburger Str. 65, 23816 Leezen</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:info@theurer-trucks-2go.de" style="color:inherit;">info@theurer-trucks-2go.de</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer__bar">
+            <span>&copy; 2026 TheurerTrucks 2GO. Alle Rechte vorbehalten.</span>
+            <div class="footer__bar-links">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+                <a href="agb.html">AGB</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    /* Navbar Scroll-Effekt */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+</script>
+
+</body>
+</html>

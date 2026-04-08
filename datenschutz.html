@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutzerklärung — TheurerTrucks 2GO</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES
+        ============================================================ */
+        :root {
+            --primary:          #0088CF;
+            --primary-bright:   #38B6FF;
+            --primary-dark:     #006fa8;
+            --primary-deeper:   #005a8c;
+            --primary-light:    #e8f4fb;
+            --primary-ghost:    rgba(0, 136, 207, 0.08);
+            --primary-grad:     linear-gradient(135deg, #0088CF 0%, #38B6FF 100%);
+            --primary-grad-r:   linear-gradient(135deg, #38B6FF 0%, #0088CF 100%);
+
+            --dark:             #0f1419;
+            --dark-soft:        #1a2028;
+            --dark-medium:      #2a3038;
+            --text:             #4a5568;
+            --text-light:       #718096;
+            --text-dark:        #1a202c;
+
+            --light:            #f7fafc;
+            --white:            #ffffff;
+            --border:           #e2e8f0;
+            --border-light:     #edf2f7;
+
+            --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow:           0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg:        0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-blue:      0 4px 24px rgba(0, 136, 207, 0.28);
+            --shadow-blue-lg:   0 12px 40px rgba(0, 136, 207, 0.35);
+
+            --radius-sm:        8px;
+            --radius:           12px;
+            --radius-lg:        20px;
+            --radius-xl:        28px;
+            --radius-full:      999px;
+
+            --ease:             cubic-bezier(0.4, 0, 0.2, 1);
+            --transition:       all 0.3s var(--ease);
+        }
+
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.15;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+        /* Obere Akzentlinie */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-grad);
+            z-index: 9999;
+        }
+
+        /* ============================================================
+           LAYOUT HELPERS
+        ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ============================================================
+           BUTTONS
+        ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 32px;
+            border-radius: var(--radius-full);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            white-space: nowrap;
+            min-height: 48px;
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-blue-lg);
+        }
+
+        /* ============================================================
+           NAVBAR
+        ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 3px;
+            inset-inline: 0;
+            z-index: 900;
+            padding: 20px 0;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 var(--border), var(--shadow-sm);
+        }
+
+        .navbar__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .navbar__logo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar__logo img {
+            height: 42px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .navbar__logo img {
+            height: 38px;
+            filter: none;
+        }
+
+        .navbar__back {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.85);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .navbar.scrolled .navbar__back { color: var(--text-dark); }
+        .navbar__back:hover,
+        .navbar.scrolled .navbar__back:hover { color: var(--primary); }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer {
+            background: #0a0d10;
+            padding: 72px 0 32px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-bottom: 52px;
+        }
+
+        .footer__logo { margin-bottom: 16px; }
+
+        .footer__logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .footer__desc {
+            font-size: 0.87rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer__social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer__social a:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer__col-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer__links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer__links a {
+            font-size: 0.87rem;
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__links a:hover { color: var(--primary-bright); }
+
+        .footer__contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.87rem;
+        }
+
+        .footer__contact-row i {
+            color: var(--primary-bright);
+            margin-top: 3px;
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        .footer__bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            font-size: 0.82rem;
+            flex-wrap: wrap;
+        }
+
+        .footer__bar-links {
+            display: flex;
+            gap: 22px;
+        }
+
+        .footer__bar-links a {
+            color: rgba(255, 255, 255, 0.45);
+            transition: color 0.25s;
+        }
+
+        .footer__bar-links a:hover { color: var(--primary-bright); }
+
+        /* ============================================================
+           LEGAL CONTENT
+        ============================================================ */
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+        }
+
+        .legal-content h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 8px;
+        }
+
+        .legal-content .legal-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .legal-content h2 {
+            font-size: 1.3rem;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .legal-content h3 {
+            font-size: 1.1rem;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .legal-content ul, .legal-content ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            line-height: 1.8;
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-content a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .legal-content .contact-block {
+            background: var(--light);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        /* Zurück-Link */
+        .legal-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            text-decoration: none;
+        }
+
+        .legal-back:hover { text-decoration: underline; }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (min-width: 769px) {
+            .container { padding: 0 28px; }
+            .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .footer__bar { flex-direction: row; text-align: left; justify-content: space-between; gap: 0; }
+        }
+
+        @media (min-width: 1025px) {
+            .footer__grid { grid-template-columns: 2fr 1fr 1fr 1.3fr; gap: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVBAR
+================================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO Logo">
+            </a>
+            <a href="index.html" class="navbar__back">
+                <i class="fas fa-arrow-left"></i> Zurück zur Startseite
+            </a>
+            <div style="flex:1"></div>
+            <a href="https://theurer-trucks-2go.fleetster.de"
+               class="btn btn--primary"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fas fa-truck-ramp-box"></i> Jetzt registrieren
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="legal-content">
+        <a href="index.html" class="legal-back"><i class="fas fa-arrow-left"></i> Zurück zur Startseite</a>
+        <h1>Datenschutzerklärung</h1>
+        <p class="legal-date">Stand: 06.02.2023</p>
+
+        <p style="margin-bottom: 32px;">
+            <a href="https://drive.google.com/file/d/129aQ5Sidqh6mkAiQgQuYl9M7R8Zg6HaI/view" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; background: var(--light); padding: 12px 20px; border-radius: var(--radius); border: 1px solid var(--border); font-weight: 600; text-decoration: none;">
+                <i class="fas fa-file-pdf" style="color: #e53e3e; font-size: 1.2rem;"></i> Datenschutzerklärung als PDF ansehen
+            </a>
+        </p>
+
+        <h2>Name und Kontakt des Verantwortlichen</h2>
+        <p>Verantwortlicher gemäß Artikel 4 Abs. 7 DSGVO:</p>
+        <div class="contact-block">
+            <p>
+                <strong>TheurerTrucks Renting GmbH</strong><br>
+                Hamburger Str. 65<br>
+                23816 Leezen<br>
+                Tel. <a href="tel:+4945529941286">04552/9941286</a><br>
+                E-Mail: <a href="mailto:info@theurer-trucks-2go.de">info@theurer-trucks-2go.de</a>
+            </p>
+        </div>
+
+        <h2>Datenschutzbeauftragter</h2>
+        <div class="contact-block">
+            <p>
+                <strong>Andreas Theurer</strong><br>
+                Hamburger Str. 65<br>
+                23816 Leezen<br>
+                E-Mail: <a href="mailto:datenschutz@theurer-trucks-2go.de">datenschutz@theurer-trucks-2go.de</a>
+            </p>
+        </div>
+
+        <h2>Sicherheit und Schutz Ihrer personenbezogenen Daten</h2>
+        <p>Wir betrachten es als unsere vorrangige Aufgabe, die Vertraulichkeit der von Ihnen bereitgestellten personenbezogenen Daten zu wahren und diese vor unbefugten Zugriffen zu schützen. Deshalb wenden wir äußerste Sorgfalt und modernste Sicherheitsstandards an, um einen maximalen Schutz Ihrer personenbezogenen Daten zu gewährleisten.</p>
+        <p>Als privatrechtliches Unternehmen unterliegen wir den Bestimmungen der europäischen Datenschutzgrundverordnung (DSGVO) und den Regelungen des Bundesdatenschutzgesetzes (BDSG).</p>
+
+        <h2>Ihre Rechte</h2>
+        <p>Als betroffene Person haben Sie folgende Rechte:</p>
+        <ul>
+            <li>Widerruf der Einwilligung</li>
+            <li>Recht auf Bestätigung</li>
+            <li>Auskunftsrecht</li>
+            <li>Recht auf Berichtigung</li>
+            <li>Recht auf Löschung ("Recht auf Vergessen werden")</li>
+            <li>Recht auf Einschränkung der Verarbeitung</li>
+            <li>Recht auf Datenübertragbarkeit</li>
+            <li>Widerspruchsrecht</li>
+            <li>Recht auf Beschwerde bei einer Aufsichtsbehörde</li>
+        </ul>
+        <p>Für die Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:datenschutz@theurer-trucks-2go.de">datenschutz@theurer-trucks-2go.de</a></p>
+
+        <h2>Vollständige Datenschutzerklärung</h2>
+        <p>Die vollständige Datenschutzerklärung mit allen Details zu Begriffsbestimmungen, Rechtmäßigkeit der Verarbeitung, Erhebung personenbezogener Daten, Einsatz von Cookies, Einbindung von Google Maps und weiteren Themen finden Sie in unserem <a href="https://drive.google.com/file/d/129aQ5Sidqh6mkAiQgQuYl9M7R8Zg6HaI/view" target="_blank" rel="noopener noreferrer">PDF-Dokument</a>.</p>
+    </div>
+</main>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__grid">
+
+            <!-- Brand -->
+            <div>
+                <div class="footer__logo">
+                    <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO">
+                </div>
+                <p class="footer__desc">
+                    Car-Sharing für Pferdetransporter — sichere Mobilität für Pferd und Reiter. STX Transporter für 1 Großpferd oder 2 kleinere Pferde, abholbereit an Reitstallparkplätzen deutschlandweit.
+                </p>
+                <div class="footer__social">
+                    <a href="https://www.instagram.com/theurer_trucks_2go/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/theurertrucks2go" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div>
+                <div class="footer__col-title">Navigation</div>
+                <ul class="footer__links">
+                    <li><a href="index.html#verfuegbarkeit">Verfügbarkeit prüfen</a></li>
+                    <li><a href="index.html#so-gehts">So geht's</a></li>
+                    <li><a href="index.html#fahrzeug">Unser Fahrzeug</a></li>
+                    <li><a href="index.html#standorte">Standorte</a></li>
+                    <li><a href="index.html#preise">Preise</a></li>
+                    <li><a href="index.html#faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Konto & App -->
+            <div>
+                <div class="footer__col-title">Konto &amp; App</div>
+                <ul class="footer__links">
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Kostenlos registrieren
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://theurer-trucks-2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            Anmelden
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://apps.apple.com/us/app/theurertrucks-2go/id1589088586" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-apple" style="margin-right:6px;"></i>App Store
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://play.google.com/store/apps/details?id=theurertrucks2go.fleetster.de" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google-play" style="margin-right:6px;"></i>Google Play
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Kontakt -->
+            <div>
+                <div class="footer__col-title">Kontakt</div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-building"></i>
+                    <span>TheurerTrucks Renting GmbH</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Hamburger Str. 65, 23816 Leezen</span>
+                </div>
+                <div class="footer__contact-row">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:info@theurer-trucks-2go.de" style="color:inherit;">info@theurer-trucks-2go.de</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer__bar">
+            <span>&copy; 2026 TheurerTrucks 2GO. Alle Rechte vorbehalten.</span>
+            <div class="footer__bar-links">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+                <a href="agb.html">AGB</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    /* Navbar Scroll-Effekt */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+</script>
+
+</body>
+</html>
