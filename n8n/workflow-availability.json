@@ -3,14 +3,15 @@
   "nodes": [
     {
       "parameters": {
-        "httpMethod": "POST",
+        "httpMethod": "=*",
         "path": "tt2go-availability",
         "responseMode": "responseNode",
         "options": {
           "responseHeaders": {
             "entries": [
               { "name": "Access-Control-Allow-Origin", "value": "*" },
-              { "name": "Access-Control-Allow-Headers", "value": "Content-Type" }
+              { "name": "Access-Control-Allow-Headers", "value": "Content-Type" },
+              { "name": "Access-Control-Allow-Methods", "value": "POST, OPTIONS" }
             ]
           }
         }
@@ -23,7 +24,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const body = $input.first().json.body;\nconst stationId = body?.stationId || '';\nconst startDate = body?.startDate || '';\nconst endDate = body?.endDate || '';\n\nif (!stationId || !startDate || !endDate) {\n  return [{ json: { error: 'Parameter fehlen: stationId, startDate, endDate erforderlich' } }];\n}\n\nreturn [{ json: { stationId, startDate, endDate } }];"
+        "jsCode": "// CORS Preflight abfangen\nconst method = $input.first().json.headers?.['method'] || $input.first().json.method || '';\nif (method === 'OPTIONS') {\n  return [{ json: { cors: true } }];\n}\n\nconst body = $input.first().json.body || {};\nconst stationId = body.stationId || '';\nconst startDate = body.startDate || '';\nconst endDate = body.endDate || '';\n\nif (!stationId || !startDate || !endDate) {\n  return [{ json: { error: 'Parameter fehlen: stationId, startDate, endDate erforderlich', cors: false } }];\n}\n\nreturn [{ json: { stationId, startDate, endDate, cors: false } }];"
       },
       "id": "validate-input",
       "name": "Parameter validieren",
@@ -48,17 +49,17 @@
     },
     {
       "parameters": {
-        "jsCode": "const authResponse = $input.first().json;\nconst token = authResponse._id;\nconst params = $('Parameter validieren').first().json;\nreturn [{ json: { token, ...params } }];"
+        "jsCode": "const authResponse = $input.first().json;\nconst token = authResponse._id;\nconst params = $('Parameter validieren').first().json;\nreturn [{ json: { token, stationId: params.stationId, startDate: params.startDate, endDate: params.endDate } }];"
       },
       "id": "extract-token",
-      "name": "Token extrahieren",
+      "name": "Token + Parameter",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [900, 300]
     },
     {
       "parameters": {
-        "url": "=https://my.fleetster.net/vehicles?locationId={{ $json.stationId }}",
+        "url": "=https://my.fleetster.net/vehicles?locationId={{ $json.stationId }}&deleted=false&fields[_id]=1&fields[locationId]=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -71,15 +72,25 @@
       "name": "Fahrzeuge am Standort",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 200]
+      "position": [1120, 300]
     },
     {
       "parameters": {
-        "url": "=https://my.fleetster.net/bookings?state=created&state=keyreleased&startDate%5B%24lte%5D={{ encodeURIComponent($('Token extrahieren').first().json.endDate) }}&endDate%5B%24gte%5D={{ encodeURIComponent($('Token extrahieren').first().json.startDate) }}",
+        "jsCode": "// Fahrzeug-IDs sammeln\nconst vehicleItems = $('Fahrzeuge am Standort').all().map(i => i.json);\nlet vehicles = vehicleItems;\nif (vehicleItems.length === 1 && Array.isArray(vehicleItems[0])) vehicles = vehicleItems[0];\n\nconst params = $('Token + Parameter').first().json;\nconst vehicleIds = vehicles.map(v => v._id).filter(Boolean);\n\nreturn [{ json: { token: params.token, stationId: params.stationId, startDate: params.startDate, endDate: params.endDate, vehicleIds, totalVehicles: vehicleIds.length } }];"
+      },
+      "id": "prepare-booking-query",
+      "name": "Fahrzeuge auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://my.fleetster.net/bookings?state=created&state=keyreleased&startDate%5B%24lte%5D={{ encodeURIComponent($json.endDate) }}&endDate%5B%24gte%5D={{ encodeURIComponent($json.startDate) }}&fields[vehicleId]=1&fields[state]=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
+            { "name": "Authorization", "value": "={{ $json.token }}" }
           ]
         },
         "options": {}
@@ -88,17 +99,17 @@
       "name": "Buchungen im Zeitraum",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 500]
+      "position": [1560, 300]
     },
     {
       "parameters": {
-        "jsCode": "const vehiclesRaw = $('Fahrzeuge am Standort').first().json;\nconst bookingsRaw = $('Buchungen im Zeitraum').first().json;\nconst params = $('Token extrahieren').first().json;\n\nconst vehicles = Array.isArray(vehiclesRaw) ? vehiclesRaw : [vehiclesRaw];\nconst bookings = Array.isArray(bookingsRaw) ? bookingsRaw : (bookingsRaw ? [bookingsRaw] : []);\n\n// Fahrzeuge am gewählten Standort (nicht gelöscht)\nconst stationVehicles = vehicles.filter(v => !v.deleted && v.locationId === params.stationId);\n\n// Gebuchte Fahrzeug-IDs im Zeitraum\nconst bookedVehicleIds = new Set(\n  bookings\n    .filter(b => b.vehicleId && stationVehicles.some(v => v._id === b.vehicleId))\n    .map(b => b.vehicleId)\n);\n\n// Verfügbare Fahrzeuge = am Standort minus gebuchte\nconst availableVehicles = stationVehicles.filter(v => !bookedVehicleIds.has(v._id));\n\nreturn [{\n  json: {\n    available: availableVehicles.length > 0,\n    availableCount: availableVehicles.length,\n    totalAtStation: stationVehicles.length,\n    stationId: params.stationId,\n    startDate: params.startDate,\n    endDate: params.endDate\n  }\n}];"
+        "jsCode": "const bookingItems = $('Buchungen im Zeitraum').all().map(i => i.json);\nlet bookings = bookingItems;\nif (bookingItems.length === 1 && Array.isArray(bookingItems[0])) bookings = bookingItems[0];\n\nconst params = $('Fahrzeuge auswerten').first().json;\nconst vehicleIds = params.vehicleIds || [];\n\n// Gebuchte Fahrzeug-IDs die zu diesem Standort gehören\nconst bookedIds = new Set();\nbookings.forEach(b => {\n  if (b.vehicleId && vehicleIds.includes(b.vehicleId)) {\n    bookedIds.add(b.vehicleId);\n  }\n});\n\nconst availableCount = vehicleIds.length - bookedIds.size;\n\nreturn [{ json: {\n  available: availableCount > 0,\n  availableCount: Math.max(0, availableCount),\n  totalAtStation: params.totalVehicles,\n  stationId: params.stationId,\n  startDate: params.startDate,\n  endDate: params.endDate\n} }];"
       },
       "id": "check-availability",
       "name": "Verfügbarkeit berechnen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1340, 350]
+      "position": [1780, 300]
     },
     {
       "parameters": {
@@ -117,15 +128,16 @@
       "name": "Response senden",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1560, 350]
+      "position": [2000, 300]
     }
   ],
   "connections": {
     "Webhook": { "main": [[{ "node": "Parameter validieren", "type": "main", "index": 0 }]] },
     "Parameter validieren": { "main": [[{ "node": "Fleetster Login", "type": "main", "index": 0 }]] },
-    "Fleetster Login": { "main": [[{ "node": "Token extrahieren", "type": "main", "index": 0 }]] },
-    "Token extrahieren": { "main": [[{ "node": "Fahrzeuge am Standort", "type": "main", "index": 0 }, { "node": "Buchungen im Zeitraum", "type": "main", "index": 0 }]] },
-    "Fahrzeuge am Standort": { "main": [[{ "node": "Verfügbarkeit berechnen", "type": "main", "index": 0 }]] },
+    "Fleetster Login": { "main": [[{ "node": "Token + Parameter", "type": "main", "index": 0 }]] },
+    "Token + Parameter": { "main": [[{ "node": "Fahrzeuge am Standort", "type": "main", "index": 0 }]] },
+    "Fahrzeuge am Standort": { "main": [[{ "node": "Fahrzeuge auswerten", "type": "main", "index": 0 }]] },
+    "Fahrzeuge auswerten": { "main": [[{ "node": "Buchungen im Zeitraum", "type": "main", "index": 0 }]] },
     "Buchungen im Zeitraum": { "main": [[{ "node": "Verfügbarkeit berechnen", "type": "main", "index": 0 }]] },
     "Verfügbarkeit berechnen": { "main": [[{ "node": "Response senden", "type": "main", "index": 0 }]] }
   },
