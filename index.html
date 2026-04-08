@@ -2692,6 +2692,41 @@
 </section>
 
 <!-- ================================================================
+     STANDORTKARTE
+================================================================ -->
+<section class="section" id="standorte">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
+            <h2 class="section-title">Unsere Standorte</h2>
+            <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
+        </div>
+
+        <!-- PLZ-Suche -->
+        <div class="locations__search reveal">
+            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
+            <button class="btn btn--primary" onclick="searchLocation()">
+                <i class="fas fa-magnifying-glass"></i> Suchen
+            </button>
+        </div>
+
+        <!-- Karte -->
+        <div class="locations__map reveal delay-1" id="map"></div>
+
+        <!-- CTA #3 -->
+        <div class="locations__cta reveal delay-2">
+            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Prüfe direkt die Verfügbarkeit!</p>
+            <a href="#verfuegbarkeit"
+               class="btn btn--primary btn--lg">
+                <i class="fas fa-calendar-check"></i> Verfügbarkeit prüfen
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
      SO GEHT'S — 4 SCHRITTE (Task 9)
 ================================================================ -->
 <section class="section section--light" id="so-gehts">
@@ -2731,39 +2766,20 @@
             </div>
         </div>
 
-    </div>
-</section>
-
-<!-- ================================================================
-     STANDORTKARTE (Task 10)
-================================================================ -->
-<section class="section" id="standorte">
-    <div class="container">
-
-        <div class="section-header reveal">
-            <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
-            <h2 class="section-title">Unsere Standorte</h2>
-            <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
-        </div>
-
-        <!-- PLZ-Suche -->
-        <div class="locations__search reveal">
-            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
-            <button class="btn btn--primary" onclick="searchLocation()">
-                <i class="fas fa-magnifying-glass"></i> Suchen
-            </button>
-        </div>
-
-        <!-- Karte -->
-        <div class="locations__map reveal delay-1" id="map"></div>
-
-        <!-- CTA #3 -->
-        <div class="locations__cta reveal delay-2">
-            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Prüfe direkt die Verfügbarkeit!</p>
-            <a href="#verfuegbarkeit"
-               class="btn btn--primary btn--lg">
-                <i class="fas fa-calendar-check"></i> Verfügbarkeit prüfen
-            </a>
+        <!-- Erklärvideo eingebettet -->
+        <div class="reveal" style="margin-top: 48px;">
+            <div class="explainer__video" style="max-width: 800px; margin: 0 auto;">
+                <iframe
+                    src="https://player.vimeo.com/video/1019195471?title=0&byline=0&portrait=0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                    title="TheurerTrucks 2GO Erklärvideo"
+                    loading="lazy">
+                </iframe>
+            </div>
+            <p style="text-align: center; color: var(--text-light); margin-top: 12px; font-size: 0.85rem;">
+                <i class="fas fa-play-circle" style="color: var(--primary);"></i> So einfach funktioniert TheurerTrucks 2GO
+            </p>
         </div>
 
     </div>
@@ -2867,42 +2883,6 @@
             </div>
 
         </div>
-    </div>
-</section>
-
-<!-- ================================================================
-     ERKLÄRVIDEO VIMEO (Task 12)
-================================================================ -->
-<section class="section explainer" id="erklaervideo">
-    <div class="container">
-
-        <div class="section-header reveal">
-            <span class="section-tag"><i class="fas fa-play-circle"></i> Erklärvideo</span>
-            <h2 class="section-title">Schau dir an, wie einfach es funktioniert</h2>
-            <p class="section-subtitle">In wenigen Minuten zeigen wir dir, wie einfach die Buchung funktioniert.</p>
-        </div>
-
-        <!-- Vimeo 16:9 responsiv -->
-        <div class="explainer__video reveal">
-            <iframe
-                src="https://player.vimeo.com/video/1019195471?title=0&byline=0&portrait=0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowfullscreen
-                title="TheurerTrucks 2GO Erklärvideo">
-            </iframe>
-        </div>
-
-        <!-- CTA #4 -->
-        <div class="reveal delay-1">
-            <a href="https://theurer-trucks-2go.fleetster.de"
-               class="btn btn--primary btn--lg"
-               target="_blank"
-               rel="noopener noreferrer"
-               onclick="dataLayer.push({'event':'cta_click','cta_location':'explainer_cta'})">
-                <i class="fas fa-truck-ramp-box"></i> Jetzt kostenlos registrieren →
-            </a>
-        </div>
-
     </div>
 </section>
 
