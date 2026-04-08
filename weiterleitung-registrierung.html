@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Du wirst weitergeleitet... — TheurerTrucks 2GO</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Cookiebot -->
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="3d40de5d-ceaa-46b5-97af-cc86c9aed0fd" data-blockingmode="auto" type="text/javascript"></script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P4D6Z66');</script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES
+        ============================================================ */
+        :root {
+            --primary:          #0088CF;
+            --primary-bright:   #38B6FF;
+            --primary-dark:     #006fa8;
+            --primary-deeper:   #005a8c;
+            --primary-light:    #e8f4fb;
+            --primary-ghost:    rgba(0, 136, 207, 0.08);
+            --primary-grad:     linear-gradient(135deg, #0088CF 0%, #38B6FF 100%);
+            --primary-grad-r:   linear-gradient(135deg, #38B6FF 0%, #0088CF 100%);
+
+            --dark:             #0f1419;
+            --dark-soft:        #1a2028;
+            --dark-medium:      #2a3038;
+            --text:             #4a5568;
+            --text-light:       #718096;
+            --text-dark:        #1a202c;
+
+            --light:            #f7fafc;
+            --white:            #ffffff;
+            --border:           #e2e8f0;
+            --border-light:     #edf2f7;
+
+            --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow:           0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg:        0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-blue:      0 4px 24px rgba(0, 136, 207, 0.28);
+            --shadow-blue-lg:   0 12px 40px rgba(0, 136, 207, 0.35);
+
+            --radius-sm:        8px;
+            --radius:           12px;
+            --radius-lg:        20px;
+            --radius-xl:        28px;
+            --radius-full:      999px;
+
+            --ease:             cubic-bezier(0.4, 0, 0.2, 1);
+            --transition:       all 0.3s var(--ease);
+        }
+
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+
+        /* Obere Akzentlinie */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-grad);
+            z-index: 9999;
+        }
+
+        /* ============================================================
+           REDIRECT PAGE
+        ============================================================ */
+        .redirect-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--light);
+        }
+
+        .redirect-logo {
+            margin-bottom: 48px;
+        }
+
+        .redirect-logo img {
+            height: 48px;
+            width: auto;
+        }
+
+        .countdown-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 32px;
+        }
+
+        .countdown-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .countdown-ring circle {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .countdown-ring .ring-bg {
+            stroke: var(--border);
+        }
+
+        .countdown-ring .ring-progress {
+            stroke: var(--primary);
+            stroke-linecap: round;
+            stroke-dasharray: 339.292;
+            stroke-dashoffset: 0;
+            animation: countdown-ring 3s linear forwards;
+        }
+
+        @keyframes countdown-ring {
+            to { stroke-dashoffset: 339.292; }
+        }
+
+        .countdown-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .redirect-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .redirect-sub {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .redirect-manual {
+            color: var(--primary);
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4D6Z66"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <div class="redirect-page">
+
+        <!-- Logo -->
+        <div class="redirect-logo">
+            <img src="Logo/TT2GO-Logo-rgb_56-182-255 (Website).png" alt="TheurerTrucks 2GO Logo">
+        </div>
+
+        <!-- Countdown-Ring -->
+        <div class="countdown-ring">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+                <circle class="ring-progress" cx="60" cy="60" r="54"></circle>
+            </svg>
+            <span class="countdown-number" id="countdownNumber">3</span>
+        </div>
+
+        <!-- Texte -->
+        <p class="redirect-title">Du wirst zur Registrierung weitergeleitet...</p>
+        <p class="redirect-sub">Du wirst in wenigen Sekunden automatisch weitergeleitet.</p>
+
+        <!-- Manueller Fallback-Link -->
+        <a href="https://theurer-trucks-2go.fleetster.de"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="redirect-manual">
+            Falls du nicht automatisch weitergeleitet wirst, klicke hier.
+        </a>
+
+    </div>
+
+    <script>
+        // GTM Event: Soft-Conversion — Nutzer hat auf Registrierung geklickt
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'generate_lead',
+            'event_category': 'conversion',
+            'event_label': 'registration_redirect'
+        });
+
+        // Countdown
+        var count = 3;
+        var countEl = document.getElementById('countdownNumber');
+        var interval = setInterval(function() {
+            count--;
+            if (countEl) countEl.textContent = count;
+            if (count <= 0) {
+                clearInterval(interval);
+                window.location.href = 'https://theurer-trucks-2go.fleetster.de';
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
