@@ -1,0 +1,56 @@
+====================================================
+Anleitung: n8n Docker — .env bearbeiten & neu starten
+====================================================
+
+1. Per SSH auf den Server verbinden
+------------------------------------
+ssh root@<SERVER-IP>
+ssh root@187.77.80.22
+
+
+2. .env Datei finden & bearbeiten
+------------------------------------
+Die Dateien liegen im n8n Docker-Verzeichnis:
+
+   /docker/n8n/.env                 ← Umgebungsvariablen
+   /docker/n8n/docker-compose.yml   ← Docker-Konfiguration
+
+Datei anzeigen:
+   cat /docker/n8n/.env
+
+Datei bearbeiten:
+   nano /docker/n8n/.env
+
+
+3. In nano speichern & beenden
+------------------------------------
+   Speichern:    Ctrl + O, dann Enter
+   Beenden:      Ctrl + X
+   (Oder:        Ctrl + X, dann Y, dann Enter)
+
+
+4. Docker neu starten (WICHTIG!)
+------------------------------------
+   cd /docker/n8n && docker compose down && docker compose up -d
+
+ACHTUNG: "docker compose restart" reicht NICHT!
+Neue Umgebungsvariablen werden nur bei "down && up" geladen.
+
+
+5. Pruefen ob Container laufen
+------------------------------------
+   docker compose ps
+
+
+6. Logs anschauen (bei Problemen)
+------------------------------------
+   docker compose logs -f          ← Alle Container
+   docker compose logs -f n8n      ← Nur n8n
+
+
+Hinweise
+------------------------------------
+- Neue Env-Variablen muessen sowohl in .env ALS AUCH in
+  docker-compose.yml eingetragen werden (unter "environment:")
+- N8N_BLOCK_ENV_ACCESS_IN_NODE=false muss gesetzt sein,
+  damit $env in Code-Nodes funktioniert

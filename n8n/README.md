@@ -1,74 +1,69 @@
 # n8n Workflows für TheurerTrucks 2GO
 
-## Setup in n8n
+## Übersicht
 
-### 1. Environment-Variablen setzen
+| Workflow | Trigger | Zweck |
+|---|---|---|
+| `workflow-static-data.json` | Cron (täglich 6:00) | Standorte + Zahlen → JSON nach GitHub pushen |
+| `workflow-availability.json` | POST Webhook | Live-Verfügbarkeitsprüfung |
 
-In n8n unter **Settings → Environment Variables** diese Variablen anlegen:
+## Setup
 
-| Variable | Wert |
-|---|---|
-| `FLEETSTER_EMAIL` | `tt2go-kontakt@theurer-trucks.de` |
-| `FLEETSTER_PASSWORD` | (Passwort aus .env) |
+### 1. Environment-Variablen in docker-compose.yml
 
-### 2. Workflows importieren
+```yaml
+environment:
+  - FLEETSTER_EMAIL=tt2go-kontakt@theurer-trucks.de
+  - FLEETSTER_PASSWORD=... (mit $$ statt $ bei Sonderzeichen)
+  - GITHUB_TOKEN=ghp_... (GitHub Personal Access Token)
+```
 
-1. In n8n auf **Workflows → Import from File** klicken
-2. `workflow-static-data.json` importieren
-3. `workflow-availability.json` importieren
-4. Beide Workflows **aktivieren**
+### 2. GitHub Personal Access Token erstellen
 
-### 3. Webhook-URLs notieren
+1. GitHub → Settings → Developer Settings → Personal Access Tokens → Fine-grained tokens
+2. "Generate new token"
+3. Repository access: **Only select repositories** → `theurer-trucks-2go-webseite`
+4. Permissions: **Contents** → Read and Write
+5. Token kopieren → als `GITHUB_TOKEN` in docker-compose.yml eintragen
+6. n8n neu starten: `cd /docker/n8n && docker compose down && docker compose up -d`
 
-Nach dem Aktivieren zeigt n8n die Webhook-URLs an:
-- **Statische Daten:** `https://DEIN-VPS/webhook/tt2go-data` (GET)
-- **Verfügbarkeit:** `https://DEIN-VPS/webhook/tt2go-availability` (POST)
+### 3. Workflows importieren
 
-Diese URLs müssen in der `index.html` im `TT2GO_API` Konfigurationsobjekt eingetragen werden.
+1. In n8n: Workflows → Import from File
+2. `workflow-static-data.json` importieren + aktivieren
+3. `workflow-availability.json` importieren + aktivieren
 
-## Workflow 1: Statische Daten
-
-**Trigger:** GET Webhook `/tt2go-data`
-**Zweck:** Liefert Standorte + Zahlen für Karte, Dropdown und Zahlen-Banner
-**Cache:** 24h (via Cache-Control Header)
+## Workflow 1: Statische Daten (täglich → GitHub)
 
 **Ablauf:**
-1. Fleetster Login → Token holen
-2. Parallel: Locations + Vehicles + Users abrufen
-3. Daten formatieren (Standorte mit Koordinaten, Fahrzeuge pro Standort, Gesamtzahlen)
-4. JSON zurückgeben
+```
+Cron 6:00 → Fleetster Login → Token → Standorte → Fahrzeuge → Nutzer
+→ JSON formatieren → SHA der bestehenden Datei holen → nach GitHub pushen
+```
 
-**Response:**
+**Was passiert:**
+- n8n holt täglich alle Daten von Fleetster
+- Formatiert sie als JSON
+- Pusht `api/data.json` ins GitHub Repo
+- GitHub Pages aktualisiert sich automatisch
+- Das Frontend lädt `api/data.json` beim Seitenaufruf
+
+**Die JSON enthält:**
 ```json
 {
   "stations": [
-    {
-      "id": "61488363b67ef95fb3934229",
-      "name": "23816 Leezen - Theurer Trucks 2 Go Hauptstation",
-      "city": "Leezen",
-      "postcode": "23816",
-      "street": "Hamburger Strasse 65",
-      "lat": 53.862175,
-      "lng": 10.2488051,
-      "comment": "",
-      "vehicleCount": 3
-    }
+    { "id": "...", "name": "...", "city": "...", "lat": 53.86, "lng": 10.24, "vehicleCount": 3 }
   ],
-  "stats": {
-    "vehicles": 87,
-    "stations": 58,
-    "users": 16484
-  },
-  "updated": "2026-04-08T12:00:00.000Z"
+  "stats": { "vehicles": 87, "stations": 58, "users": 16484 },
+  "updated": "2026-04-08T06:00:00.000Z"
 }
 ```
 
-## Workflow 2: Verfügbarkeitsprüfung
+## Workflow 2: Live-Verfügbarkeit (Webhook)
 
-**Trigger:** POST Webhook `/tt2go-availability`
-**Zweck:** Prüft ob am gewählten Standort ein Fahrzeug im Zeitraum frei ist
+**Webhook-URL:** `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability`
 
-**Request Body:**
+**Request (POST):**
 ```json
 {
   "stationId": "61488363b67ef95fb3934229",
@@ -82,19 +77,16 @@ Diese URLs müssen in der `index.html` im `TT2GO_API` Konfigurationsobjekt einge
 {
   "available": true,
   "availableCount": 2,
-  "totalAtStation": 3,
-  "stationId": "61488363b67ef95fb3934229",
-  "startDate": "2026-04-10T10:00:00.000Z",
-  "endDate": "2026-04-11T10:00:00.000Z"
+  "totalAtStation": 3
 }
 ```
 
 ## Fleetster API Referenz
 
 - **Base URL:** `https://my.fleetster.net`
-- **Auth:** `POST /users/auth` mit `{ email, password }` → Top-Level `_id` ist der Token
+- **Auth:** `POST /users/auth` → Top-Level `_id` ist der Token (UUID)
 - **Locations:** `GET /locations` mit Header `Authorization: {token}`
 - **Vehicles:** `GET /vehicles` mit Header `Authorization: {token}`
-- **Bookings:** `GET /bookings?startDate[$lte]=X&endDate[$gte]=Y` mit Header `Authorization: {token}`
-- **Users:** `GET /users?limit=0` mit Header `Authorization: {token}`
+- **Bookings:** `GET /bookings?startDate[$lte]=X&endDate[$gte]=Y`
+- **Users:** `GET /users?limit=0`
 - **Swagger:** `https://my.fleetster.net/swagger/`

@@ -3458,8 +3458,8 @@
         // API-Konfiguration — Webhook-URLs hier eintragen
         // ============================================================
         var TT2GO_API = {
-            dataUrl:  '',   // z.B. 'https://dein-vps.de/webhook/tt2go-data'
-            availUrl: ''    // z.B. 'https://dein-vps.de/webhook/tt2go-availability'
+            dataUrl:  'api/data.json',   // Statische Daten (täglich via n8n nach GitHub gepusht)
+            availUrl: ''                 // Live-Verfügbarkeit: n8n Webhook-URL hier eintragen
         };
 
         /* ── Navbar Scroll-Effekt ──────────────────────────────── */
