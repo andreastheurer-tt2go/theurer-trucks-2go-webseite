@@ -5,7 +5,7 @@ Anleitung: n8n Docker — .env bearbeiten & neu starten
 1. Per SSH auf den Server verbinden
 ------------------------------------
 ssh root@<SERVER-IP>
-ssh root@187.77.80.22
+ssh root@187.77.80.222
 
 
 2. .env Datei finden & bearbeiten
