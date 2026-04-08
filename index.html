@@ -1655,10 +1655,16 @@
             user-select: none;
         }
 
+        .faq-q span:first-child {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
         .faq-q h4 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 0.92rem;
+            font-size: 1.05rem;
             color: var(--text-dark);
         }
 
@@ -1687,8 +1693,8 @@
             overflow: hidden;
             transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
             padding: 0 24px;
-            font-size: 0.88rem;
-            color: var(--text-light);
+            font-size: 0.95rem;
+            color: var(--text);
             line-height: 1.85;
         }
 
@@ -2959,8 +2965,7 @@
 
         <!-- Kategorie-Tabs -->
         <div class="faq-tabs reveal">
-            <button class="faq-tab active" onclick="showFaqCategory('alle')">Alle</button>
-            <button class="faq-tab" onclick="showFaqCategory('buchung')">Buchung & Registrierung</button>
+            <button class="faq-tab active" onclick="showFaqCategory('buchung')">Buchung & Registrierung</button>
             <button class="faq-tab" onclick="showFaqCategory('fahrzeug')">Fahrzeug & Ausstattung</button>
             <button class="faq-tab" onclick="showFaqCategory('fahrt')">Während der Fahrt</button>
             <button class="faq-tab" onclick="showFaqCategory('kosten')">Kosten & Versicherung</button>
@@ -3024,7 +3029,7 @@
             </div>
 
             <!-- FAHRZEUG & AUSSTATTUNG -->
-            <div class="faq-category active" data-category="fahrzeug">
+            <div class="faq-category" data-category="fahrzeug">
                 <div class="faq-category__title"><i class="fas fa-truck"></i> Fahrzeug & Ausstattung</div>
 
                 <div class="faq-item">
@@ -3133,7 +3138,7 @@
             </div>
 
             <!-- WÄHREND DER FAHRT -->
-            <div class="faq-category active" data-category="fahrt">
+            <div class="faq-category" data-category="fahrt">
                 <div class="faq-category__title"><i class="fas fa-road"></i> Während der Fahrt</div>
 
                 <div class="faq-item">
@@ -3202,7 +3207,7 @@
             </div>
 
             <!-- KOSTEN & VERSICHERUNG -->
-            <div class="faq-category active" data-category="kosten">
+            <div class="faq-category" data-category="kosten">
                 <div class="faq-category__title"><i class="fas fa-euro-sign"></i> Kosten & Versicherung</div>
 
                 <div class="faq-item">
@@ -3239,7 +3244,7 @@
             </div>
 
             <!-- RÜCKGABE & NOTFÄLLE -->
-            <div class="faq-category active" data-category="rueckgabe">
+            <div class="faq-category" data-category="rueckgabe">
                 <div class="faq-category__title"><i class="fas fa-flag-checkered"></i> Rückgabe & Notfälle</div>
 
                 <div class="faq-item">
