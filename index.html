@@ -2635,14 +2635,11 @@
             </div>
             <div class="calculator__body">
                 <div class="calculator__left">
-                    <span class="calculator__label"><i class="fas fa-road" style="color: var(--primary); margin-right: 6px;"></i> Wie weit ist dein Ziel?</span>
+                    <span class="calculator__label"><i class="fas fa-road" style="color: var(--primary); margin-right: 6px;"></i> Wie viele Kilometer fährst du insgesamt?</span>
                     <div class="calculator__km-input" style="margin-bottom: 24px;">
-                        <input type="number" id="calcDistance" value="100" min="0" step="10" oninput="updateTripCalc()" style="width: 120px;">
-                        <span>km (einfache Strecke)</span>
+                        <input type="number" id="calcDistance" value="200" min="0" step="10" oninput="updateTripCalc()" style="width: 120px;">
+                        <span>km (Gesamtstrecke)</span>
                     </div>
-                    <p style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 24px;">
-                        <i class="fas fa-info-circle" style="color: var(--primary);"></i> Gesamtstrecke Hin &amp; Rück: <strong id="calcRoundTrip">200</strong> km
-                    </p>
 
                     <span class="calculator__label"><i class="fas fa-calendar" style="color: var(--primary); margin-right: 6px;"></i> Wie lange brauchst du den Transporter?</span>
                     <div class="calculator__days" id="calcDays">
@@ -3414,21 +3411,19 @@
         }
 
         function updateTripCalc() {
-            const distance = Math.max(0, parseInt(document.getElementById('calcDistance').value) || 0);
-            const roundTrip = distance * 2;
+            const totalKm = Math.max(0, parseInt(document.getElementById('calcDistance').value) || 0);
             const basePrice = parseInt(selectedTripBtn.dataset.price);
             const freeKm = parseInt(selectedTripBtn.dataset.km);
             const days = parseInt(selectedTripBtn.dataset.days);
-            const extraKm = Math.max(0, roundTrip - freeKm);
+            const extraKm = Math.max(0, totalKm - freeKm);
             const extraPrice = extraKm * 0.46;
             const total = basePrice + extraPrice;
 
             // Anzeige aktualisieren
-            document.getElementById('calcRoundTrip').textContent = roundTrip.toLocaleString('de-DE');
             document.getElementById('calcDaysLabel').textContent = days === 1 ? '1 Tag' : days + ' Tage';
             document.getElementById('calcBasePrice').textContent = basePrice.toFixed(2).replace('.', ',') + ' €';
             document.getElementById('calcFreeKm').textContent = freeKm.toLocaleString('de-DE') + ' km';
-            document.getElementById('calcTotalKm').textContent = roundTrip.toLocaleString('de-DE') + ' km';
+            document.getElementById('calcTotalKm').textContent = totalKm.toLocaleString('de-DE') + ' km';
             document.getElementById('calcTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
 
             // Mehrkilometer ein-/ausblenden
