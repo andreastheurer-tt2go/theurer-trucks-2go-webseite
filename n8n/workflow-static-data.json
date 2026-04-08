@@ -1,5 +1,5 @@
 {
-  "name": "TT2GO - Statische Daten (täglich nach GitHub)",
+  "name": "TT2GO - Standorte täglich nach GitHub",
   "nodes": [
     {
       "parameters": {
@@ -59,47 +59,13 @@
     },
     {
       "parameters": {
-        "url": "https://my.fleetster.net/vehicles?deleted=false&fields[_id]=1&fields[locationId]=1",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
-          ]
-        },
-        "options": {}
-      },
-      "id": "get-vehicles",
-      "name": "Fahrzeuge abrufen",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [1120, 400]
-    },
-    {
-      "parameters": {
-        "url": "https://my.fleetster.net/users?limit=0&fields[_id]=1",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ $('Token extrahieren').first().json.token }}" }
-          ]
-        },
-        "options": {}
-      },
-      "id": "get-users",
-      "name": "Nutzer zählen",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [1340, 400]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Daten aus den vorherigen Nodes\nconst locItems = $('Standorte abrufen').all().map(i => i.json);\nconst vehItems = $('Fahrzeuge abrufen').all().map(i => i.json);\nconst usrItems = $('Nutzer zählen').all().map(i => i.json);\n\n// Arrays korrekt auflösen (n8n gibt Arrays als einzelne Items zurück)\nlet locations = locItems;\nif (locItems.length === 1 && Array.isArray(locItems[0])) locations = locItems[0];\n\nlet vehicles = vehItems;\nif (vehItems.length === 1 && Array.isArray(vehItems[0])) vehicles = vehItems[0];\n\nlet users = usrItems;\nif (usrItems.length === 1 && Array.isArray(usrItems[0])) users = usrItems[0];\n\n// Standorte formatieren (nur mit gültigen Koordinaten)\nconst stations = locations\n  .filter(loc => loc.extended && loc.extended.GeoPosition && loc.extended.GeoPosition.latitude)\n  .map(loc => ({\n    id: loc._id,\n    name: loc.name || '',\n    city: loc.city || '',\n    postcode: loc.postcode || '',\n    street: ((loc.streetName || '') + ' ' + (loc.streetNumber || '')).trim(),\n    lat: loc.extended.GeoPosition.latitude,\n    lng: loc.extended.GeoPosition.longitude,\n    comment: loc.comment || ''\n  }))\n  .sort((a, b) => a.name.localeCompare(b.name));\n\n// Fahrzeuge pro Standort zählen\nconst vehiclesByLocation = {};\nvehicles.forEach(v => {\n  if (v.locationId) {\n    vehiclesByLocation[v.locationId] = (vehiclesByLocation[v.locationId] || 0) + 1;\n  }\n});\n\nstations.forEach(s => {\n  s.vehicleCount = vehiclesByLocation[s.id] || 0;\n});\n\nconst result = {\n  stations: stations,\n  stats: {\n    vehicles: vehicles.length,\n    stations: stations.length,\n    users: users.length\n  },\n  updated: new Date().toISOString()\n};\n\nreturn [{ json: { content: JSON.stringify(result, null, 2) } }];"
+        "jsCode": "const locItems = $('Standorte abrufen').all().map(i => i.json);\n\n// Array korrekt auflösen\nlet locations = locItems;\nif (locItems.length === 1 && Array.isArray(locItems[0])) locations = locItems[0];\n\n// Standorte formatieren (nur mit gültigen Koordinaten)\nconst stations = locations\n  .filter(loc => loc.extended && loc.extended.GeoPosition && loc.extended.GeoPosition.latitude)\n  .map(loc => ({\n    id: loc._id,\n    name: loc.name || '',\n    city: loc.city || '',\n    postcode: loc.postcode || '',\n    street: ((loc.streetName || '') + ' ' + (loc.streetNumber || '')).trim(),\n    lat: loc.extended.GeoPosition.latitude,\n    lng: loc.extended.GeoPosition.longitude,\n    comment: loc.comment || ''\n  }))\n  .sort((a, b) => a.name.localeCompare(b.name));\n\nconst result = {\n  stations: stations,\n  updated: new Date().toISOString()\n};\n\nreturn [{ json: { content: JSON.stringify(result, null, 2) } }];"
       },
       "id": "format-response",
       "name": "JSON formatieren",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 400]
+      "position": [1120, 400]
     },
     {
       "parameters": {
@@ -120,17 +86,17 @@
       "name": "Bestehende Datei SHA holen",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 400]
+      "position": [1340, 400]
     },
     {
       "parameters": {
-        "jsCode": "const fileCheck = $input.first().json;\nconst content = $('JSON formatieren').first().json.content;\nconst sha = fileCheck.sha || null;\n\n// Base64-Encoding des Inhalts\nconst contentBase64 = Buffer.from(content, 'utf-8').toString('base64');\n\n// GitHub API Body zusammenbauen\nconst body = {\n  message: 'chore: API-Daten aktualisiert (' + new Date().toISOString().slice(0,10) + ')',\n  content: contentBase64\n};\n\n// SHA nur mitschicken wenn Datei bereits existiert (Update statt Create)\nif (sha) body.sha = sha;\n\nreturn [{ json: body }];"
+        "jsCode": "const fileCheck = $input.first().json;\nconst content = $('JSON formatieren').first().json.content;\nconst sha = fileCheck.sha || null;\n\nconst contentBase64 = Buffer.from(content, 'utf-8').toString('base64');\n\nconst body = {\n  message: 'chore: Standorte aktualisiert (' + new Date().toISOString().slice(0,10) + ')',\n  content: contentBase64\n};\n\nif (sha) body.sha = sha;\n\nreturn [{ json: body }];"
       },
       "id": "prepare-push",
       "name": "Push vorbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 400]
+      "position": [1560, 400]
     },
     {
       "parameters": {
@@ -153,16 +119,14 @@
       "name": "Nach GitHub pushen",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2220, 400]
+      "position": [1780, 400]
     }
   ],
   "connections": {
     "Täglich um 6 Uhr": { "main": [[{ "node": "Fleetster Login", "type": "main", "index": 0 }]] },
     "Fleetster Login": { "main": [[{ "node": "Token extrahieren", "type": "main", "index": 0 }]] },
     "Token extrahieren": { "main": [[{ "node": "Standorte abrufen", "type": "main", "index": 0 }]] },
-    "Standorte abrufen": { "main": [[{ "node": "Fahrzeuge abrufen", "type": "main", "index": 0 }]] },
-    "Fahrzeuge abrufen": { "main": [[{ "node": "Nutzer zählen", "type": "main", "index": 0 }]] },
-    "Nutzer zählen": { "main": [[{ "node": "JSON formatieren", "type": "main", "index": 0 }]] },
+    "Standorte abrufen": { "main": [[{ "node": "JSON formatieren", "type": "main", "index": 0 }]] },
     "JSON formatieren": { "main": [[{ "node": "Bestehende Datei SHA holen", "type": "main", "index": 0 }]] },
     "Bestehende Datei SHA holen": { "main": [[{ "node": "Push vorbereiten", "type": "main", "index": 0 }]] },
     "Push vorbereiten": { "main": [[{ "node": "Nach GitHub pushen", "type": "main", "index": 0 }]] }
