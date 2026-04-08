@@ -1,9 +1,575 @@
 {
-  "stations": [],
-  "stats": {
-    "vehicles": 87,
-    "stations": 58,
-    "users": 16484
-  },
-  "updated": "2026-04-08T12:00:00.000Z"
+  "stations": [
+    {
+      "id": "69b3eef5761816c3fe833909",
+      "name": "01619 Zeithain - Reiterhof Kurze",
+      "city": "Zeithain",
+      "postcode": "01619",
+      "street": "Lessaer Straße 47",
+      "lat": 51.3204851,
+      "lng": 13.3047393,
+      "comment": ""
+    },
+    {
+      "id": "67bdf322908585dbbf33e0dd",
+      "name": "04316 Leipzig - SCHUHKNECHT GmbH",
+      "city": "Leipzig",
+      "postcode": "04316",
+      "street": "An der Hebemärchte 10",
+      "lat": 51.3236031,
+      "lng": 12.495414,
+      "comment": ""
+    },
+    {
+      "id": "69ca209ac532bc8e5f9fba67",
+      "name": "08060 Zwickau - Pferdezucht & Sportpferde Tobias Kunze",
+      "city": "Zwickau",
+      "postcode": "08060",
+      "street": "Marienthaler Straße 163",
+      "lat": 50.71867109999999,
+      "lng": 12.4490107,
+      "comment": ""
+    },
+    {
+      "id": "64be97d1257434c883c131f1",
+      "name": "14053 Berlin - Reitclub am Olympiapark e.V. ",
+      "city": "Berlin",
+      "postcode": "14053",
+      "street": "Schirwindter Allee 45",
+      "lat": 52.511133,
+      "lng": 13.229749,
+      "comment": ""
+    },
+    {
+      "id": "695e103b7603e804754c4b56",
+      "name": "14513 Teltow - Hof Bernadotte",
+      "city": "Teltow",
+      "postcode": "14513",
+      "street": "Dorfstraße 5",
+      "lat": 52.3747963,
+      "lng": 13.2689934,
+      "comment": ""
+    },
+    {
+      "id": "640b2fc3d166920896c0474b",
+      "name": "14558 Nuthetal - Der Schäferhof",
+      "city": "Nuthetal",
+      "postcode": "14558",
+      "street": "Leibnizstraße  1",
+      "lat": 52.337895,
+      "lng": 13.099213,
+      "comment": ""
+    },
+    {
+      "id": "69b91605c3024f38702317b7",
+      "name": "14624 Dallgow-Döberitz - Pferdeklinik Seeburg ",
+      "city": "Dallgow-Döberitz",
+      "postcode": "14624",
+      "street": "Engelsfelder Chaussee 1a",
+      "lat": 52.5075488,
+      "lng": 13.1454497,
+      "comment": ""
+    },
+    {
+      "id": "6995cf6e41a524f218cf1baa",
+      "name": "14778 Beetzsee - Pferdeklinik Havelland",
+      "city": "Beetzsee",
+      "postcode": "14778",
+      "street": "Hohenferchesarer Straße 49",
+      "lat": 52.4707199,
+      "lng": 12.5312232,
+      "comment": ""
+    },
+    {
+      "id": "684951735b23fd667be187aa",
+      "name": "16356 Ahrensfelde - Reitanlage Hermannshof (Berlin)",
+      "city": "Ahrensfelde",
+      "postcode": "16356",
+      "street": "Lindenberger Str. 29",
+      "lat": 52.5851394,
+      "lng": 13.5625496,
+      "comment": ""
+    },
+    {
+      "id": "69c27ba816e6c6dd98590764",
+      "name": "18279 Lalendorf - Agrarhof-Köper ",
+      "city": "Lalendorf",
+      "postcode": "18279",
+      "street": "Im Wiesengrund 3",
+      "lat": 53.7606479,
+      "lng": 12.3765612,
+      "comment": ""
+    },
+    {
+      "id": "66cc7e67bceec3df9b254465",
+      "name": "21079 Hamburg - Reitsportanlage Soe Oertzen",
+      "city": "Hamburg",
+      "postcode": "21079",
+      "street": "Moorburger Elbdeich 375",
+      "lat": 53.49753,
+      "lng": 9.90019,
+      "comment": ""
+    },
+    {
+      "id": "616407be2ca5346b2bef1bf4",
+      "name": "22113 Oststeinbek - Reitstall Bernd Carstens",
+      "city": "Oststeinbek",
+      "postcode": "22113",
+      "street": "Stormarnstr.  5",
+      "lat": 53.533304,
+      "lng": 10.172736,
+      "comment": "Der Stall befindet sich an der K100, genau zwischen Oststeinbek und Havighorst. Die Stormarnstraße Richtung Havighorst zu Ende fahren. "
+    },
+    {
+      "id": "61ea6d5d74ace553c3ee810e",
+      "name": "22395 Hamburg - Reitanlage Kracht",
+      "city": "Hamburg",
+      "postcode": "22395",
+      "street": "Bergstedter Markt 7",
+      "lat": 53.670548,
+      "lng": 10.122622,
+      "comment": ""
+    },
+    {
+      "id": "640b3a22cb07bcb99a5f5d7f",
+      "name": "22848 Norderstedt - Wieger de Boer",
+      "city": "Norderstedt",
+      "postcode": "22848",
+      "street": "Niendorfer Straße 26",
+      "lat": 53.6760201413136,
+      "lng": 9.968023214520247,
+      "comment": "Tor öffnet sich wenn Sie dicht heran fahren."
+    },
+    {
+      "id": "616408aa93ec4d768c5ae7e4",
+      "name": "22869 Schenefeld - Pferdesportzentrum Friedrichshulde",
+      "city": "Schenefeld",
+      "postcode": "22869",
+      "street": "Lindenallee  98",
+      "lat": 53.608234,
+      "lng": 9.825727,
+      "comment": ""
+    },
+    {
+      "id": "660e53a0dea0ca04110e1ed6",
+      "name": "22869 Schenefeld - Reitstall Klövensteen",
+      "city": "Schenefeld",
+      "postcode": "22869",
+      "street": "Uetersener Weg  100",
+      "lat": 53.60649,
+      "lng": 9.79964,
+      "comment": ""
+    },
+    {
+      "id": "67a6311e97594f7a6137a043",
+      "name": "22889 Tangstedt - Reitanlage Gut Tangstedt",
+      "city": "Tangstedt",
+      "postcode": "22889",
+      "street": "Beekmoorweg 13",
+      "lat": 53.7357977,
+      "lng": 10.0802553,
+      "comment": ""
+    },
+    {
+      "id": "654e2279fa0131e621215912",
+      "name": "23556 Lübeck - Hans-Jürgen Steffen GmbH",
+      "city": "Lübeck",
+      "postcode": "23556",
+      "street": "Taschenmascherstraße 17-19",
+      "lat": 53.867328,
+      "lng": 10.61049,
+      "comment": ""
+    },
+    {
+      "id": "61488363b67ef95fb3934229",
+      "name": "23816 Leezen - Theurer Trucks 2 Go Hauptstation",
+      "city": "Leezen",
+      "postcode": "23816",
+      "street": "Hamburger Strasse 65",
+      "lat": 53.862175,
+      "lng": 10.2488051,
+      "comment": ""
+    },
+    {
+      "id": "649145c76a60d0ff10c53f1f",
+      "name": "24118 Kiel - Kieler Renn- und Reitverein ",
+      "city": "Kiel",
+      "postcode": "24118",
+      "street": "Olshausenstraße  65-67",
+      "lat": 54.341408,
+      "lng": 10.112467,
+      "comment": ""
+    },
+    {
+      "id": "69ca3f092e3aab53a6e94665",
+      "name": "24589 Schülp bei Nortorf - Reitanlage Höllnhof - Thomas Voss",
+      "city": "Schülp bei Nortorf",
+      "postcode": "24589",
+      "street": "Looper Weg 2",
+      "lat": 54.1636469,
+      "lng": 9.893046300000002,
+      "comment": ""
+    },
+    {
+      "id": "655360c46b645add0d8a1029",
+      "name": "25336 Elmshorn - Holsteiner Verband",
+      "city": "Elmshorn",
+      "postcode": "25336",
+      "street": "Westerstraße  93",
+      "lat": 53.74489,
+      "lng": 9.64493,
+      "comment": ""
+    },
+    {
+      "id": "62347fa7f7f4959d4b16ebb4",
+      "name": "25482 Pinneberg - Tierklinik SANAKENA",
+      "city": "Pinneberg",
+      "postcode": "25482",
+      "street": "Hasenmoorkamp  3",
+      "lat": 53.6417894,
+      "lng": 9.7685173,
+      "comment": ""
+    },
+    {
+      "id": "6421b1a0610cc1acc491f633",
+      "name": "30916 Isernhagen - Reiterverein Isernhagen",
+      "city": "Isernhagen",
+      "postcode": "30916",
+      "street": "Burgwedeler Straße  43",
+      "lat": 52.46287,
+      "lng": 9.78766,
+      "comment": ""
+    },
+    {
+      "id": "627b53f00b22c7ec1d31f55f",
+      "name": "31157 Sarstedt - Pferdeklinik Sarstedt",
+      "city": "Sarstedt",
+      "postcode": "31157",
+      "street": "Wenderter Str. 7",
+      "lat": 52.231120006856415,
+      "lng": 9.83983779496767,
+      "comment": ""
+    },
+    {
+      "id": "69c39af457d7cabbd085f9b2",
+      "name": "32457 Porta Westfalica - Engemann & Vieregge Sportpferde",
+      "city": "Porta Westfalica",
+      "postcode": "32457",
+      "street": "Mahrstraße 6",
+      "lat": 52.18754,
+      "lng": 8.97083,
+      "comment": ""
+    },
+    {
+      "id": "66fbae56d241bee1017dead1",
+      "name": "33739 Bielefeld - Gestüt Wahl & Co - zusätzliche Informationen beachten!",
+      "city": "Bielefeld",
+      "postcode": "33739",
+      "street": "Hageresch 80",
+      "lat": 52.07008,
+      "lng": 8.48344,
+      "comment": "Das Hoftor ist zwischen 18/19 Uhr und 7 Uhr morgens geschlossen. \nZum öffnen/schließen des Tors bitte den Code 25353 eingeben und mit den Doppelpunkten bestätigen.\nEin langer Piepton bestätigt die korrekte \nEingabe und das Tor setzt sich in Bewegung"
+    },
+    {
+      "id": "635bd15f323dfd37f92fa3f4",
+      "name": "40764 Langenfeld - Landes- Reit- u. Fahrschule Rheinland",
+      "city": "Langenfeld ",
+      "postcode": "40764",
+      "street": "Weißenstein  52",
+      "lat": 51.119439,
+      "lng": 6.937468,
+      "comment": ""
+    },
+    {
+      "id": "693ac335add87ea005265af9",
+      "name": "40822 Mettmann - Reitsportanlage Rommerskirchen",
+      "city": "Mettmann",
+      "postcode": "40822",
+      "street": "Dorper Weg 1",
+      "lat": 51.25422289999999,
+      "lng": 6.9349459,
+      "comment": ""
+    },
+    {
+      "id": "65f98defef8d73509e0e0d3d",
+      "name": "42113 Wuppertal - Reitsportzentrum Bödicker ",
+      "city": "Wuppertal",
+      "postcode": "42113",
+      "street": "Aprather Weg 23",
+      "lat": 51.26964,
+      "lng": 7.10261,
+      "comment": ""
+    },
+    {
+      "id": "667d8a4995f1a252d26b6e80",
+      "name": "45481 Mülheim an der Ruhr - Gestüt Eschenbruch",
+      "city": "Mülheim an der Ruhr",
+      "postcode": "45481",
+      "street": "Eschenbruch 30",
+      "lat": 51.3814139,
+      "lng": 6.8704014,
+      "comment": ""
+    },
+    {
+      "id": "64bf8267257434c883d33e95",
+      "name": "48163 Münster - Turnierstall Michael Klimke",
+      "city": "Münster",
+      "postcode": "48163",
+      "street": "Reiner-Klimke-Weg  1d",
+      "lat": 51.940293,
+      "lng": 7.585932,
+      "comment": ""
+    },
+    {
+      "id": "65f9a03fb2e32b5ec87ff96a",
+      "name": "49124 Georgsmarienhütte - Rittergut Osthoff",
+      "city": "Georgsmarienhütte",
+      "postcode": "49124",
+      "street": "Rittergut Osthoff  3a",
+      "lat": 52.22155,
+      "lng": 8.05629,
+      "comment": ""
+    },
+    {
+      "id": "65818c3dbbf234a6bf2e6e68",
+      "name": "49393 Lohne - Autoglas Middendorf",
+      "city": "Lohne",
+      "postcode": "49393",
+      "street": "Langwegerstraße 3",
+      "lat": 52.65867,
+      "lng": 8.18955,
+      "comment": ""
+    },
+    {
+      "id": "69ba6562558e044712280fd6",
+      "name": "49439 Steinfeld (Oldenburg) - Pferdeklinik Mühlen",
+      "city": "Steinfeld (Oldenburg)",
+      "postcode": "49439",
+      "street": "Münsterlandstraße 42",
+      "lat": 52.6111851,
+      "lng": 8.2056481,
+      "comment": ""
+    },
+    {
+      "id": "69b26acd01001cbbc6e451ab",
+      "name": "53919 Weilerswist - Pferdeklinik Burg Müggenhausen",
+      "city": "Weilerswist",
+      "postcode": "53919",
+      "street": "Heimerzheimer Straße 18",
+      "lat": 50.7134839,
+      "lng": 6.8781398,
+      "comment": ""
+    },
+    {
+      "id": "63356a5de0646c64bbc6426b",
+      "name": "58730 Fröndenberg - Gut Dahlmann",
+      "city": "Fröndenberg",
+      "postcode": "58730",
+      "street": "Neimenerweg  3",
+      "lat": 51.479742,
+      "lng": 7.799759,
+      "comment": ""
+    },
+    {
+      "id": "67a6350a97594f7a6137b117",
+      "name": "61440 Oberursel - Hofgut im Weidenhag - Kerstin Illing",
+      "city": "Oberursel",
+      "postcode": "61440",
+      "street": "Im Weidenhag 1",
+      "lat": 50.2091998,
+      "lng": 8.5520555,
+      "comment": ""
+    },
+    {
+      "id": "64881c799f928e48259e8afe",
+      "name": "63263 Neu-Isenburg - Hofgut Gravenbruch ",
+      "city": "Neu-Isenburg",
+      "postcode": "63263",
+      "street": "Reithalle Gravenbruch 1",
+      "lat": 50.053789,
+      "lng": 8.745445,
+      "comment": "Das Tor ist jederzeit offen und kann manuell aufgeschoben werden. "
+    },
+    {
+      "id": "627d02b48b871538fb797a0e",
+      "name": "65795 Hattersheim am Main - Reitanlage Georg Weitzel ",
+      "city": "Hattersheim am Main",
+      "postcode": "65795",
+      "street": "Flörßheimer Str. 62 62",
+      "lat": 50.03609,
+      "lng": 8.46538,
+      "comment": ""
+    },
+    {
+      "id": "63f7162a986c7892acb4513f",
+      "name": "68165 Mannheim - Reiter-Verein Mannheim e.V.",
+      "city": "Mannheim",
+      "postcode": "68165",
+      "street": "Gartenschauweg 8",
+      "lat": 49.480397,
+      "lng": 8.499538,
+      "comment": ""
+    },
+    {
+      "id": "62ac473d3d2e1b531af7cdbb",
+      "name": "71640 Ludwigsburg - Reitstall Lemberger - Ludwigsburg",
+      "city": "Ludwigsburg",
+      "postcode": "71640",
+      "street": "Spottenberger Weg 55",
+      "lat": 48.89465,
+      "lng": 9.242881,
+      "comment": ""
+    },
+    {
+      "id": "64cb8b60b0468a201288e444",
+      "name": "73235 Weilheim a.d. Teck - Reitverein Weilheim",
+      "city": "Weilheim a.d. Teck ",
+      "postcode": "73235",
+      "street": "Kornbergstraße  85",
+      "lat": 48.61603,
+      "lng": 9.51038,
+      "comment": ""
+    },
+    {
+      "id": "69c3b02b493cf266d50ced6f",
+      "name": "73642 Welzheim - EquiZentrum ",
+      "city": "Welzheim",
+      "postcode": "73642",
+      "street": "Obere Bausche 1",
+      "lat": 48.8586244,
+      "lng": 9.601808799999999,
+      "comment": ""
+    },
+    {
+      "id": "655b6ba8f192079968340de2",
+      "name": "78667 Villingendorf - Reitanlage Güss",
+      "city": "Villingendorf",
+      "postcode": "78667",
+      "street": "Stadionstraße  25",
+      "lat": 48.20904,
+      "lng": 8.58353,
+      "comment": ""
+    },
+    {
+      "id": "627d15748b871538fb7a6d67",
+      "name": "81929 München - Olympia Reitanlagen GmbH",
+      "city": "München",
+      "postcode": "81929",
+      "street": "Schichtlstraße 50",
+      "lat": 48.14339,
+      "lng": 11.6653,
+      "comment": "Zufahrt über die Schichtlstraße, die Fahrzeuge stehen direkt an der großen Reithalle. "
+    },
+    {
+      "id": "6553630b1e96a532c441843c",
+      "name": "82069 Schäftlarn - Der Fichtenhof",
+      "city": "Schäftlarn",
+      "postcode": "82069",
+      "street": "Zeller Straße 10",
+      "lat": 47.99336,
+      "lng": 11.42243,
+      "comment": ""
+    },
+    {
+      "id": "64da426b32ec9d96fa973054",
+      "name": "85757 Karlsfeld - Reiterhof Pickl",
+      "city": "Karlsfeld",
+      "postcode": "85757",
+      "street": "Hadinger Weg  3",
+      "lat": 48.21067,
+      "lng": 11.43193,
+      "comment": ""
+    },
+    {
+      "id": "68b69c50214dbc7e9409188e",
+      "name": "AT Damarishof (Unterwaltersdorf)",
+      "city": "Deutsch-Brodersdorf",
+      "postcode": "2443",
+      "street": "Unterwaltersdorfer Straße 99",
+      "lat": 47.9495551,
+      "lng": 16.4513988,
+      "comment": ""
+    },
+    {
+      "id": "68b6994e107e39ebcebf6442",
+      "name": "AT Reiterstadl Ebreichsdorf (Unterwaltersdorf)",
+      "city": "Unterwaltersdorf",
+      "postcode": "2442",
+      "street": "Hauptplatz 7",
+      "lat": 47.9605025,
+      "lng": 16.4317799,
+      "comment": ""
+    },
+    {
+      "id": "667becffd7fe2fb4a4ee21eb",
+      "name": "Gestüt Vogt",
+      "city": "Alfeld",
+      "postcode": "91236",
+      "street": "Wörleinshof  2",
+      "lat": 49.41754,
+      "lng": 11.52454,
+      "comment": ""
+    },
+    {
+      "id": "6662eb3f336a73387ebe297a",
+      "name": "Gut Ringelsbruch",
+      "city": " Paderborn",
+      "postcode": "33106",
+      "street": "Ringelsbruch 1-9",
+      "lat": 51.70463,
+      "lng": 8.68457,
+      "comment": ""
+    },
+    {
+      "id": "6620dea16285865070009e5f",
+      "name": "Reitanlage Abraham",
+      "city": "Dortmund",
+      "postcode": "44227",
+      "street": "Menglinghauser Straße 274",
+      "lat": 51.46263,
+      "lng": 7.41177,
+      "comment": ""
+    },
+    {
+      "id": "67496841afaec203d3639a9b",
+      "name": "Reitanlage am Ried - Kunze",
+      "city": "Langenau",
+      "postcode": "89129",
+      "street": "Raiffeisenstraße 32",
+      "lat": 48.48917,
+      "lng": 10.12658,
+      "comment": ""
+    },
+    {
+      "id": "67deceec685840583808a7b2",
+      "name": "Reiterhof Horkheim",
+      "city": "Heilbronn-Horkheim",
+      "postcode": "74081",
+      "street": "Kelterweg 41",
+      "lat": 49.1120651,
+      "lng": 9.162387899999999,
+      "comment": ""
+    },
+    {
+      "id": "68888b3606372dc1cbf41766",
+      "name": "Stall Hollenbach",
+      "city": "Rot am See",
+      "postcode": "74585",
+      "street": "Bartenmühlenweg  20",
+      "lat": 49.2581163,
+      "lng": 10.0113091,
+      "comment": ""
+    },
+    {
+      "id": "655de014d20d99a38f079c73",
+      "name": "Zucht- & Ausbildungstall Klintworth",
+      "city": "Bargstedt-Ohrensen",
+      "postcode": "21698",
+      "street": "Hauptstraße  16",
+      "lat": 53.46663,
+      "lng": 9.47218,
+      "comment": ""
+    }
+  ],
+  "updated": "2026-04-08T19:44:09.490Z"
 }
