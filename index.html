@@ -1174,7 +1174,7 @@
         .vehicle__thumbs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin-top: 12px;
         }
 
@@ -2242,6 +2242,7 @@
             .video-showcase__inner { grid-template-columns: 1fr 1fr; min-height: 520px; }
 
             .vehicle__showcase { grid-template-columns: 1.15fr 1fr; gap: 56px; }
+            .vehicle__thumbs { grid-template-columns: repeat(6, 1fr); }
 
             .trust-layout { grid-template-columns: auto 1fr; gap: 48px; align-items: center; }
             .trust-layout__video { order: 0; }
@@ -2864,32 +2865,43 @@
             <div class="vehicle__gallery reveal">
                 <div class="vehicle__main">
                     <span class="vehicle__main-badge">STX Pferdetransporter</span>
-                    <img id="mainVehicleImg" src="img/truck-front.jpg" alt="STX Pferdetransporter Frontansicht">
+                    <img id="mainVehicleImg" src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_061-1200x900.jpg" alt="STX Pferdetransporter Frontansicht">
                 </div>
                 <div class="vehicle__thumbs">
-                    <button class="vehicle__thumb active" data-img="img/truck-front.jpg" aria-label="Frontansicht">
-                        <img src="img/truck-front.jpg" alt="Frontansicht">
+                    <!-- Exterior -->
+                    <button class="vehicle__thumb active" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_061-1200x900.jpg" aria-label="Frontansicht">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_061-1200x900.jpg" alt="Frontansicht" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/horse-stall.jpg" aria-label="Pferdeboxen">
-                        <img src="img/horse-stall.jpg" alt="Pferdeboxen">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_063-1200x900.jpg" aria-label="Seitenansicht">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_063-1200x900.jpg" alt="Seitenansicht" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/interior-corridor.jpg" aria-label="Innenraum">
-                        <img src="img/interior-corridor.jpg" alt="Innenraum">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_065-1200x900.jpg" aria-label="Schrägansicht">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_065-1200x900.jpg" alt="Schrägansicht vorne" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/rearview-camera.jpg" aria-label="Rückfahrkamera">
-                        <img src="img/rearview-camera.jpg" alt="Rückfahrkamera">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_002-1200x900.jpg" aria-label="Mit Anhänger">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_002-1200x900.jpg" alt="Mit Anhänger" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/navigation.jpg" aria-label="Navigation">
-                        <img src="img/navigation.jpg" alt="Navigation">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_071-1200x900.jpg" aria-label="Heck mit Rampe">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_071-1200x900.jpg" alt="Heck mit Verladerampe" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/ventilation-lights.jpg" aria-label="Belüftung & LED">
-                        <img src="img/ventilation-lights.jpg" alt="Belüftung und LED">
+                    <!-- Interior -->
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_077-1200x900.jpg" aria-label="Cockpit">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_077-1200x900.jpg" alt="Cockpit und Armaturenbrett" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/skylight.jpg" aria-label="Dachfenster">
-                        <img src="img/skylight.jpg" alt="Dachfenster">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_081-1200x900.jpg" aria-label="Pferdeüberwachungskamera">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_081-1200x900.jpg" alt="Pferdeüberwachungskamera-Monitor" loading="lazy">
                     </button>
-                    <button class="vehicle__thumb" data-img="img/dashboard.jpg" aria-label="Armaturenbrett">
-                        <img src="img/dashboard.jpg" alt="Armaturenbrett">
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_149-1200x800.jpg" aria-label="Pferdeboxen">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_149-1200x800.jpg" alt="Pferdeboxen innen" loading="lazy">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_158-1200x800.jpg" aria-label="Sattelkammer">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_158-1200x800.jpg" alt="Sattelkammer und LED" loading="lazy">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_159-1200x800.jpg" aria-label="Innenraum">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_159-1200x800.jpg" alt="Innenraum mit Sattelhalter" loading="lazy">
+                    </button>
+                    <button class="vehicle__thumb" data-img="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_128-1200x800.jpg" aria-label="Dachluke & LED">
+                        <img src="img/STX-Transporter/STX-Trucks_dinsdag_©Jeroen-Willems_WEB_128-1200x800.jpg" alt="Dachluke, Lüfter und LED-Beleuchtung" loading="lazy">
                     </button>
                 </div>
             </div>
