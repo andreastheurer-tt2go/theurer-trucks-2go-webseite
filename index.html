@@ -1459,6 +1459,13 @@
         /* ============================================================
            TRUSTPILOT-BEWERTUNGEN (Task 11)
         ============================================================ */
+        /* Trustpilot-Container — Höhenbegrenzung auf Mobile */
+        .trustpilot-container {
+            max-height: 480px;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+        }
+
         /* Trustpilot + Video nebeneinander */
         .trustpilot-video-grid {
             display: grid;
@@ -2250,6 +2257,7 @@
             .trust-video-wrap { max-width: 360px; }
 
             .trustpilot-video-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
+            .trustpilot-container { max-height: none; }
             .trustpilot-video-grid__video { order: 0; }
 
             .steps { grid-template-columns: repeat(5, 1fr); }
@@ -2605,11 +2613,16 @@
             <p class="section-subtitle">Echte Erfahrungen von Reiterinnen und Reitern, die mit TheurerTrucks 2GO unterwegs waren.</p>
         </div>
 
-        <div class="reveal">
+        <div class="reveal trustpilot-container">
             <div class="trustpilot-widget" data-locale="de-DE" data-template-id="539adbd6dec7e10e686debee" data-businessunit-id="6295331e310b02c5d3124dd4" data-style-height="500px" data-style-width="100%" data-token="b8588a55-d11b-4427-8b5d-a02c972ac626" data-stars="4,5" data-review-languages="de">
                 <a href="https://de.trustpilot.com/review/theurer-trucks-2go.de" target="_blank" rel="noopener">Trustpilot</a>
             </div>
         </div>
+        <p style="text-align: center; margin-top: 16px;" class="reveal">
+            <a href="https://de.trustpilot.com/review/theurer-trucks-2go.de" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600; font-size: 0.9rem; text-decoration: none;">
+                Alle Bewertungen auf Trustpilot ansehen <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i>
+            </a>
+        </p>
 
     </div>
 </section>
