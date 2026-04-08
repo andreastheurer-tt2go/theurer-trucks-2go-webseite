@@ -121,9 +121,47 @@ Finale Reihenfolge (Stand 08.04.2026):
 - GitHub Pages aktiviert (Deploy from branch main, root /)
 - **Seite ist live**
 
+---
+
+## Session 3 — 08.04.2026 (Fortsetzung)
+
+### Fleetster-API-Integration
+
+- **Architektur-Entscheidung:** n8n auf bestehendem Hostinger VPS statt Cloudflare Workers
+- **Fleetster API erfolgreich getestet** — Login, Locations (58 Standorte), Vehicles (87), Users (16.484), Bookings
+- **Wichtige Erkenntnis:** Auth-Token ist die Top-Level `_id` (UUID), nicht die User-ID aus dem `user`-Objekt
+
+### n8n Workflow 1: Standorte → GitHub (Cron)
+
+- Workflow mehrfach iteriert wegen n8n-spezifischer Probleme:
+  - Parallele Nodes → Fehler "Node hasn't been executed" → auf sequentiell umgestellt
+  - `$env` in HTTP-Nodes unzuverlässig → Token direkt in Nodes eingetragen
+  - Vehicles-Endpoint zu langsam (5000+ Items) → aus Workflow entfernt
+  - Users-Endpoint Timeout (16.000+ Einträge) → aus Workflow entfernt
+- **Finale Version:** Login → Standorte → JSON → SHA holen → GitHub Push
+- **57 echte Standorte** erfolgreich nach `api/data.json` in GitHub gepusht
+- Standorte erscheinen auf der Karte und im Dropdown
+- Docker `.env` Problem: `$`-Zeichen im Passwort → `$$` als Escape
+- GitHub Token: `$env` funktioniert nicht → direkt in Nodes eingetragen
+
+### n8n Workflow 2: Live-Verfügbarkeitsprüfung (Webhook)
+
+- Webhook-URL: `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability`
+- HTTP Method `*` nicht supported in n8n v2.7.5 → auf `POST` geändert
+- **Erfolgreich getestet** — Frontend sendet Station + Datum → Workflow prüft echte Buchungen bei Fleetster → Response mit Verfügbarkeit
+- Frontend `availUrl` eingetragen und gepusht
+
+### Frontend-Anpassungen für API
+
+- `TT2GO_API` Config-Objekt im Script
+- `loadStationData()` — lädt Standorte aus `api/data.json`
+- `populateStations()` — befüllt Karte + Dropdown dynamisch
+- `checkAvailability()` — POST an n8n Webhook statt Stub
+- Graceful Fallback bei API-Ausfall (5 Demo-Standorte + Fake-Ergebnis)
+
 ### Offene Punkte
 
+- [ ] Zahlen-Banner aktualisieren (63→87, 51→57, 15.677→16.484)
 - [ ] Eigene Domain verbinden
-- [ ] Fleetster-API anbinden (Cloudflare Worker als Proxy)
 - [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
 - [ ] In fleetster Redirect-URL auf Erfolgsseite setzen

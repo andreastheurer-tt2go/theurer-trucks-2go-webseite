@@ -241,14 +241,89 @@ Alle Bilder haben SEO-optimierte Alt-Texte mit Keywords.
 13. **Footer-Logo weiß invertiert** — `filter: brightness(0) invert(1)` für Sichtbarkeit auf dunklem Hintergrund
 14. **Vertrauens-Karte 4 geändert** — "Lohnt sich ein Anhänger?" → "Wie schnell bekomme ich ein Fahrzeug?" (24/7 Verfügbarkeit)
 
-## Geplante Fleetster-API-Integration
+## Fleetster-API-Integration (Live)
 
-Architektur-Entscheidung: **Cloudflare Worker als Proxy** für alle API-Calls.
+Architektur: **n8n auf Hostinger VPS** (Docker + Traefik) statt Cloudflare Workers — VPS war schon vorhanden (Führerschein-/Bonitätsprüfung).
 
-| Endpoint | Zweck | Cache |
-|---|---|---|
-| `/api/availability` | Live-Verfügbarkeit prüfen | Kein Cache |
-| `/api/stations` | Standorte für Karte + Dropdown | 24h |
-| `/api/stats` | Fahrzeuge/Standorte/Nutzer für Zahlen-Banner | 30 Tage |
+### Fleetster API Details
 
-API-Key bleibt als Environment Variable im Worker — nie im Frontend sichtbar.
+- **Base URL:** `https://my.fleetster.net`
+- **Auth:** `POST /users/auth` mit `{ email, password }` → Top-Level `_id` ist der Token (UUID, nicht die User-ID!)
+- **Account:** `tt2go-kontakt@theurer-trucks.de` (Credentials in `.env` auf VPS)
+- **Swagger:** `https://my.fleetster.net/swagger/` (Spec unter `../swagger.yaml`)
+
+### n8n VPS
+
+- **URL:** `https://n8n.srv1381541.hstgr.cloud`
+- **Docker:** n8n + Traefik Container unter `/docker/n8n/`
+- **Environment-Variablen:** In `/docker/n8n/.env` (FLEETSTER_EMAIL, FLEETSTER_PASSWORD, GITHUB_TOKEN)
+- **Achtung:** `$`-Zeichen in Passwörtern müssen als `$$` escaped werden in Docker `.env`
+- **Neustart:** `cd /docker/n8n && docker compose down && docker compose up -d`
+
+### Workflow 1: Standorte → GitHub (Cron)
+
+| Node | Funktion |
+|---|---|
+| Täglich um 6 Uhr | Cron-Trigger |
+| Fleetster Login | Auth-Token holen |
+| Token extrahieren | Top-Level `_id` aus Response |
+| Standorte abrufen | `GET /locations?deleted=false` |
+| JSON formatieren | Standorte mit Koordinaten formatieren, `api/data.json` erzeugen |
+| Bestehende Datei SHA holen | GitHub API: SHA der aktuellen data.json (nötig für Update) |
+| Push vorbereiten | Content Base64-encoden, SHA mitgeben |
+| Nach GitHub pushen | `PUT /repos/.../contents/api/data.json` → committed automatisch |
+
+**Hinweis:** GitHub Token muss direkt in den Nodes eingetragen werden (nicht über `$env` — funktioniert nicht zuverlässig in n8n HTTP-Nodes).
+
+**Output (`api/data.json`):**
+```json
+{
+  "stations": [
+    { "id": "61488...", "name": "23816 Leezen - Hauptstation", "city": "Leezen", "postcode": "23816", "lat": 53.86, "lng": 10.24, "comment": "" }
+  ],
+  "updated": "2026-04-08T06:00:00.000Z"
+}
+```
+
+### Workflow 2: Verfügbarkeitsprüfung (Webhook)
+
+**URL:** `POST https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability`
+
+| Node | Funktion |
+|---|---|
+| Webhook | POST empfangen (HTTP Method muss auf POST stehen, NICHT `*`) |
+| Parameter validieren | stationId, startDate, endDate prüfen |
+| Fleetster Login | Auth-Token holen |
+| Token + Parameter | Token + Request-Parameter zusammenführen |
+| Fahrzeuge am Standort | `GET /vehicles?locationId=X&deleted=false&fields[_id]=1&fields[locationId]=1` |
+| Fahrzeuge auswerten | Vehicle-IDs sammeln |
+| Buchungen im Zeitraum | `GET /bookings?state=created&state=keyreleased&startDate[$lte]=END&endDate[$gte]=START` |
+| Verfügbarkeit berechnen | Fahrzeuge minus gebuchte = verfügbar |
+| Response senden | JSON zurück an Frontend |
+
+**Request:** `{ "stationId": "61488...", "startDate": "2026-04-10T08:00:00Z", "endDate": "2026-04-10T18:00:00Z" }`
+**Response:** `{ "available": true, "availableCount": 2, "totalAtStation": 3 }`
+
+### Technische Erkenntnisse (n8n + Fleetster)
+
+- **Parallele Nodes vermeiden** — n8n gibt Fehler wenn ein nachfolgender Code-Node Daten von parallel laufenden Nodes referenziert. Alle API-Calls sequentiell verketten.
+- **`$env` in HTTP-Nodes unzuverlässig** — Environment-Variablen funktionieren in Code-Nodes, aber nicht immer in HTTP-Node Headern. Workaround: Token in Code-Node lesen und als `$json`-Property durchreichen, oder direkt im Node eintragen.
+- **Fleetster gibt Arrays als Items zurück** — bei vielen Ergebnissen liefert n8n einzelne Items statt ein Array. Im Code-Node prüfen: `if (length === 1 && Array.isArray(items[0])) items = items[0]`
+- **Vehicles-Endpoint ist langsam** — `GET /vehicles` ohne Filter gibt 5000+ Items zurück (inkl. historischer Einträge). Immer `deleted=false` und `fields`-Filter nutzen.
+- **Users-Endpoint zu langsam** — 16.000+ Nutzer, Timeout bei Abruf. Nutzer-Zahlen daher manuell pflegen.
+- **Webhook HTTP Method `*` nicht supported** in n8n v2.7.5 — explizit `POST` wählen.
+- **Docker `.env` Sonderzeichen** — `$` in Passwörtern wird als Variable interpretiert → `$$` verwenden.
+
+### Frontend-Integration
+
+```javascript
+var TT2GO_API = {
+    dataUrl:  'api/data.json',  // Standorte (aus GitHub, täglich aktualisiert)
+    availUrl: 'https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability'
+};
+```
+
+- `loadStationData()` — lädt `api/data.json`, befüllt Karte + Dropdown
+- `populateStations()` — erstellt Marker + Dropdown-Options aus API-Daten
+- `checkAvailability()` — POST an n8n Webhook, zeigt Ergebnis
+- **Fallback:** Wenn API nicht erreichbar → 5 Demo-Standorte + Stub-Verfügbarkeit

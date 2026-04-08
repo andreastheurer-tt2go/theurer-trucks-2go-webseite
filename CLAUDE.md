@@ -15,6 +15,7 @@ Statischer One-Pager für **TheurerTrucks 2GO** — Car-Sharing für Pferdetrans
 - Font Awesome 6.5 via CDN
 - Leaflet + OpenStreetMap für Standortkarte
 - Vimeo Embed für Erklärvideo
+- Fleetster API via n8n Workflows auf Hostinger VPS
 - Alles in einer Datei: `index.html`
 
 ## Seite starten
@@ -44,6 +45,14 @@ TT2GO_Neue_WEBSEITE/
 │   └── TT2GO-Logo-rgb_56-182-255 (Website).png
 ├── robots.txt
 ├── sitemap.xml
+├── api/
+│   └── data.json                   # Standortdaten (täglich via n8n aus Fleetster aktualisiert)
+├── n8n/
+│   ├── workflow-static-data.json   # Standorte → GitHub (Cron täglich 6:00)
+│   ├── workflow-availability.json  # Live-Verfügbarkeit (POST Webhook)
+│   └── README.md                   # n8n Setup-Anleitung
+├── .env                            # API-Keys (NICHT im Repo, in .gitignore)
+├── .env.example                    # Vorlage für .env
 ├── .gitignore
 ├── CLAUDE.md / DETAILS.md / HISTORY.md
 └── README.md
@@ -59,13 +68,13 @@ TT2GO_Neue_WEBSEITE/
 
 1. **Navbar** — fixiert, Scroll-Effekt, CTA "Jetzt registrieren"
 2. **Hero** — truck-front.jpg Hintergrund, Headline, Trustpilot-Sterne (klickbar → #bewertungen), 2 CTAs, Stat-Bar
-3. **Verfügbarkeitsprüfung** — Datum + Stations-Dropdown (Stub, Fleetster-API kommt)
+3. **Verfügbarkeitsprüfung** — Datum + Stations-Dropdown (Live via Fleetster-API/n8n)
 4. **Vertrauens-Sektion** — Video (Hochformat) links + 4 Angst-zu-Lösung-Karten rechts
 5. **Deine Vorteile** — Infografik-Bild (Pferdetransporter_auf_Abruf.jpg) + CTA
 6. **Zahlen-Banner** — 63 Fahrzeuge | 51 Standorte | 15.677 Nutzer (blauer Gradient)
 7. **Trustpilot-Bewertungen** — Grid-Widget (4 Spalten Desktop, Höhe begrenzt auf Mobile)
 8. **Preise & Tarife** — 3 Karten + Fahrt-Rechner (Gesamtstrecke) + Preisblatt-Link
-9. **Standortkarte** — Leaflet/OpenStreetMap, PLZ-Suche mit Nominatim, Popup → Verfügbarkeitsprüfer mit Vorauswahl
+9. **Standortkarte** — Leaflet/OpenStreetMap, 57 echte Standorte aus Fleetster-API, PLZ-Suche mit Nominatim, Popup → Verfügbarkeitsprüfer mit Vorauswahl
 10. **So geht's** — 5 Schritte + Erklärvideo (Vimeo 1019195471) eingebettet
 11. **Fahrzeug-Detail** — Bildergalerie (11 STX-Profifotos, 6 Spalten Desktop, Auto-Rotate) + 5 Specs
 12. **FAQ** — 31 Fragen in 5 Kategorien mit Tabs, Schema.org FAQPage JSON-LD (8 Fragen)
@@ -133,15 +142,38 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
 - **Conversion-Funnel:** Alle CTAs → `weiterleitung-registrierung.html` (GTM `generate_lead`) → fleetster → `registrierung-erfolgreich.html` (GTM `sign_up`)
 
-## Fleetster-API (deferred)
+## Fleetster-API (Live)
 
-Drei Stubs die noch API-Anbindung brauchen:
-1. **Verfügbarkeitsprüfung** — Bookings + Cars Endpoints
-2. **Standortkarte** — Stationsdaten dynamisch laden
-3. **Zahlen-Banner** — Fahrzeuge/Standorte/Nutzer 1x monatlich aktualisieren
+**Auth:** `POST https://my.fleetster.net/users/auth` → Top-Level `_id` = Token (UUID)
+**Swagger:** `https://my.fleetster.net/swagger/`
 
-API-Docs: `https://www.fleetster.net/mobility-api`
-Swagger: `https://my.fleetster.net/swagger/` (Credentials nötig)
+### n8n Workflows auf Hostinger VPS
+
+| Workflow | Trigger | Funktion |
+|---|---|---|
+| Standorte → GitHub | Cron täglich 6:00 | Holt Locations aus Fleetster, pusht `api/data.json` nach GitHub |
+| Verfügbarkeitsprüfung | POST Webhook | Prüft Live-Verfügbarkeit am gewählten Standort/Zeitraum |
+
+**VPS:** `n8n.srv1381541.hstgr.cloud` (Hostinger, Docker mit Traefik)
+**Webhook-URL:** `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability`
+
+### Frontend-API-Konfiguration (index.html)
+
+```javascript
+var TT2GO_API = {
+    dataUrl:  'api/data.json',  // Standorte (täglich aus GitHub)
+    availUrl: 'https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability'
+};
+```
+
+Das Frontend hat Fallback-Daten falls die API nicht erreichbar ist.
+
+### Zahlen-Banner
+
+Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
+- Fahrzeuge: aktuell 87 (auf der Seite noch 63 — TODO aktualisieren)
+- Standorte: aktuell 57 (auf der Seite noch 51 — TODO aktualisieren)
+- Nutzer: aktuell 16.484 (auf der Seite noch 15.677 — TODO aktualisieren)
 
 ## Erledigte Go-Live-Punkte
 
@@ -153,12 +185,15 @@ Swagger: `https://my.fleetster.net/swagger/` (Credentials nötig)
 - [x] GitHub Pages Hosting eingerichtet
 - [x] Tracking-Seiten erstellt (Soft-Conversion + Conversion)
 - [x] FAQ komplett überarbeitet (31 Fragen, 5 Kategorien)
+- [x] Fleetster-API angebunden (n8n auf Hostinger VPS)
+- [x] 57 echte Standorte auf Karte + Dropdown (täglich aktualisiert)
+- [x] Live-Verfügbarkeitsprüfung funktioniert
 
 ## Offene Punkte
 
+- [ ] Zahlen-Banner aktualisieren (63→87, 51→57, 15.677→16.484)
 - [ ] Eigene Domain verbinden (GitHub Pages → Custom Domain)
 - [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
-- [ ] Fleetster-API anbinden (Cloudflare Worker als Proxy)
 - [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
 - [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
 
