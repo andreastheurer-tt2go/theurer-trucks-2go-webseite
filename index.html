@@ -2651,6 +2651,9 @@
                         <button class="calculator__day-btn" data-days="6" data-price="788" data-km="900" onclick="selectTripDay(this)">6 Tage</button>
                         <button class="calculator__day-btn" data-days="7" data-price="860" data-km="1050" onclick="selectTripDay(this)">7 Tage</button>
                     </div>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 12px;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i> Längere Buchungszeiträume auf Anfrage möglich — <a href="mailto:info@theurer-trucks-2go.de" style="color: var(--primary); font-weight: 600;">info@theurer-trucks-2go.de</a>
+                    </p>
                 </div>
                 <div class="calculator__right">
                     <span class="calculator__label">Deine Kosten</span>
@@ -3433,7 +3436,7 @@
                 extraRow.style.display = 'flex';
                 document.getElementById('calcExtraKmCount').textContent = extraKm.toLocaleString('de-DE');
                 document.getElementById('calcExtraPrice').textContent = extraPrice.toFixed(2).replace('.', ',') + ' €';
-                message.innerHTML = '<i class="fas fa-info-circle"></i> ' + extraKm.toLocaleString('de-DE') + ' km über den Freikilometern — Aufpreis: ' + extraPrice.toFixed(2).replace('.', ',') + ' €';
+                message.innerHTML = '';
                 message.style.color = 'var(--text-light)';
             } else {
                 extraRow.style.display = 'none';
