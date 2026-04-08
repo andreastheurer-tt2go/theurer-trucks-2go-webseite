@@ -32,50 +32,66 @@
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "Brauche ich einen speziellen Führerschein?",
+                "name": "Welchen Führerschein benötige ich für die TheurerTrucks?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Nein, dein normaler Führerschein Klasse B reicht vollständig aus. Unser STX Pferdetransporter hat ein zulässiges Gesamtgewicht unter 3,5 Tonnen — kein Anhängerführerschein (BE) und kein LKW-Führerschein nötig."
+                    "text": "Der PKW-Führerschein Klasse B bzw. Klasse 3 ist ausreichend. Solltest du im Besitz des Anhängerführerscheins BE sein, darfst du zusätzlich noch einen Anhänger mitführen."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Wie funktioniert die Buchung?",
+                "name": "Was kostet die Miete eines TheurerTrucks?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Registriere dich kostenlos bei fleetster, wähle deinen Standort und deinen Wunschzeitraum, buche online und öffne das Fahrzeug am Abholtag per App. Der Schlüssel liegt im Handschuhfach."
+                    "text": "Ab 165 € pro Tag (brutto inkl. MwSt. und Vollkaskoversicherung). Das Wochenende (3 Tage) kostet 466 €, die Wochenmiete 860 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,46 €/km. Dieselkosten trägt der Mieter — Fahrzeug muss vollgetankt zurückgebracht werden."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Wo stehen die Transporter?",
+                "name": "Wie sind die Fahrzeuge versichert?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit — immer in der Nähe von Reitanlagen, damit du kurze Wege hast."
+                    "text": "Vollkaskoversicherung mit 1.000 € Selbstbeteiligung. Teilkaskoversicherung mit 150 € Selbstbeteiligung."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Was kostet die Miete?",
+                "name": "Wie viel kg darf ich zuladen?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Ab 165 € pro Tag (inkl. MwSt. und Vollkaskoversicherung). Das Wochenende (3 Tage) kostet 466 €, die Wochenmiete 860 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,46 €/km. Dieselkosten trägt der Mieter — Fahrzeug muss vollgetankt zurückgebracht werden."
+                    "text": "950 kg. Egal welcher Führerschein — unsere TheurerTrucks sind auf 3,5t zugelassen und haben somit immer eine Zuladung von 950 kg."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Ist das Fahrzeug versichert?",
+                "name": "Wie läuft der Registrierungsprozess ab?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Ja, unser Transporter ist zu 100 % vollkaskoversichert. Die Versicherung ist im Mietpreis enthalten — kein Aufpreis, keine bösen Überraschungen."
+                    "text": "Kontodetails eingeben, persönliche Daten und Ausweisdaten hinterlegen, AGB bestätigen, Aktivierungslink per Mail bestätigen, App downloaden und Führerscheinverifizierung durchführen (Freischaltung kann bis zu 24 Std. dauern), dann Zahlungsweise auswählen."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Wie viele Pferde passen in den Transporter?",
+                "name": "Wie gebe ich das Fahrzeug zurück?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Der STX Pferdetransporter bietet Platz für 1 Großpferd oder 2 kleinere Pferde. Die maximale Zuladung beträgt 950 kg."
+                    "text": "Das Fahrzeug muss vollgetankt (Diesel) und besenrein (Fahrerhaus und Pferdeabteil) zurückgegeben werden. Schlüssel in die Halterung im Handschuhfach, Türen schließen, Fahrzeug per App verschließen und auf 'Miete beenden' klicken."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Wie groß sind die TheurerTruck Fahrzeuge?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Höhe 2,85m, Breite 2,10m (ohne Spiegel), Länge 6,25m. Die Höhe im Pferdeabteil beträgt ca. 2,50m."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Kann ich den TheurerTruck an einer anderen Station abgeben (One-Way)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nein, unsere Fahrzeuge sind standortgebunden und müssen dahin zurückgebracht werden, wo sie abgeholt worden sind."
                 }
             }
         ]
@@ -2114,6 +2130,48 @@
             line-height: 1.4;
         }
 
+        /* FAQ Kategorien */
+        .faq-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .faq-tab {
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-full);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text);
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .faq-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .faq-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        .faq-category { display: none; }
+        .faq-category.active { display: block; }
+        .faq-category__title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         @media (max-width: 360px) {
             .features-diagram__labels { grid-template-columns: 1fr; }
         }
@@ -2896,92 +2954,337 @@
         <div class="section-header reveal">
             <span class="section-tag"><i class="fas fa-circle-question"></i> Häufige Fragen</span>
             <h2 class="section-title">Deine Fragen — unsere Antworten</h2>
-            <p class="section-subtitle">Alles Wichtige für deine erste Buchung auf einen Blick.</p>
+            <p class="section-subtitle">Alles Wichtige rund um TheurerTrucks 2GO auf einen Blick.</p>
         </div>
 
+        <!-- Kategorie-Tabs -->
+        <div class="faq-tabs reveal">
+            <button class="faq-tab active" onclick="showFaqCategory('alle')">Alle</button>
+            <button class="faq-tab" onclick="showFaqCategory('buchung')">Buchung & Registrierung</button>
+            <button class="faq-tab" onclick="showFaqCategory('fahrzeug')">Fahrzeug & Ausstattung</button>
+            <button class="faq-tab" onclick="showFaqCategory('fahrt')">Während der Fahrt</button>
+            <button class="faq-tab" onclick="showFaqCategory('kosten')">Kosten & Versicherung</button>
+            <button class="faq-tab" onclick="showFaqCategory('rueckgabe')">Rückgabe & Notfälle</button>
+        </div>
+
+        <!-- Alle Kategorien -->
         <div class="faq-wrap">
 
-            <div class="faq-item reveal">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Brauche ich einen speziellen Führerschein?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+            <!-- BUCHUNG & REGISTRIERUNG -->
+            <div class="faq-category active" data-category="buchung">
+                <div class="faq-category__title"><i class="fas fa-user-plus"></i> Buchung & Registrierung</div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie funktioniert die Buchung?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>1. App downloaden (TheurerTrucks 2GO im App- bzw. Playstore suchen) 2. Registrieren (inkl. Führerscheinverifizierung, kann bis zu 24 Stunden dauern) 3. Fahrzeug buchen 4. Bei Abholung in der App auf "Buchung starten" klicken 5. Frage nach gültigem Führerschein beantworten und auf "Fahrt starten" klicken 6. Fahrzeug zusammen mit der App auf Schäden überprüfen 7. Fahrzeug per App aufschließen (offenes Schlosssymbol) 8. Der Schlüssel befindet sich im Handschuhfach in einer extra Halterung.</p></div>
                 </div>
-                <div class="faq-a">
-                    Nein, dein normaler Führerschein Klasse B reicht vollständig aus. Unser STX Pferdetransporter hat ein zulässiges Gesamtgewicht unter 3,5 Tonnen — kein Anhängerführerschein (BE) und kein LKW-Führerschein nötig. Einfach einsteigen und losfahren.
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie läuft der Registrierungsprozess ab?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Die Registrierung könnt ihr online oder in der TheurerTrucks 2GO App vornehmen: 1. Sprache auswählen 2. Kontodetails eingeben (Name, Handynummer, E-Mail, Passwort) 3. Persönliche Daten und Ausweisdaten hinterlegen (Personalausweis oder Reisepass) 4. AGB bestätigen 5. Aktivierungslink per Mail erhalten 6. App downloaden und Führerscheinverifizierung durchführen (Freischaltung kann bis zu 24 Std. dauern) 7. Zahlungsweise auswählen (SEPA-Lastschrift oder Kreditkarte).</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie funktioniert die Führerscheinverifizierung?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Wichtig: Die Führerscheindaten müssen auf allen Bildern gut lesbar sein! 1. Bild von der Vorderseite des Führerscheins machen (bei Papierführerscheinen bitte vollständig auffalten) 2. Bild von der Rückseite des Führerscheins machen 3. Selfie von euch selbst inkl. Führerschein hochladen 4. Führerscheindaten eingeben (kein Ablaufdatum? Über den grünen Punkt abwählen) 5. Auf "Senden" klicken.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie lange dauert die Führerscheinverifizierung?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Die Führerscheinverifizierung erfolgt werktags innerhalb von 24 Stunden. In dringenden Notfällen ist eine Freischaltung auch am Wochenende möglich — melde dich dafür telefonisch bei uns.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Kann man einen zweiten Fahrer/Fahrerin angeben?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Ja. Dafür bitte die Buchungsdaten sowie Name, Adresse, Geburtsdatum des zusätzlichen Fahrers/Fahrerin plus Bilder vom Führerschein an <a href="mailto:info@theurer-trucks-2go.de">info@theurer-trucks-2go.de</a> oder per WhatsApp an 04552/9941286 senden.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Gibt es ein Mindestalter?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Zum Fahren der Trucks musst du mindestens 18 Jahre alt sein.</p></div>
                 </div>
             </div>
 
-            <div class="faq-item reveal delay-1">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Wie funktioniert die Buchung?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+            <!-- FAHRZEUG & AUSSTATTUNG -->
+            <div class="faq-category active" data-category="fahrzeug">
+                <div class="faq-category__title"><i class="fas fa-truck"></i> Fahrzeug & Ausstattung</div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Welchen Führerschein benötige ich?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Der PKW-Führerschein Klasse B bzw. Klasse 3 ist ausreichend. Solltest du im Besitz des Anhängerführerscheins BE sein, darfst du zusätzlich noch einen Anhänger mitführen.</p></div>
                 </div>
-                <div class="faq-a">
-                    Registriere dich kostenlos bei fleetster, wähle deinen Standort und Wunschzeitraum, buche online und öffne das Fahrzeug am Abholtag per App. Der Schlüssel liegt im Handschuhfach — gewartet und versichert.
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie groß sind die Fahrzeuge?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Höhe 2,85m, Breite 2,10m (ohne Spiegel), Länge 6,25m. Die Höhe im Pferdeabteil beträgt ca. 2,50m.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie viele Pferde darf ich transportieren?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>2 Großpferde hätten ausreichend Platz, jedoch ist hier die maximale Zuladung von 950 kg zu beachten!</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie viel kg darf ich zuladen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>950 kg.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie groß ist die Anhängelast?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>2.500 kg Gesamtgewicht.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Sind alle TheurerTrucks mit einer Anhängerkupplung ausgestattet?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Ja, alle Trucks sind identisch ausgestattet.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Darf ich meinen privaten Anhänger hinter die TheurerTrucks hängen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Sofern der entsprechende Führerschein (Anhängerführerschein BE) vorliegt, darfst du deinen privaten Anhänger hinterhängen.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Darf ich mit LKW-Führerschein mehr Gewicht zuladen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Nein! Egal welcher Führerschein, unsere TheurerTrucks sind auf 3,5t zugelassen und haben somit immer eine Zuladung von 950 kg.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wo schalte ich den Lüfter und das Licht fürs Pferdeabteil ein?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Beides wird im Führerhaus über zwei Schalter neben dem Lenkrad eingeschaltet.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Muss ich den TheurerTruck einstreuen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Einstreuen ist Pflicht, Späne eignen sich hier am besten.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Sind Anbindeketten im TheurerTruck?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>In der Regel sollen sich Anbindeketten im TheurerTruck befinden, sollte dies nicht der Fall sein, kannst du dein Pferd ganz normal mit eigenen Stricken anbinden.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Muss ein Heunetz ins Fahrzeug?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Ob ihr eurem Pferd Heu zur Verfügung stellen möchtet, dürft ihr selbst entscheiden. Bei längeren Fahrten ist dies empfehlenswert. Halterungen um ein Heunetz anzubringen sind vorhanden.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Gibt es Wasser für die Pferde im TheurerTruck?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Nein, um die Versorgung der Pferde muss sich selbst gekümmert werden. Hier empfiehlt es sich je nach Fahrtdauer Wasser in einem Kanister o.ä. mitzunehmen.</p></div>
                 </div>
             </div>
 
-            <div class="faq-item reveal delay-2">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Wo stehen die Transporter?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+            <!-- WÄHREND DER FAHRT -->
+            <div class="faq-category active" data-category="fahrt">
+                <div class="faq-category__title"><i class="fas fa-road"></i> Während der Fahrt</div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie öffne ich das Fahrzeug?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Das Fahrzeug wird über die TheurerTrucks 2GO App geöffnet.</p></div>
                 </div>
-                <div class="faq-a">
-                    Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit — immer direkt an Reitanlagen, damit du kurze Wege hast und dein Pferd schnell verladen kannst.
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wo finde ich den Schlüssel?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Im Handschuhfach des TheurerTrucks steckt der Schlüssel mit dem Schlüsselanhänger in einer extra Halterung. Während der Fahrt kann der Schlüssel ganz normal verwendet werden.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wer übergibt mir den TheurerTruck?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Du holst den TheurerTruck vollkommen selbstständig per App ab.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie herum fahren die Pferde?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Die Pferde fahren rückwärts, der Kopf befindet sich Richtung Sattelkammer.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Auf welcher Seite fahre ich mein Pferd?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Am einfachsten ist es, wenn du dein Pferd auf die Fahrerseite verlädst.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Muss ich das Pferdeabteil abschließen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Wenn sich Pferde auf dem TheurerTruck befinden, bitte niemals das Pferdeabteil abschließen. Bei der Fahrzeugrückgabe bitte alle Türen abschließen und den Schlüssel in die Halterung im Handschuhfach stecken. Im Winter (bei Frost) müsst ihr die Türen vom Pferdeabteil nicht verschließen.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Was tanken die TheurerTrucks?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Diesel.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Muss ich AdBlue tanken?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Solltest du bemerken, dass AdBlue aufgefüllt werden muss, erledige dies bitte an der nächsten Tankstelle. Die Kosten hierfür erstatten wir dir selbstverständlich!</p></div>
                 </div>
             </div>
 
-            <div class="faq-item reveal">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Was kostet die Miete?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+            <!-- KOSTEN & VERSICHERUNG -->
+            <div class="faq-category active" data-category="kosten">
+                <div class="faq-category__title"><i class="fas fa-euro-sign"></i> Kosten & Versicherung</div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Was kostet die Miete?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Ab 165 € pro Tag (brutto inkl. MwSt. und Vollkaskoversicherung). Das Wochenende (3 Tage) kostet 466 €, die Wochenmiete 860 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,46 €/km. Dieselkosten trägt der Mieter — Fahrzeug muss vollgetankt zurückgebracht werden.</p></div>
                 </div>
-                <div class="faq-a">
-                    Ab 165 € pro Tag (brutto inkl. MwSt. und Vollkaskoversicherung). Das Wochenende (3 Tage) kostet 466 €, die Wochenmiete 860 €. Freikilometer sind im Tarif enthalten, Mehrkilometer kosten 0,46 €/km. Dieselkosten trägt der Mieter — Fahrzeug muss vollgetankt zurückgebracht werden.
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie sind die Fahrzeuge versichert?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Vollkaskoversicherung mit 1.000 € Selbstbeteiligung. Teilkaskoversicherung mit 150 € Selbstbeteiligung.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Kann ich die Selbstbeteiligung reduzieren?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Ein anderer Versicherungsschutz kann leider nicht angeboten werden.</p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Muss ich eine Kaution zahlen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Eine Kaution ist nicht fällig.</p></div>
                 </div>
             </div>
 
-            <div class="faq-item reveal delay-1">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Ist das Fahrzeug versichert?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
-                </div>
-                <div class="faq-a">
-                    Ja, unser Transporter ist zu 100 % vollkaskoversichert. Die Versicherung ist im Mietpreis enthalten — kein Aufpreis, keine bösen Überraschungen. Eventuelle Selbstbeteiligungen werden beim Buchungsvorgang angezeigt.
-                </div>
-            </div>
+            <!-- RÜCKGABE & NOTFÄLLE -->
+            <div class="faq-category active" data-category="rueckgabe">
+                <div class="faq-category__title"><i class="fas fa-flag-checkered"></i> Rückgabe & Notfälle</div>
 
-            <div class="faq-item reveal delay-2">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Wie viele Pferde passen in den Transporter?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie gebe ich das Fahrzeug zurück?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Bei Rückgabe muss das Fahrzeug vollgetankt (Diesel) und besenrein (Fahrerhaus und Pferdeabteil) sein. Stellt euch immer die Frage: Wärt ihr zufrieden, wenn ihr das Fahrzeug so erhalten hättet? Schlüssel zurück in die Halterung im Handschuhfach, Türen zumachen und Fahrzeug per App verschließen (geschlossenes Schlosssymbol). Dann auf "Miete beenden" klicken und die Fragen zum Sauberkeitszustand beantworten. Erst jetzt gilt die Miete als beendet!</p></div>
                 </div>
-                <div class="faq-a">
-                    Der STX Pferdetransporter bietet Platz für 1 Großpferd oder 2 kleinere Pferde. Die maximale Zuladung beträgt 950 kg. Die Hengstausstattung mit hoher, verstellbarer Trennwand sorgt für maximale Sicherheit.
-                </div>
-            </div>
 
-            <div class="faq-item reveal">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Wie funktioniert das Verladen?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Kann ich den TheurerTruck an einer anderen Station abgeben? (One-Way)</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Nein, unsere Fahrzeuge sind standortgebunden und müssen also dahin wieder zurück gebracht werden, wo sie abgeholt worden sind.</p></div>
                 </div>
-                <div class="faq-a">
-                    Die breite Verladerampe und der niedrige Einstieg machen das Einladen auch für scheue Pferde leicht. Separate Türen vor jeder Box und eine Pferdeüberwachungskamera sorgen für maximale Sicherheit während der Fahrt.
-                </div>
-            </div>
 
-            <div class="faq-item reveal delay-1">
-                <div class="faq-q" onclick="toggleFaq(this)">
-                    <h4>Was passiert bei einer Panne?</h4>
-                    <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wie verhalte ich mich im Schadenfall?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Wichtig ist Ruhe zu bewahren und sich einen Überblick über die Situation zu machen. Je nach Schadenfall ist die Polizei hinzuzuziehen. Es müssen mehrere Bilder vom Schaden erstellt werden (Detailaufnahmen und aus der Entfernung). Der Schaden ist außerdem an uns zu melden. Alle Fahrzeuge sind selbstverständlich versichert.</p></div>
                 </div>
-                <div class="faq-a">
-                    Im Pannenfall erreichst du unseren Support über die App oder die Kontaktdaten im Fahrzeug. Alle nötigen Infos — Pannendienst, Notfallkontakt und Versicherungsdaten — sind im Fahrzeug hinterlegt und in der App abrufbar.
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wo melde ich mich in dringenden Notfällen?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Unsere Notfallnummer steht euch 24/7 zur Verfügung: <a href="tel:+491749578657">0174/9578657</a></p></div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Wo kann ich mich melden, sollte ich weitere Fragen haben?</span>
+                        <span class="faq-toggle"><i class="fas fa-plus"></i></span>
+                    </button>
+                    <div class="faq-a"><p>Telefonisch oder per WhatsApp unter <a href="tel:+4945529941286">04552/9941286</a>, per Mail an <a href="mailto:info@theurer-trucks-2go.de">info@theurer-trucks-2go.de</a> oder über unsere App. Wir melden uns innerhalb unserer Öffnungszeiten bei euch zurück: Mo-Fr 08:00 - 16:30 Uhr.</p></div>
                 </div>
             </div>
 
         </div>
+
     </div>
 </section>
 
@@ -3252,13 +3555,33 @@
         // Autoplay starten, wenn Thumbs vorhanden
         if (thumbs.length > 0) startGalleryAutoplay();
 
-        /* ── FAQ Toggle (Task 14) ─────────────────────────────── */
+        /* ── FAQ Akkordeon (Task 14) ──────────────────────────── */
         function toggleFaq(el) {
-            const item   = el.closest('.faq-item');
-            const isOpen = item.classList.contains('open');
-            // Alle offenen FAQs schließen
-            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-            if (!isOpen) item.classList.add('open');
+            var item = el.closest('.faq-item');
+            var wasOpen = item.classList.contains('open');
+            // Nur innerhalb der gleichen Kategorie schließen
+            var category = item.closest('.faq-category');
+            if (category) {
+                category.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+            }
+            if (!wasOpen) item.classList.add('open');
+        }
+
+        // FAQ Kategorie-Tabs
+        function showFaqCategory(cat) {
+            // Tabs aktualisieren
+            document.querySelectorAll('.faq-tab').forEach(function(t) { t.classList.remove('active'); });
+            event.target.classList.add('active');
+
+            // Kategorien ein-/ausblenden
+            var categories = document.querySelectorAll('.faq-category');
+            if (cat === 'alle') {
+                categories.forEach(function(c) { c.classList.add('active'); });
+            } else {
+                categories.forEach(function(c) {
+                    c.classList.toggle('active', c.dataset.category === cat);
+                });
+            }
         }
 
         /* ── Leaflet Standortkarte (Task 10) ──────────────────── */
