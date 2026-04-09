@@ -1538,6 +1538,12 @@
             text-align: center;
             position: relative;
             transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card .btn {
+            margin-top: auto;
         }
 
         .pricing-card:hover {
@@ -1622,6 +1628,7 @@
             list-style: none;
             text-align: left;
             margin-bottom: 32px;
+            flex-grow: 1;
         }
 
         .pricing-card__list li {
