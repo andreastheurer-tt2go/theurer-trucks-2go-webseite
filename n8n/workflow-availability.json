@@ -59,7 +59,7 @@
     },
     {
       "parameters": {
-        "url": "=https://my.fleetster.net/vehicles?locationId={{ $json.stationId }}&deleted=false&fields[_id]=1&fields[locationId]=1&fields[extended.EntityLabels]=1",
+        "url": "=https://my.fleetster.net/vehicles?locationId={{ $json.stationId }}&deleted=false&active=true&fields[_id]=1&fields[locationId]=1",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -76,7 +76,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const LABEL_ARCHIVIERT = '69d64b9011fe02d420b21789';\n\n// Fahrzeug-IDs sammeln (archivierte ausfiltern)\nconst vehicleItems = $('Fahrzeuge am Standort').all().map(i => i.json);\nlet vehicles = vehicleItems;\nif (vehicleItems.length === 1 && Array.isArray(vehicleItems[0])) vehicles = vehicleItems[0];\n\nconst params = $('Token + Parameter').first().json;\nconst vehicleIds = vehicles\n  .filter(v => {\n    const labels = (v.extended && v.extended.EntityLabels && v.extended.EntityLabels.labels) || [];\n    return !labels.includes(LABEL_ARCHIVIERT);\n  })\n  .map(v => v._id)\n  .filter(Boolean);\n\nreturn [{ json: { token: params.token, stationId: params.stationId, startDate: params.startDate, endDate: params.endDate, vehicleIds, totalVehicles: vehicleIds.length } }];"
+        "jsCode": "// Fahrzeug-IDs sammeln (API liefert nur active=true)\nconst vehicleItems = $('Fahrzeuge am Standort').all().map(i => i.json);\nlet vehicles = vehicleItems;\nif (vehicleItems.length === 1 && Array.isArray(vehicleItems[0])) vehicles = vehicleItems[0];\n\nconst params = $('Token + Parameter').first().json;\nconst vehicleIds = vehicles.map(v => v._id).filter(Boolean);\n\nreturn [{ json: { token: params.token, stationId: params.stationId, startDate: params.startDate, endDate: params.endDate, vehicleIds, totalVehicles: vehicleIds.length } }];"
       },
       "id": "prepare-booking-query",
       "name": "Fahrzeuge auswerten",
