@@ -733,6 +733,9 @@
             border-radius: var(--radius-xl);
             padding: 24px 16px;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         /* Formular-Grid: Mobile-First — einspaltig als Default */
@@ -771,6 +774,9 @@
             outline: none;
             transition: border-color 0.25s, box-shadow 0.25s;
             -webkit-appearance: none;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -796,6 +802,10 @@
             background-position: right 14px center;
             padding-right: 40px;
             cursor: pointer;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
         }
 
         .form-select:focus {
@@ -1912,8 +1922,8 @@
         /* CTA-Band Buttons volle Breite */
         .cta-band__actions .btn { width: 100%; justify-content: center; }
 
-        /* Avail-Button volle Breite */
-        .avail__btn { width: 100%; justify-content: center; }
+        /* Avail-Button volle Breite, Umbruch erlauben */
+        .avail__btn { width: 100%; justify-content: center; white-space: normal; }
 
         /* Zahlen-Banner */
         .counter-band {
@@ -3345,8 +3355,8 @@
     </div>
 </section>
 
-<!-- Sticky Mobile CTA — immer sichtbar auf Mobile -->
-<div class="mobile-sticky-cta">
+<!-- Sticky Mobile CTA — ausgeblendet wenn Hero sichtbar -->
+<div class="mobile-sticky-cta" id="mobileStickyCtaBar">
     <a href="weiterleitung-registrierung.html" target="_blank" rel="noopener noreferrer"
        class="btn btn--primary"
        onclick="dataLayer.push({'event':'cta_click','cta_location':'mobile_sticky'})">
@@ -3467,6 +3477,18 @@
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('scrolled', window.scrollY > 60);
         }, { passive: true });
+
+        /* ── Sticky Mobile CTA ausblenden wenn Hero sichtbar ── */
+        (function() {
+            var hero = document.querySelector('.hero');
+            var stickyBar = document.getElementById('mobileStickyCtaBar');
+            if (!hero || !stickyBar) return;
+            var observer = new IntersectionObserver(function(entries) {
+                // Hero sichtbar → Sticky CTA ausblenden
+                stickyBar.style.display = entries[0].isIntersecting ? 'none' : 'block';
+            }, { threshold: 0.15 });
+            observer.observe(hero);
+        })();
 
         /* ── Mobile Menü ──────────────────────────────────────── */
         const burgerBtn   = document.getElementById('burgerBtn');
