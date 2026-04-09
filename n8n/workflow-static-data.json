@@ -90,7 +90,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const fileCheck = $input.first().json;\nconst content = $('JSON formatieren').first().json.content;\nconst githubToken = $('JSON formatieren').first().json.githubToken;\nconst sha = fileCheck.sha || null;\n\nconst contentBase64 = Buffer.from(content, 'utf-8').toString('base64');\n\nconst body = {\n  message: 'chore: Standorte aktualisiert (' + new Date().toISOString().slice(0,10) + ')',\n  content: contentBase64\n};\n\nif (sha) body.sha = sha;\n\nreturn [{ json: { body: body, githubToken: githubToken } }];"
+        "jsCode": "const fileCheck = $input.first().json;\nconst content = $('JSON formatieren').first().json.content;\nconst githubToken = $('JSON formatieren').first().json.githubToken;\n\n// SHA kann direkt oder verschachtelt sein\nconst sha = fileCheck.sha || (fileCheck.data && fileCheck.data.sha) || null;\n\nconst contentBase64 = Buffer.from(content, 'utf-8').toString('base64');\n\nconst body = {\n  message: 'chore: Standorte aktualisiert (' + new Date().toISOString().slice(0,10) + ')',\n  content: contentBase64\n};\n\nif (sha) {\n  body.sha = sha;\n} else {\n  throw new Error('SHA konnte nicht ermittelt werden. Response: ' + JSON.stringify(fileCheck).slice(0, 500));\n}\n\nreturn [{ json: { body: body, githubToken: githubToken } }];"
       },
       "id": "prepare-push",
       "name": "Push vorbereiten",
