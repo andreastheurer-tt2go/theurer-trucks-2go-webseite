@@ -3773,7 +3773,7 @@
                 stations.forEach(function(s) {
                     var opt = document.createElement('option');
                     opt.value       = s.id;
-                    opt.textContent = (s.city ? s.city + ' – ' : '') + s.name;
+                    opt.textContent = s.name;
                     select.appendChild(opt);
                 });
             }
