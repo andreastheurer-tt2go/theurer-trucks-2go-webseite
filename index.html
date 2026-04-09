@@ -3500,8 +3500,12 @@
             var stickyBar = document.getElementById('mobileStickyCtaBar');
             if (!hero || !stickyBar) return;
             var observer = new IntersectionObserver(function(entries) {
-                // Hero sichtbar → Sticky CTA ausblenden
-                stickyBar.style.display = entries[0].isIntersecting ? 'none' : 'block';
+                // Hero sichtbar → Sticky CTA ausblenden (nur Mobile)
+                if (window.innerWidth < 1025) {
+                    stickyBar.style.display = entries[0].isIntersecting ? 'none' : 'block';
+                } else {
+                    stickyBar.style.display = 'none';
+                }
             }, { threshold: 0.15 });
             observer.observe(hero);
         })();
