@@ -291,16 +291,6 @@
       "comment": ""
     },
     {
-      "id": "65f98defef8d73509e0e0d3d",
-      "name": "42113 Wuppertal - Reitsportzentrum Bödicker ",
-      "city": "Wuppertal",
-      "postcode": "42113",
-      "street": "Aprather Weg 23",
-      "lat": 51.26964,
-      "lng": 7.10261,
-      "comment": ""
-    },
-    {
       "id": "667d8a4995f1a252d26b6e80",
       "name": "45481 Mülheim an der Ruhr - Gestüt Eschenbruch",
       "city": "Mülheim an der Ruhr",
@@ -481,5 +471,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-04-09T11:53:30.489Z"
+  "updated": "2026-04-09T13:18:55.402Z"
 }
