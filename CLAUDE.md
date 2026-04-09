@@ -36,7 +36,8 @@ TT2GO_Neue_WEBSEITE/
 ├── weiterleitung-registrierung.html # Tracking-Interstitial (3s Countdown → fleetster)
 ├── registrierung-erfolgreich.html  # Danke-Seite nach Registrierung
 ├── img/
-│   ├── truck-front.jpg             # Hero-Hintergrundbild (optimiert, 826 KB)
+│   ├── truck-front.jpg             # Hero-Hintergrundbild Desktop (optimiert, 826 KB)
+│   ├── Mobil_Banner_3.jpg          # Hero-Hintergrundbild Mobile (Hochformat, 1,3 MB)
 │   ├── Pferdetransporter_auf_Abruf.jpg  # Infografik Vorteile (optimiert, 240 KB)
 │   ├── truck-video.mp4             # Stiller Loop (Hochformat, 3,9 MB)
 │   ├── STX-Transporter/            # 11 Profi-Fotos (Exterior + Interior)
@@ -67,7 +68,7 @@ TT2GO_Neue_WEBSEITE/
 ## Seitenstruktur (Reihenfolge der Sektionen)
 
 1. **Navbar** — fixiert, Scroll-Effekt, CTA "Jetzt registrieren"
-2. **Hero** — truck-front.jpg Hintergrund, Headline, Trustpilot-Sterne (klickbar → #bewertungen), 2 CTAs, Stat-Bar
+2. **Hero** — Mobile: Mobil_Banner_3.jpg / Desktop: truck-front.jpg, Headline, Trustpilot 4,6 Sterne (klickbar → #bewertungen), 2 CTAs, Stat-Bar
 3. **Verfügbarkeitsprüfung** — Datum + Stations-Dropdown (Live via Fleetster-API/n8n)
 4. **Vertrauens-Sektion** — Video (Hochformat) links + 4 Angst-zu-Lösung-Karten rechts
 5. **Deine Vorteile** — Infografik-Bild (Pferdetransporter_auf_Abruf.jpg) + CTA
@@ -79,7 +80,7 @@ TT2GO_Neue_WEBSEITE/
 11. **Fahrzeug-Detail** — Bildergalerie (11 STX-Profifotos, 6 Spalten Desktop, Auto-Rotate) + 5 Specs
 12. **FAQ** — 31 Fragen in 5 Kategorien mit Tabs, Schema.org FAQPage JSON-LD (8 Fragen)
 13. **CTA-Band** — Finaler Push, blauer Gradient
-14. **Sticky Mobile CTA** — fixiert am unteren Bildschirmrand (nur Mobile)
+14. **Sticky Mobile CTA** — fixiert am unteren Bildschirmrand (nur Mobile, ausgeblendet wenn Hero sichtbar via IntersectionObserver)
 15. **Footer** — 4 Spalten, Logo weiß invertiert + Footer-Bar
 
 ## Unterseiten
@@ -151,8 +152,8 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 
 | Workflow | Trigger | Funktion |
 |---|---|---|
-| Standorte → GitHub | Cron täglich 6:00 | Holt Locations aus Fleetster, pusht `api/data.json` nach GitHub |
-| Verfügbarkeitsprüfung | POST Webhook | Prüft Live-Verfügbarkeit am gewählten Standort/Zeitraum |
+| Standorte → GitHub | Cron täglich 6:00 | Holt Locations aus Fleetster, filtert archivierte aus, pusht `api/data.json` nach GitHub |
+| Verfügbarkeitsprüfung | POST Webhook | Prüft Live-Verfügbarkeit am gewählten Standort/Zeitraum (archivierte Fahrzeuge ausgeschlossen) |
 
 **VPS:** `n8n.srv1381541.hstgr.cloud` (Hostinger, Docker mit Traefik)
 **Webhook-URL:** `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-availability`
@@ -168,12 +169,19 @@ var TT2GO_API = {
 
 Das Frontend hat Fallback-Daten falls die API nicht erreichbar ist.
 
+### Archiviert-Filter (Label)
+
+Beide Workflows filtern Standorte/Fahrzeuge mit dem Label **"Archiviert"** aus:
+- **Feld:** `extended.EntityLabels.labels` (Array von Label-IDs)
+- **Label-ID:** `69d64b9011fe02d420b21789`
+- **API-Endpunkt für Labels:** `GET https://my.fleetster.net/entitylabels`
+
 ### Zahlen-Banner
 
 Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - Fahrzeuge: aktuell 87 (auf der Seite noch 63 — TODO aktualisieren)
-- Standorte: aktuell 57 (auf der Seite noch 51 — TODO aktualisieren)
-- Nutzer: aktuell 16.484 (auf der Seite noch 15.677 — TODO aktualisieren)
+- Standorte: ~49 aktiv (9 archivierte ausgefiltert), auf der Seite noch 51 — TODO aktualisieren
+- Nutzer: aktuell 16.545 (auf der Seite: 16.545)
 
 ## Erledigte Go-Live-Punkte
 
@@ -191,11 +199,13 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 ## Offene Punkte
 
-- [ ] Zahlen-Banner aktualisieren (63→87, 51→57, 15.677→16.484)
+- [ ] Zahlen-Banner aktualisieren (63→87, 51→~49)
 - [ ] Eigene Domain verbinden (GitHub Pages → Custom Domain)
 - [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
 - [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
 - [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
+- [ ] Custom Button-Icon (Pferd+Transporter) — SVG-Versuche gescheitert, fa-truck-ramp-box bleibt vorerst
+- [ ] Favicon einrichten (Pferd+Transporter Illustration liegt vor als `img/horse-truck-icon-square.png`)
 
 ## Externe Links
 

@@ -159,9 +159,67 @@ Finale Reihenfolge (Stand 08.04.2026):
 - `checkAvailability()` — POST an n8n Webhook statt Stub
 - Graceful Fallback bei API-Ausfall (5 Demo-Standorte + Fake-Ergebnis)
 
-### Offene Punkte
+### Offene Punkte (Session 3)
 
-- [ ] Zahlen-Banner aktualisieren (63→87, 51→57, 15.677→16.484)
+- [ ] Zahlen-Banner aktualisieren (63→87, 51→~49)
 - [ ] Eigene Domain verbinden
 - [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
 - [ ] In fleetster Redirect-URL auf Erfolgsseite setzen
+
+---
+
+## Session 4 — 09.04.2026
+
+### Mobile Layout-Fixes
+
+- **Sticky Mobile CTA** — IntersectionObserver blendet CTA aus wenn Hero sichtbar ist (kein doppelter Button mehr)
+- **Verfügbarkeitsformular** — `white-space: normal` auf Mobile für Avail-Button, `width: 100%` + `min-width: 0` auf form-input/form-select, `text-overflow: ellipsis` für lange Standortnamen
+- **Verfügbarkeits-Ergebnis** — `flex-wrap` + Button volle Breite auf Mobile (war rechts abgeschnitten)
+- **Hero-Hintergrundbild** — Separates Hochformat-Bild für Mobile (`Mobil_Banner_3.jpg`, via Gemini Outpainting generiert). Desktop lädt weiterhin `truck-front.jpg`. Umschaltung via Media Query ab 1025px.
+- **Sticky CTA nur Mobile** — IntersectionObserver prüft `window.innerWidth < 1025` bevor Inline-Style gesetzt wird, da dieser sonst die Desktop-CSS-Regel überschrieb
+
+### Footer Unterseiten vereinheitlicht
+
+- **Impressum, AGB, Datenschutz:** Logo auf 52px + `filter: brightness(0) invert(1)` (weiß, wie Hauptseite)
+- **Beschreibungstext** gekürzt auf: "Car-Sharing für Pferdetransporter — sichere Mobilität für Pferd und Reiter."
+
+### Textänderungen
+
+- **Trustpilot-Bewertung** im Hero: 4,5 → 4,6
+- **Stat-Bar:** "24/7 Online buchbar" → "24/7 Verfügbar"
+- **Hero-Lead:** "Premium-Pferdetransporter an Reitställen" → "Premium-Pferdetransporter-Vermietung an Reitställen und Tierkliniken"
+- **Fahrzeug-Sektion:** Button-Text "Jetzt buchen" → "Jetzt kostenlos registrieren"
+- **Standort-Dropdown:** Kein doppelter Ort mehr — nur `s.name` (enthält bereits PLZ + Ort + Name)
+
+### Preiskarten-Layout
+
+- Pricing-Cards auf Flexbox umgestellt (`display: flex; flex-direction: column`)
+- Feature-Liste `flex-grow: 1`, Button `margin-top: auto` → Buttons auf gleicher Höhe
+
+### Custom Button-Icon (versucht, zurückgesetzt)
+
+- Versuch 1: Inline-SVG Silhouette (Pferd+Transporter) via CSS-Mask — Icon war zu grob
+- Versuch 2: Gemini-generiertes Bild als SVG via CSS-Mask — SVG 1.1MB, zu groß/detailliert
+- Versuch 3: User-bereitgestellte ICON_STX.svg — 1.1MB, nicht als kleines Icon geeignet
+- **Ergebnis:** Komplett zurückgesetzt auf `fa-truck-ramp-box` (Font Awesome)
+- **Favicon-Versuch** ebenfalls zurückgesetzt (war Teil des gleichen Commits)
+- **Erkenntnis:** Komplexe Illustrationen funktionieren nicht als 20px Button-Icons. Für Favicon: Bild liegt bereit als `img/horse-truck-icon-square.png`
+
+### n8n Workflows — Archiviert-Filter
+
+- **Fleetster Entity-Labels API** entdeckt: `GET /entitylabels` gibt alle Labels zurück
+- **Label "Archiviert"** identifiziert: ID `69d64b9011fe02d420b21789`
+- **Feld:** `extended.EntityLabels.labels` (Array von Label-IDs) — gleiche Struktur wie bei Users
+- **9 archivierte Standorte** gefunden und ausgefiltert
+- **Standorte-Workflow:** Filter im "JSON formatieren" Node eingebaut
+- **Verfügbarkeits-Workflow:** `fields[extended.EntityLabels]=1` zur Fahrzeug-Abfrage ergänzt, Filter im "Fahrzeuge auswerten" Node
+- **GitHub Token Problem:** Token musste direkt in n8n-Nodes eingetragen werden (nicht via `$env`). Bei Token-Erneuerung → SHA-Abruf gab 401, Workflow schlug fehl. Fix: `throw new Error()` mit Response-Inhalt für bessere Diagnose.
+
+### Offene Punkte (Session 4)
+
+- [ ] Zahlen-Banner aktualisieren (63→87, 51→~49)
+- [ ] Eigene Domain verbinden
+- [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
+- [ ] In fleetster Redirect-URL auf Erfolgsseite setzen
+- [ ] Custom Button-Icon (Pferd+Transporter) — bessere Lösung finden
+- [ ] Favicon einrichten

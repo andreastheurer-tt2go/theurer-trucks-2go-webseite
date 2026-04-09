@@ -324,6 +324,80 @@ var TT2GO_API = {
 ```
 
 - `loadStationData()` — lädt `api/data.json`, befüllt Karte + Dropdown
-- `populateStations()` — erstellt Marker + Dropdown-Options aus API-Daten
+- `populateStations()` — erstellt Marker + Dropdown-Options aus API-Daten (nur `s.name`, kein doppelter City-Prefix)
 - `checkAvailability()` — POST an n8n Webhook, zeigt Ergebnis
 - **Fallback:** Wenn API nicht erreichbar → 5 Demo-Standorte + Stub-Verfügbarkeit
+
+### Archiviert-Filter in Workflows
+
+Beide n8n-Workflows filtern Einträge mit dem Label "Archiviert" aus:
+
+**Fleetster Entity-Labels System:**
+- **API-Endpunkt:** `GET https://my.fleetster.net/entitylabels` → Array aller Labels
+- **Feld auf Locations/Vehicles:** `extended.EntityLabels.labels` (Array von Label-IDs)
+- **Label "Archiviert":** ID `69d64b9011fe02d420b21789`, Farbe `#85015a`
+- **Gleiche Struktur wie bei Users** — `extended.EntityLabels.labels` ist einheitlich
+
+**Alle bekannten Entity-Labels (Stand 09.04.2026):**
+
+| Label-ID | Name | Farbe | Kontext |
+|---|---|---|---|
+| `69d64b9011fe02d420b21789` | Archiviert | #85015a | Standorte/Fahrzeuge ausblenden |
+| `66598ad048da8295e6385ef8` | Zusatzinfo vorhanden | #007db6 | Standorte mit Zusatzinfo |
+| `65c1debc5bd6fda2a161409c` | Bonität (1-3) | #4ba003 | User: Bonität OK |
+| `65c0fa1ca649f1fd7fc7478b` | negative Bonität (3-6) | #f38400 | User: Bonität schlecht |
+| `65c0fab1bb85e00a524ae130` | Nichtzahler | #b50d17 | User: offene Rechnungen |
+| `69a5fecc32185cdefa9202aa` | Bonitaet unklar | #b50d17 | User: Score 0.0 |
+| `69b6acdb4d17f06ac8b0ed8b` | Ausland | #0066cc | User: nicht-deutsche Adresse |
+| `69b6d7618ed7ece1603386b0` | Eskalation Führerschein | #f38400 | User: FS-Prüfung offen |
+| `66211a316285865070036b02` | Fehlender Personalausweis | #13477b | User |
+| `667fa4fd29c30e02f0d429b6` | Stationsbetreiber | #9013fe | User |
+| `667be69432ed8db614845a88` | Sommerreifen | #e9009c | Fahrzeug |
+| `66bdb7fbf0af4a65dbd62a98` | Bremsen | #474747 | Fahrzeug |
+| `66bdb80a1c179d101121f7c9` | TÜV | #e9009c | Fahrzeug |
+| `686cfb0f0262e2c81bd665c5` | L2 Hengstausstattung | #91bd6d | Fahrzeug |
+| `686cfb3c098fe3e7a43f8116` | L2 Chestbar | #f8e71c | Fahrzeug |
+| `686cfb590262e2c81bd66895` | L3 Hengstausstattung | #548c26 | Fahrzeug |
+
+**Filter-Implementierung (Standorte-Workflow):**
+```javascript
+const LABEL_ARCHIVIERT = '69d64b9011fe02d420b21789';
+const labels = (loc.extended && loc.extended.EntityLabels && loc.extended.EntityLabels.labels) || [];
+if (labels.includes(LABEL_ARCHIVIERT)) return false;
+```
+
+**Verfügbarkeits-Workflow:** Fahrzeuge-Abfrage holt zusätzlich `fields[extended.EntityLabels]=1`, dann gleicher Filter.
+
+### Mobile Hero-Bild
+
+Desktop und Mobile nutzen separate Hintergrundbilder im Hero:
+- **Mobile (Basis-CSS):** `img/Mobil_Banner_3.jpg` — Hochformat-Foto mit Transporter im oberen Drittel
+- **Desktop (ab 1025px):** `img/truck-front.jpg` — Querformat-Original
+- Umschaltung via Media Query in der Desktop-Breakpoint-Regel (`background-image` Override)
+- Das Mobile-Bild wurde von Gemini generiert (Outpainting nach unten, mehr Straße)
+
+### Sticky Mobile CTA Logik
+
+Der Sticky-CTA am unteren Bildschirmrand hat besondere Logik:
+- **Nur Mobile:** `display: none` ab 1025px (Desktop-Breakpoint)
+- **IntersectionObserver:** Blendet CTA aus wenn Hero sichtbar ist (threshold 0.15)
+- **Wichtig:** Observer prüft `window.innerWidth < 1025` bevor er `style.display` setzt — sonst überschreibt der Inline-Style die Desktop-Media-Query
+
+### Preiskarten Flexbox-Layout
+
+Die Pricing-Cards nutzen Flexbox für gleichmäßige Button-Ausrichtung:
+- `.pricing-card` → `display: flex; flex-direction: column`
+- `.pricing-card__list` → `flex-grow: 1` (füllt verfügbaren Platz)
+- `.pricing-card .btn` → `margin-top: auto` (klebt am unteren Rand)
+
+### Unterseiten-Footer
+
+Footer auf allen Unterseiten identisch mit Hauptseite:
+- Logo: 52px, `filter: brightness(0) invert(1)` (weiß)
+- Text: "Car-Sharing für Pferdetransporter — sichere Mobilität für Pferd und Reiter."
+
+### GitHub Token in n8n
+
+Der GitHub Token für den Standorte-Workflow muss **direkt in den n8n-Nodes** eingetragen werden (nicht über `$env.GITHUB_TOKEN`). Bei Token-Erneuerung beide Nodes aktualisieren:
+- "Bestehende Datei SHA holen" → Authorization Header
+- "Nach GitHub pushen" → Authorization Header
