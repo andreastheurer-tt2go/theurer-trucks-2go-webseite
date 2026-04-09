@@ -209,10 +209,10 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 ## Offene Punkte
 
-- [ ] .de Domain verbinden (GitHub Pages → Custom Domain)
-- [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
+- [x] .de Domain verbunden (DNS bei Strato → GitHub Pages)
+- [x] Canonical-URL + Sitemap-URL zeigen auf `theurer-trucks-2go.de` ✓
+- [x] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` gesetzt
 - [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
-- [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
 
 ## Externe Links
 
