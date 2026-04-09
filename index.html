@@ -357,6 +357,7 @@
         }
 
         .btn--full {
+            display: flex;
             width: 100%;
             justify-content: center;
         }
@@ -1550,6 +1551,11 @@
             flex-direction: column;
         }
 
+        .pricing-card .btn {
+            margin-top: auto;
+            box-sizing: border-box;
+        }
+
         .pricing-card:hover {
             transform: translateY(-6px);
             box-shadow: var(--shadow-lg);
@@ -2014,6 +2020,7 @@
         .calculator__right {
             padding: 28px;
             background: var(--light);
+            overflow: hidden;
         }
         .calculator__label {
             font-family: 'Montserrat', sans-serif;
