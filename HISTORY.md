@@ -225,9 +225,30 @@ Finale Reihenfolge (Stand 08.04.2026):
 - **Zahlen-Banner** aktualisiert
 - **.com Domain** verbunden (GitHub Pages → Custom Domain)
 
+### Domain & Deployment
+
+- **.com Domain** verbunden (GitHub Pages Custom Domain)
+- **.de Domain** verbunden (Strato DNS: A-Record `185.199.108.153`, CNAME www → `andreastheurer-tt2go.github.io`)
+- **MX-Records** unangetastet (Google Mail)
+- **Canonical-URL + Sitemap** zeigen bereits auf `theurer-trucks-2go.de` — kein Änderungsbedarf
+- **fleetster Redirect-URL** auf `registrierung-erfolgreich.html` gesetzt
+- **Erkenntnis:** GitHub Pages braucht immer `.html` in URLs — kein automatisches Routing wie bei WordPress
+
+### Tracking komplett neu aufgesetzt
+
+- **Alter GTM Container** `GTM-P4D6Z66` (WordPress) ersetzt durch neuen Container `GTM-KZDXGB75`
+- Container-ID auf allen Seiten ausgetauscht (index, weiterleitung, registrierung-erfolgreich)
+- **3 Seitenaufruf-Trigger** erstellt: Hauptseite (`/`), Weiterleitung, Registrierung erfolgreich
+- **Meta Pixel** `914203592639470` via GTM eingerichtet (3 Tags: PageView auf All Pages, Lead auf Weiterleitung, CompleteRegistration auf Erfolgsseite)
+- Google Ads und GA4 stehen noch aus
+
+### Textänderungen
+
+- "So geht's" → Registrierung: "Erstelle dir deinen Account - kostenlos und in unter 2 min"
+- "So geht's" → Standort: "Finde den nächsten verfügbaren Transporter in deiner Nähe"
+- Fahrzeug-Specs → Anhängerkupplung: "Passt für einen normalen 2 Pferde Anhänger"
+
 ### Offene Punkte
 
-- [ ] .de Domain verbinden
-- [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
-- [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
-- [ ] In fleetster Redirect-URL auf Erfolgsseite setzen
+- [ ] Google Ads Conversions einrichten (Lead + Registrierung)
+- [ ] GA4 einrichten

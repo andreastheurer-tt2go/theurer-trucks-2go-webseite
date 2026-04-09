@@ -136,12 +136,22 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 
 ## Tracking & Consent
 
-- **GTM:** Container-ID `GTM-KZDXGB75` (auf allen Seiten inkl. Unterseiten)
+- **GTM:** Container-ID `GTM-KZDXGB75` (neuer Container, auf allen Seiten inkl. Unterseiten)
+- **GTM alt:** `GTM-P4D6Z66` war der WordPress-Container — nicht mehr verwenden
 - **Cookiebot:** Domain-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` (auf allen Seiten)
+- **Meta Pixel:** `914203592639470` — via GTM (3 Tags: PageView, Lead, CompleteRegistration)
 - **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
 - **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
 - **Conversion-Funnel:** Alle CTAs → `weiterleitung-registrierung.html` (GTM `generate_lead`) → fleetster → `registrierung-erfolgreich.html` (GTM `sign_up`)
+
+### GTM Trigger (Seitenaufruf-basiert)
+
+| Trigger | Bedingung | Zweck |
+|---|---|---|
+| Hauptseite besucht | Page Path gleich `/` | Basis-Traffic |
+| Weiterleitung Registrierung | Page Path enthält `weiterleitung-registrierung` | Soft Conversion |
+| Registrierung erfolgreich | Page Path enthält `registrierung-erfolgreich` | Finale Conversion |
 
 ## Fleetster-API (Live)
 
@@ -207,12 +217,19 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] Verfügbarkeitsprüfung: nur aktive Fahrzeuge, Webhook auf POST
 - [x] Enddatum-Zeitzonenfix (UTC → lokale Zeit)
 
+## Erledigte Punkte (Session 4, Fortsetzung)
+
+- [x] .de Domain verbunden (DNS bei Strato → GitHub Pages, A-Record `185.199.108.153`)
+- [x] Canonical-URL + Sitemap-URL zeigen auf `theurer-trucks-2go.de`
+- [x] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` gesetzt
+- [x] GTM neuer Container `GTM-KZDXGB75` auf allen Seiten eingebaut
+- [x] GTM Trigger erstellt (3 Seitenaufruf-Trigger)
+- [x] Meta Pixel `914203592639470` via GTM eingerichtet (PageView + Lead + CompleteRegistration)
+
 ## Offene Punkte
 
-- [x] .de Domain verbunden (DNS bei Strato → GitHub Pages)
-- [x] Canonical-URL + Sitemap-URL zeigen auf `theurer-trucks-2go.de` ✓
-- [x] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` gesetzt
-- [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
+- [ ] Google Ads Conversions einrichten (Lead + Registrierung) — Conversion-ID + Label nötig
+- [ ] GA4 einrichten (Mess-ID nötig)
 
 ## Externe Links
 

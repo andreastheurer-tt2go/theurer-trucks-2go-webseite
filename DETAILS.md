@@ -401,3 +401,63 @@ Footer auf allen Unterseiten identisch mit Hauptseite:
 Der GitHub Token für den Standorte-Workflow muss **direkt in den n8n-Nodes** eingetragen werden (nicht über `$env.GITHUB_TOKEN`). Bei Token-Erneuerung beide Nodes aktualisieren:
 - "Bestehende Datei SHA holen" → Authorization Header
 - "Nach GitHub pushen" → Authorization Header
+
+### Verfügbarkeits-Workflow: Nur aktive Fahrzeuge
+
+Die Fahrzeug-Abfrage filtert mit `active=true` direkt in der API-URL. Inaktive Fahrzeuge (z.B. in Leezen 34 Stück, nur 2 aktiv) werden nicht mitgezählt. Der Label-Filter im Code-Node wurde entfernt (redundant).
+
+### n8n Code-Node Einschränkungen
+
+In n8n v2.7.5 Code-Nodes sind folgende Module/Funktionen **nicht verfügbar**:
+- `fetch` — nicht definiert
+- `require('https')` — "Module 'https' is disallowed"
+- `require('http')` — ebenfalls blockiert
+- Externe HTTP-Requests nur über separate HTTP-Request Nodes möglich
+
+**Workaround für Geocoding:** Manuelle Koordinaten-Tabelle (`GEO_FALLBACK`) im Code-Node statt API-Calls.
+
+### Enddatum Zeitzonenfix
+
+`new Date().toISOString().slice(0, 16)` konvertiert in UTC — bei deutscher Sommerzeit (UTC+2) sind das 2 Stunden weniger. Fix: Manuelle Formatierung mit `getHours()`/`getMinutes()` (lokale Zeit). JavaScript `setDate(+1)` berücksichtigt Sommer-/Winterzeitumstellung automatisch.
+
+### Domain-Konfiguration
+
+| Domain | Typ | Wo konfiguriert |
+|---|---|---|
+| `theurer-trucks-2go.de` | Hauptdomain | Strato DNS → A-Record `185.199.108.153`, CNAME www → `andreastheurer-tt2go.github.io` |
+| `theurer-trucks-2go.com` | Zweitdomain | GitHub Pages Custom Domain |
+| `andreastheurer-tt2go.github.io` | GitHub Pages Default | Automatisch |
+
+**Canonical-URL** zeigt auf `https://www.theurer-trucks-2go.de` (in `index.html` und `sitemap.xml`).
+
+**Wichtig bei Strato:** MX-Records (Google Mail) nicht ändern! Nur A-Record und CNAME für www.
+
+### GTM Setup (Neuer Container)
+
+**Container:** `GTM-KZDXGB75` (ersetzt alten WordPress-Container `GTM-P4D6Z66`)
+
+**Eingebaut auf allen Seiten:**
+- `index.html` (Head-Script + noscript-iframe)
+- `weiterleitung-registrierung.html`
+- `registrierung-erfolgreich.html`
+- Unterseiten (impressum, agb, datenschutz) haben noch den alten Container — TODO bei Bedarf aktualisieren
+
+**Trigger (Seitenaufruf-basiert):**
+
+| Trigger | Typ | Bedingung |
+|---|---|---|
+| Hauptseite besucht | Seitenaufruf | Page Path gleich `/` |
+| Weiterleitung Registrierung | Seitenaufruf | Page Path enthält `weiterleitung-registrierung` |
+| Registrierung erfolgreich | Seitenaufruf | Page Path enthält `registrierung-erfolgreich` |
+
+**Meta Pixel Tags (via benutzerdefiniertes HTML):**
+
+| Tag | Trigger | Code |
+|---|---|---|
+| Meta Pixel - Seitenaufruf | All Pages | `fbq('init', '914203592639470'); fbq('track', 'PageView');` |
+| Meta Pixel - Lead | Weiterleitung Registrierung | `fbq('track', 'Lead');` |
+| Meta Pixel - Registrierung | Registrierung erfolgreich | `fbq('track', 'CompleteRegistration');` |
+
+**Noch einzurichten:**
+- Google Ads Conversion Tags (braucht Conversion-ID `AW-XXX` + Label)
+- GA4 Tag (braucht Mess-ID `G-XXX`)
