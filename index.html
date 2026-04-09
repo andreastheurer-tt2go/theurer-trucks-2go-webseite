@@ -514,7 +514,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 100px 0 140px;
+            padding: 100px 0 160px;
             position: relative;
             background:
                 linear-gradient(
@@ -524,7 +524,7 @@
                     rgba(0, 90, 140, 0.45) 100%
                 ),
                 url('img/truck-front.jpg')
-                center / cover no-repeat;
+                center 30% / cover no-repeat;
         }
 
         .hero__content { max-width: 660px; }
@@ -841,12 +841,13 @@
         .avail__result {
             display: none;
             margin-top: 24px;
-            padding: 22px 26px;
+            padding: 22px 20px;
             background: #f0fdf4;
             border: 1.5px solid #86efac;
             border-radius: var(--radius);
             align-items: center;
-            gap: 16px;
+            gap: 14px;
+            flex-wrap: wrap;
         }
 
         .avail__result.visible { display: flex; }
@@ -1924,6 +1925,9 @@
 
         /* Avail-Button volle Breite, Umbruch erlauben */
         .avail__btn { width: 100%; justify-content: center; white-space: normal; }
+
+        /* Verfügbarkeits-Ergebnis: Button auf volle Breite */
+        .avail__result .btn { width: 100%; justify-content: center; }
 
         /* Zahlen-Banner */
         .counter-band {
