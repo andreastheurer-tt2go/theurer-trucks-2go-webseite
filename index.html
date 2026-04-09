@@ -523,10 +523,10 @@
                     rgba(0, 60, 110, 0.6) 50%,
                     rgba(0, 90, 140, 0.45) 100%
                 ),
-                url('img/truck-front.jpg')
+                url('img/truck-front-mobile.jpg')
                 no-repeat;
             background-size: cover, cover;
-            background-position: center, center 30%;
+            background-position: center, center;
         }
 
         .hero__content { max-width: 660px; }
@@ -2247,7 +2247,17 @@
             .section { padding: 110px 0; }
             .section-header { margin-bottom: 64px; }
 
-            .hero { padding: 140px 0 180px; }
+            .hero {
+                padding: 140px 0 180px;
+                background-image:
+                    linear-gradient(
+                        160deg,
+                        rgba(0, 15, 30, 0.82) 0%,
+                        rgba(0, 60, 110, 0.6) 50%,
+                        rgba(0, 90, 140, 0.45) 100%
+                    ),
+                    url('img/truck-front.jpg');
+            }
 
             /* Navbar: Desktop-Nav anzeigen, Burger ausblenden */
             .navbar__nav,
