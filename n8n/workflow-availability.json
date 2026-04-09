@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "httpMethod": "=*",
+        "httpMethod": "POST",
         "path": "tt2go-availability",
         "responseMode": "responseNode",
         "options": {
