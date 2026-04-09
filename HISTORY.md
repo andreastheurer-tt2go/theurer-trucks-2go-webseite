@@ -215,11 +215,19 @@ Finale Reihenfolge (Stand 08.04.2026):
 - **Verfügbarkeits-Workflow:** `fields[extended.EntityLabels]=1` zur Fahrzeug-Abfrage ergänzt, Filter im "Fahrzeuge auswerten" Node
 - **GitHub Token Problem:** Token musste direkt in n8n-Nodes eingetragen werden (nicht via `$env`). Bei Token-Erneuerung → SHA-Abruf gab 401, Workflow schlug fehl. Fix: `throw new Error()` mit Response-Inhalt für bessere Diagnose.
 
-### Offene Punkte (Session 4)
+### Weitere Fixes (Session 4, Fortsetzung)
 
-- [ ] Zahlen-Banner aktualisieren (63→87, 51→~49)
-- [ ] Eigene Domain verbinden
+- **Gut Bentgerhof** fehlte auf der Webseite — GeoPosition in Fleetster war leer. Geocoding-Fallback via Nominatim versucht (fetch + https in n8n nicht erlaubt), gelöst über manuelle Koordinaten-Tabelle im Code-Node
+- **Verfügbarkeitsabfrage** gegen Excel-Buchungsliste getestet — 18/18 korrekt nach Fix
+- **Inaktive Fahrzeuge** wurden mitgezählt (Leezen: 34 statt 2). Fix: `active=true` in der Fahrzeug-API-Query
+- **Webhook HTTP Method** von `*` auf `POST` geändert (in Workflow-JSON und n8n)
+- **Enddatum Zeitzonenversatz** — `toISOString()` konvertierte in UTC (−2h Sommerzeit). Fix: lokale Zeitformatierung
+- **Zahlen-Banner** aktualisiert
+- **.com Domain** verbunden (GitHub Pages → Custom Domain)
+
+### Offene Punkte
+
+- [ ] .de Domain verbinden
+- [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
 - [ ] GTM Trigger konfigurieren (`generate_lead` + `sign_up`)
 - [ ] In fleetster Redirect-URL auf Erfolgsseite setzen
-- [ ] Custom Button-Icon (Pferd+Transporter) — bessere Lösung finden
-- [ ] Favicon einrichten

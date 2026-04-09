@@ -197,15 +197,22 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] 57 echte Standorte auf Karte + Dropdown (täglich aktualisiert)
 - [x] Live-Verfügbarkeitsprüfung funktioniert
 
+## Erledigte Punkte (Session 4)
+
+- [x] Zahlen-Banner aktualisiert
+- [x] .com Domain verbunden (GitHub Pages → Custom Domain)
+- [x] Mobile Layout-Fixes (Hero-Bild, Sticky CTA, Verfügbarkeitsformular)
+- [x] Footer Unterseiten vereinheitlicht
+- [x] Archiviert-Filter in n8n Workflows
+- [x] Verfügbarkeitsprüfung: nur aktive Fahrzeuge, Webhook auf POST
+- [x] Enddatum-Zeitzonenfix (UTC → lokale Zeit)
+
 ## Offene Punkte
 
-- [ ] Zahlen-Banner aktualisieren (63→87, 51→~49)
-- [ ] Eigene Domain verbinden (GitHub Pages → Custom Domain)
+- [ ] .de Domain verbinden (GitHub Pages → Custom Domain)
 - [ ] Canonical-URL + Sitemap-URL auf finale Domain anpassen
-- [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
 - [ ] GTM Trigger für `generate_lead` und `sign_up` konfigurieren
-- [ ] Custom Button-Icon (Pferd+Transporter) — SVG-Versuche gescheitert, fa-truck-ramp-box bleibt vorerst
-- [ ] Favicon einrichten (Pferd+Transporter Illustration liegt vor als `img/horse-truck-icon-square.png`)
+- [ ] In fleetster Redirect-URL auf `registrierung-erfolgreich.html` setzen
 
 ## Externe Links
 
