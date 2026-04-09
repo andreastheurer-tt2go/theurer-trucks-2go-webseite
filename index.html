@@ -3556,7 +3556,8 @@
                     if (!endEl.value || endEl.value <= this.value) {
                         const d = new Date(this.value);
                         d.setDate(d.getDate() + 1);
-                        endEl.value = d.toISOString().slice(0, 16);
+                        const p = n => String(n).padStart(2, '0');
+                        endEl.value = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
                     }
                 });
             }
