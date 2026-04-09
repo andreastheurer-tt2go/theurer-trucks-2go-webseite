@@ -136,7 +136,7 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 
 ## Tracking & Consent
 
-- **GTM:** Container-ID `GTM-P4D6Z66` (auf allen Seiten inkl. Unterseiten)
+- **GTM:** Container-ID `GTM-KZDXGB75` (auf allen Seiten inkl. Unterseiten)
 - **Cookiebot:** Domain-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` (auf allen Seiten)
 - **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
 - **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
