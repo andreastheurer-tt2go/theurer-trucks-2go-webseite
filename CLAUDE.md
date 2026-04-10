@@ -140,6 +140,7 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 - **GTM alt:** `GTM-P4D6Z66` war der WordPress-Container — nicht mehr verwenden
 - **Cookiebot:** Domain-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` (auf allen Seiten)
 - **Meta Pixel:** `914203592639470` — via GTM (3 Tags: PageView, Lead, CompleteRegistration)
+- **Google Ads:** Conversion-ID `AW-10902648523` — via GTM (3 Tags: Remarketing auf allen Seiten, Conversion Lead auf `weiterleitung-registrierung`, Conversion Registrierung auf `registrierung-erfolgreich`). Lead-Wert 2 €, Registrierungs-Wert 5 € (konservative Startwerte, ggf. später anpassen). Consent-Modus: `ad_storage`, `ad_user_data`, `ad_personalization`.
 - **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
 - **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
@@ -225,11 +226,12 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] GTM neuer Container `GTM-KZDXGB75` auf allen Seiten eingebaut
 - [x] GTM Trigger erstellt (3 Seitenaufruf-Trigger)
 - [x] Meta Pixel `914203592639470` via GTM eingerichtet (PageView + Lead + CompleteRegistration)
+- [x] Google Ads Conversions eingerichtet (`AW-10902648523`) — 3 GTM-Tags: Remarketing + Lead (2 €, Sekundär) + Registrierung (5 €, Primär). Alte Altlasten im Google-Ads-Konto archiviert (MKO Registrierung 2, Fleetster Registrierung abgeschlossen GA4-Import, Klick auf externen Link). Anruf-Lead und Download-Kategorien bleiben vorerst drin, stören aber nicht.
 
 ## Offene Punkte
 
-- [ ] Google Ads Conversions einrichten (Lead + Registrierung) — Conversion-ID + Label nötig
-- [ ] GA4 einrichten (Mess-ID nötig)
+- [ ] GA4 einrichten — Property `289955115` "TheurerTrucks Renting Property" existiert bereits im Google-Ads-Konto, muss aber geprüft werden (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
+- [ ] Enhanced Conversions für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind
 
 ## Externe Links
 
