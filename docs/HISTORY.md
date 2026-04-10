@@ -252,3 +252,74 @@ Finale Reihenfolge (Stand 08.04.2026):
 
 - [ ] Google Ads Conversions einrichten (Lead + Registrierung)
 - [ ] GA4 einrichten
+
+---
+
+## Session 5 — 10.04.2026
+
+### Projektordner aufgeräumt und strukturiert
+
+- **Ungenutzte Assets ins `_archiv/` verschoben** (lokal, gitignored): 11 unbenutzte Bilder aus `img/`, 5 Root-PDFs, 3 Favicon-Dateien (nirgends ins HTML verlinkt), Altprojekte (`Testprojekt/`, `Screenshots/`, `Kundenavatar/`), Excel-Booking-Datei, neu erhaltene Truck-Icons und Mobile-Banner-Varianten
+- **`DETAILS.md` und `HISTORY.md`** aus dem Root nach `docs/` verschoben
+- **`.gitignore` überarbeitet** — saubere Struktur: `_archiv/` ignoriert, `docs/superpowers/` statt dem ganzen `docs/` Ordner (damit Projekt-Dokumentation getrackt wird)
+- **Alle `.DS_Store` Dateien gelöscht**
+- Commit `cc6fe8d`
+
+### Google Ads Conversion Tracking komplett eingerichtet
+
+Erstmaliges Setup von Google Ads Conversions für den bestehenden Account. Beim Durchklicken der Google-Ads-Oberfläche wurden **Altlasten eines früheren Setups** gefunden (vermutlich von Agentur "MKO"), die zuerst aufgeräumt werden mussten.
+
+**Alt-Conversions archiviert:**
+- `MKO Registrierung 2` — alte Primary-Conversion, hätte mit der neuen parallel gezählt
+- `Fleetster Registrierung abgeschlossen` — GA4-Import-Conversion (aus verknüpfter GA4-Property 289955115), verwässerte das Reporting
+- `Klick auf externen Link` — alte unbenutzte Sekundär-Conversion
+
+**Kategorien `Anruf-Lead` und `Download`** (Kontostandard-Zielvorhaben) bleiben vorerst in Ruhe, da sie nicht stören.
+
+**Neue saubere Conversions angelegt:**
+
+| Name | Kategorie | Aktionsoptimierung | Wert | GTM-Trigger |
+|---|---|---|---|---|
+| `TT2GO - Lead - Weiterleitung Registrierung` | Klick auf externen Link | Sekundär | 2 € | Weiterleitung Registrierung |
+| `TT2GO - Registrierung erfolgreich` | Registrierung | Primär | 5 € | Registrierung erfolgreich |
+
+**Conversion-ID:** `AW-10902648523` (kontoweit)
+
+**3 neue GTM-Tags gebaut** (Container `GTM-KZDXGB75`, Version 2):
+1. `Google Ads - Remarketing` — Trigger "All Pages" (Pendant zum Meta Pixel PageView)
+2. `Google Ads - Conversion - Lead` — Trigger "Weiterleitung Registrierung", Label `h8MHCJeU4JkcEMvt5M4o`, 2 €
+3. `Google Ads - Conversion - Registrierung` — Trigger "Registrierung erfolgreich", Label `mA5LCIHJ4JkcEMvt5M4o`, 5 €
+
+**Consent-Modus** für alle drei Tags gesetzt: `ad_storage`, `ad_user_data`, `ad_personalization` (Cookiebot-Integration).
+
+**Preview-Test im Tag Assistant erfolgreich**: Alle Tags feuern bei den korrekten Triggern, parallel zum Meta Pixel auf den entsprechenden Seiten.
+
+**Veröffentlicht** als GTM Version 2 "GTM Neue TT-2Go Webseite V1" um 22:19.
+
+Commit `cfbabcb`.
+
+### Erkenntnisse zum Google-Ads-Setup (für zukünftige Referenz)
+
+- **Die Conversion-ID im GTM-Feld wird OHNE `AW-`-Präfix eingetragen** (`10902648523`), anders als im direkten gtag.js-Einbau. Das GTM-Interface ergänzt den Präfix intern.
+- **"Falsch konfiguriert"-Status** bei einer Conversion-Aktion kann harmlos sein: Es heißt oft nur "kein Tag bisher gefunden", nicht "defekt". Nach dem GTM-Publish und ersten echten Events wechselt der Status automatisch.
+- **Die Warnung "Kein Google-Tag im Container gefunden"** im GTM-Conversion-Tag-Editor ist eine Best-Practice-Empfehlung, kein Blocker. Conversion-Tags funktionieren auch ohne den übergeordneten Google-Tag.
+- **Enhanced Conversions** wurden bewusst nicht aktiviert, weil auf den Conversion-Seiten (`weiterleitung-registrierung.html` und `registrierung-erfolgreich.html`) keine Nutzerdaten im Frontend verfügbar sind. Das bräuchte Server-Side Tracking oder fleetster-Integration.
+- **GA4-Verknüpfung im Google-Ads-Konto beim Anlegen von Conversion-Datenquellen abgewählt**, um Doppelzählungen via GA4-Import zu verhindern. Die GA4-Property selbst (`289955115`) bleibt unangetastet und wird beim GA4-Setup morgen geprüft.
+
+### Cookiebanner .de-Domain Problem behoben
+
+Nach Domain-Umzug auf `.de` funktionierte der Cookiebot-Banner nicht mehr. Ursache: Die neue `.de`-Domain war im Cookiebot-Konto nicht als lizenziert hinterlegt. Fix: Domain in `manage.cookiebot.com` → Domaingruppen hinzugefügt. Problem war in 30 Sekunden behoben.
+
+**Erkenntnis:** Cookiebot-Lizenzen sind pro Domain. Bei Domain-Wechseln immer zuerst prüfen, ob die neue Domain im Cookiebot-Konto registriert ist.
+
+### CLAUDE.md Aktualisierung
+
+- Tracking-Sektion um Google Ads Block ergänzt
+- Offene Punkte: Google-Ads-Conversions gestrichen, neue Punkte ergänzt (Kampagnen-Audit, Meta-Ads-Setup, GA4-Property-Check)
+
+### Offene Punkte nach Session 5
+
+- [ ] **Google Ads Kampagnen einrichten** — Audit der bestehenden 10 Kampagnen im Account zuerst (wer hat die angelegt? Aktiv oder pausiert?), dann Budget, Zielregion, Zielgruppe definieren, Search-Kampagne aufbauen
+- [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives
+- [ ] **GA4 einrichten** — Property `289955115` "TheurerTrucks Renting Property" prüfen (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
+- [ ] **Enhanced Conversions** für Google Ads (Zukunftsthema, braucht Server-Side Tracking)

@@ -228,10 +228,19 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] Meta Pixel `914203592639470` via GTM eingerichtet (PageView + Lead + CompleteRegistration)
 - [x] Google Ads Conversions eingerichtet (`AW-10902648523`) — 3 GTM-Tags: Remarketing + Lead (2 €, Sekundär) + Registrierung (5 €, Primär). Alte Altlasten im Google-Ads-Konto archiviert (MKO Registrierung 2, Fleetster Registrierung abgeschlossen GA4-Import, Klick auf externen Link). Anruf-Lead und Download-Kategorien bleiben vorerst drin, stören aber nicht.
 
+## Erledigte Punkte (Session 5 — 10.04.2026)
+
+- [x] Projektordner aufgeräumt und strukturiert — ungenutzte Assets ins `_archiv/`, `docs/` als getrackter Ordner (außer `docs/superpowers/`), `DETAILS.md`/`HISTORY.md` aus Root nach `docs/` verschoben
+- [x] Google Ads Conversion Tracking komplett eingerichtet und im GTM veröffentlicht (Version 2)
+- [x] Cookiebanner `.de`-Domain-Problem behoben — Domain war in Cookiebot-Konto nicht lizenziert, in `manage.cookiebot.com` hinzugefügt
+
 ## Offene Punkte
 
-- [ ] GA4 einrichten — Property `289955115` "TheurerTrucks Renting Property" existiert bereits im Google-Ads-Konto, muss aber geprüft werden (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
-- [ ] Enhanced Conversions für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind
+- [ ] **Google Ads Kampagnen einrichten** — Audit der bestehenden 10 Kampagnen im Konto zuerst (wer hat die angelegt? Laufen sie? Aktive Ausgaben?), dann Budget + Zielregion + Zielgruppe definieren, dann Search-Kampagne aufbauen
+- [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives (Pixel läuft bereits, Conversions sind bereit)
+- [ ] **GA4 einrichten** — Property `289955115` "TheurerTrucks Renting Property" existiert bereits im Google-Ads-Konto, muss aber geprüft werden (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
+- [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind
+- [ ] **Favicon-Einbindung** — STX-Truck-Icons liegen im `_archiv/favicons/` bereit (favicon.ico, favicon-16, favicon-32) + `_archiv/img/apple-touch-icon.png` (180×180). Müssten zurück ins Root und in allen 6 HTML-Seiten im `<head>` verlinkt werden
 
 ## Externe Links
 
