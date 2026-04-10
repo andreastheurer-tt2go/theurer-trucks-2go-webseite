@@ -1,10 +1,9 @@
 .env
 !.env.example
 .DS_Store
+
+# Lokale Arbeitsdateien (nicht deployen)
+_archiv/
 .superpowers/
-Testprojekt/
-Screenshots/
-Kundenavatar/
+docs/superpowers/
 *.pdf
-datenschutzerklaerung.pdf
-docs/
