@@ -234,9 +234,35 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] Google Ads Conversion Tracking komplett eingerichtet und im GTM veröffentlicht (Version 2)
 - [x] Cookiebanner `.de`-Domain-Problem behoben — Domain war in Cookiebot-Konto nicht lizenziert, in `manage.cookiebot.com` hinzugefügt
 
+## Erledigte Punkte (Session 6 — 12.04.2026)
+
+- [x] Google Ads Kampagnen komplett eingerichtet — alte Kampagne analysiert (CSV-Keyword-Export), zwei neue Kampagnen live:
+  - `TT2GO - National - Search` (55 €/Tag, deutschlandweit, 3 Anzeigengruppen: Brand/Pferdetransporter/Pferdeanhänger, Städte-Keywords für 22 Großstädte im Einzugsgebiet)
+  - `TT2GO - Neue Standorte - Search` (15 €/Tag, 12 PLZ-Radien à 25 km für neue Standorte, Standort-Modus: nur Präsenz)
+- [x] Kampagnenspezifische Conversion-Zielvorhaben auf `Registrierungen` gesetzt (beide Kampagnen)
+- [x] Negative Keywords eingetragen (Reiturlaub-Begriffe, 9 Stück, kampagnenweit)
+- [x] Alte Kampagne `DE - TT2GO-Suche Neue Conversion 03/25` pausiert (nicht gelöscht, Daten + Screenshots unter `Google_Ads/Kampagne alt/` gesichert)
+- [x] Kampagnen-Blueprint erstellt: `Google_Ads/Kampagnen-Blueprint.md`
+
+## Google Ads Kampagnen (aktiv)
+
+| Kampagne | Budget | Targeting | Anzeigengruppen |
+|---|---|---|---|
+| `TT2GO - National - Search` | 55 €/Tag | Deutschland | Brand (9 KW), Pferdetransporter (12 + 22 Städte), Pferdeanhänger (13 + 22 Städte) |
+| `TT2GO - Neue Standorte - Search` | 15 €/Tag | 12 PLZ × 25 km Radius, nur Präsenz | Gleiche Struktur wie National |
+
+**Gesamt-Tagesbudget:** 70 €/Tag (~2.100 €/Monat)
+
+**Gebotsstrategie:** Conversions maximieren (ohne Ziel-CPA, erst nach 30-50 Conversions evaluieren)
+
+**Suchnetzwerk-Partner:** Deaktiviert (beide Kampagnen)
+
+**Neue Standorte (12 PLZ-Radien à 25 km):**
+40822 Mettmann, 14513 Teltow, 14624 Dallgow-Döberitz, 53501 Grafschaft Birresdorf, 32457 Porta Westfalica, 49439 Steinfeld, 53919 Weilerswist, 18279 Lalendorf, 73642 Welzheim, 24589 Schülp bei Nortorf, 08060 Zwickau, 01619 Zeithain
+
 ## Offene Punkte
 
-- [ ] **Google Ads Kampagnen einrichten** — Audit der bestehenden 10 Kampagnen im Konto zuerst (wer hat die angelegt? Laufen sie? Aktive Ausgaben?), dann Budget + Zielregion + Zielgruppe definieren, dann Search-Kampagne aufbauen
+- [ ] **Google Ads Optimierung (nach 1-2 Wochen)** — Suchbegriffe-Bericht prüfen, irrelevante Begriffe als negative Keywords, ggf. Ziel-CPA setzen nach 30-50 Conversions
 - [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives (Pixel läuft bereits, Conversions sind bereit)
 - [ ] **GA4 einrichten** — Property `289955115` "TheurerTrucks Renting Property" existiert bereits im Google-Ads-Konto, muss aber geprüft werden (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
 - [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind

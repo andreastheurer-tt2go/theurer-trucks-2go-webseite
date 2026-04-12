@@ -319,7 +319,64 @@ Nach Domain-Umzug auf `.de` funktionierte der Cookiebot-Banner nicht mehr. Ursac
 
 ### Offene Punkte nach Session 5
 
-- [ ] **Google Ads Kampagnen einrichten** — Audit der bestehenden 10 Kampagnen im Account zuerst (wer hat die angelegt? Aktiv oder pausiert?), dann Budget, Zielregion, Zielgruppe definieren, Search-Kampagne aufbauen
+- [x] **Google Ads Kampagnen einrichten** → erledigt in Session 6
 - [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives
 - [ ] **GA4 einrichten** — Property `289955115` "TheurerTrucks Renting Property" prüfen (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
 - [ ] **Enhanced Conversions** für Google Ads (Zukunftsthema, braucht Server-Side Tracking)
+
+---
+
+## Session 6 — 12.04.2026
+
+### Google Ads Kampagnen komplett eingerichtet
+
+**Analyse der bestehenden Kampagne:**
+- Alte Kampagne `DE - TT2GO-Suche Neue Conversion 03/25` analysiert (CSV-Export mit 60+ Keywords, 4.890 Klicks, 1.521 € Spend in 30 Tagen)
+- Erkenntnis: 0 Conversions trotz gutem Traffic — Ursache war defektes Conversion-Tracking (alte archivierte Conversions), nicht schlechte Keywords
+- Top-Performer identifiziert: Brand-Keywords (CTR 30-48%, CPC 0,09-0,21 €), Städte-Keywords (CTR 17-22%), generische Pferdetransporter-Keywords (Hauptvolumen)
+- Problem-Keywords identifiziert: Reiturlaub-Begriffe (30.000+ verschwendete Impressionen/Monat)
+
+**Zwei neue Kampagnen aufgebaut:**
+
+#### Kampagne A: `TT2GO - National - Search` (55 €/Tag)
+- 3 Anzeigengruppen: Brand (11 KW exact match), Pferdetransporter (12 KW exact+phrase + 22 Städte), Pferdeanhänger (13 KW exact+phrase + 22 Städte)
+- Städte-Keywords für 22 Großstädte im Einzugsgebiet der Stationen (≤50 km) — ermittelt via Haversine-Distanzberechnung gegen `api/data.json`
+- Je 1 Responsive Search Ad pro Anzeigengruppe (15 Headlines, 4 Descriptions)
+- 6 Sitelinks (Preise, Standorte, So funktioniert es, FAQ, STX Transporter, Jetzt registrieren)
+- 8 Callouts
+- 9 Negative Keywords (Reiturlaub-Begriffe, kampagnenweit)
+- Conversion-Zielvorhaben: Kampagnenspezifisch → Registrierungen
+- Suchnetzwerk-Partner: deaktiviert
+- AI Max: deaktiviert
+
+#### Kampagne B: `TT2GO - Neue Standorte - Search` (15 €/Tag)
+- Duplikat von Kampagne A mit angepasstem Targeting
+- Standort: 12 PLZ-Radien à 25 km (statt 50 km — Begründung: 25 km one-way = 50 km Gesamtweg bis der Mieter mit dem Transporter am eigenen Stall ist)
+- Standort-Modus: **nur Präsenz** (nicht "Interesse"), damit nur Nutzer im physischen Einzugsgebiet die Anzeigen sehen
+- Budget: 15 €/Tag
+
+**Alte Kampagne pausiert:**
+- `DE - TT2GO-Suche Neue Conversion 03/25` auf Pausiert gesetzt
+- Keine parallele Ausspielung, um Keyword-Kannibalisierung und gespaltene Lerndaten zu vermeiden
+- Daten und Screenshots gesichert unter `Google_Ads/Kampagne alt/`
+
+### Strategische Entscheidungen und Erkenntnisse
+
+- **Keyword-Optionen konservativ gewählt:** Exact Match + Phrase Match statt Broad Match. Broad Match erst nach 2-3 Wochen mit Conversion-Daten ergänzen.
+- **Brand-Keywords in eigener Anzeigengruppe:** CTR 30-48% vs. 0,1-2,5% bei generischen Keywords — braucht eigene Anzeigen und eigene Performance-Auswertung
+- **Städte-Keywords als Phrase Match:** 22 Großstädte im Einzugsgebiet der Stationen, CTR in alter Kampagne 17-22% (beste Performance aller Keyword-Typen)
+- **25 km Radius statt 50 km:** Nutzerperspektive — Mieter fährt 25 km zum Standort + 25 km zurück zum eigenen Stall = 50 km bevor die eigentliche Reise beginnt
+- **Präsenz statt Interesse:** Bei Radius-Targeting nur Nutzer im physischen Einzugsgebiet, keine "Interessierten" aus anderen Regionen
+- **Alte Kampagne nicht parallel weiterlaufen lassen:** Trotz Lernphase der neuen Kampagnen — alte hatte 0 Conversion-Daten, ihr Smart-Bidding-Modell war nur auf Klicks optimiert, nicht auf Conversions. Parallelbetrieb hätte Lerndaten gespalten.
+
+### Kampagnen-Blueprint
+
+Vollständiges Planungsdokument unter `Google_Ads/Kampagnen-Blueprint.md` — enthält alle Keywords, Anzeigentexte, Sitelinks, Callouts, Einstellungen und eine Launch-Checkliste für Tag 1-30.
+
+### Offene Punkte nach Session 6
+
+- [ ] **Google Ads Optimierung (ab ~25.04.2026)** — Suchbegriffe-Bericht prüfen, negative Keywords ergänzen, Anzeigen-Performance evaluieren, ggf. Ziel-CPA setzen
+- [ ] **Meta Ads einrichten** — Kampagnen-Setup, Zielgruppen, Creatives
+- [ ] **GA4 einrichten** — bestehende Property prüfen
+- [ ] **Enhanced Conversions** (Zukunftsthema)
+- [ ] **Favicon-Einbindung**
