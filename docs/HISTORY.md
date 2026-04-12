@@ -373,10 +373,21 @@ Nach Domain-Umzug auf `.de` funktionierte der Cookiebot-Banner nicht mehr. Ursac
 
 Vollständiges Planungsdokument unter `Google_Ads/Kampagnen-Blueprint.md` — enthält alle Keywords, Anzeigentexte, Sitelinks, Callouts, Einstellungen und eine Launch-Checkliste für Tag 1-30.
 
+### GA4 Tracking eingerichtet
+
+- Bestehende Property `289955115` "TheurerTrucks Renting Property" wiederverwendet (statt neu angelegt)
+- 3 Properties im Konto gefunden: `289955115` (Haupt), `339242918` und `366022881` (beides automatisch migrierte UA-Properties — Altlast, nicht verwendet)
+- 2 Datenstreams in der Property: "TheurerTrucks 2Go Website" (aktiv, Mess-ID `G-TJLDKKHJJT`) und "MonsterInsights" (WordPress-Altlast, ignoriert)
+- **GTM-Tag:** "GA4 - Konfiguration" (Typ: Google-Tag), Trigger "Initialization - All Pages", Consent `analytics_storage`
+- **GTM-Version 3** veröffentlicht
+- **Echtzeit-Daten bestätigt** — GA4 empfängt Live-Daten von der Webseite
+- GA4 Enhanced Measurement trackt automatisch: Seitenaufrufe, Scrolltiefe, ausgehende Klicks, Datei-Downloads, Website-Suche
+
 ### Offene Punkte nach Session 6
 
 - [ ] **Google Ads Optimierung (ab ~25.04.2026)** — Suchbegriffe-Bericht prüfen, negative Keywords ergänzen, Anzeigen-Performance evaluieren, ggf. Ziel-CPA setzen
 - [ ] **Meta Ads einrichten** — Kampagnen-Setup, Zielgruppen, Creatives
-- [ ] **GA4 einrichten** — bestehende Property prüfen
+- [ ] **GA4 mit Google Ads verknüpfen** — in GA4 Admin → Produktverknüpfungen → Google Ads verknüpfen (ermöglicht Zielgruppen-Sharing und Conversion-Import)
+- [ ] **GA4 Key Events definieren** — CTA-Klicks, Verfügbarkeitsprüfung als Key Events markieren
 - [ ] **Enhanced Conversions** (Zukunftsthema)
 - [ ] **Favicon-Einbindung**

@@ -141,6 +141,7 @@ Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/v
 - **Cookiebot:** Domain-ID `3d40de5d-ceaa-46b5-97af-cc86c9aed0fd` (auf allen Seiten)
 - **Meta Pixel:** `914203592639470` — via GTM (3 Tags: PageView, Lead, CompleteRegistration)
 - **Google Ads:** Conversion-ID `AW-10902648523` — via GTM (3 Tags: Remarketing auf allen Seiten, Conversion Lead auf `weiterleitung-registrierung`, Conversion Registrierung auf `registrierung-erfolgreich`). Lead-Wert 2 €, Registrierungs-Wert 5 € (konservative Startwerte, ggf. später anpassen). Consent-Modus: `ad_storage`, `ad_user_data`, `ad_personalization`.
+- **GA4:** Mess-ID `G-TJLDKKHJJT` — Property `289955115` "TheurerTrucks Renting Property", via GTM (1 Tag: "GA4 - Konfiguration", Google-Tag-Typ, Trigger "Initialization - All Pages"). Consent-Modus: `analytics_storage`. Enhanced Measurement aktiv (Seitenaufrufe, Scrolltiefe, ausgehende Klicks, Datei-Downloads automatisch).
 - **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
 - **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
@@ -264,7 +265,7 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 - [ ] **Google Ads Optimierung (nach 1-2 Wochen)** — Suchbegriffe-Bericht prüfen, irrelevante Begriffe als negative Keywords, ggf. Ziel-CPA setzen nach 30-50 Conversions
 - [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives (Pixel läuft bereits, Conversions sind bereit)
-- [ ] **GA4 einrichten** — Property `289955115` "TheurerTrucks Renting Property" existiert bereits im Google-Ads-Konto, muss aber geprüft werden (Wer hat Zugriff? Sammelt sie Daten? Weiterverwenden oder neu anlegen?)
+- [x] **GA4 eingerichtet** — Property `289955115`, Mess-ID `G-TJLDKKHJJT`, via GTM Tag "GA4 - Konfiguration" (Version 3), Echtzeit-Daten bestätigt
 - [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind
 - [ ] **Favicon-Einbindung** — STX-Truck-Icons liegen im `_archiv/favicons/` bereit (favicon.ico, favicon-16, favicon-32) + `_archiv/img/apple-touch-icon.png` (180×180). Müssten zurück ins Root und in allen 6 HTML-Seiten im `<head>` verlinkt werden
 
