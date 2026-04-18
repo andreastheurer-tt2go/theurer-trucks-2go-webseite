@@ -2448,6 +2448,41 @@
 </section>
 
 <!-- ================================================================
+     STANDORTKARTE
+================================================================ -->
+<section class="section section--light" id="standorte">
+    <div class="container">
+
+        <div class="section-header reveal">
+            <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
+            <h2 class="section-title">Unsere Standorte</h2>
+            <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
+        </div>
+
+        <!-- PLZ-Suche -->
+        <div class="locations__search reveal">
+            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
+            <button class="btn btn--primary" onclick="searchLocation()">
+                <i class="fas fa-magnifying-glass"></i> Suchen
+            </button>
+        </div>
+
+        <!-- Karte -->
+        <div class="locations__map reveal delay-1" id="map"></div>
+
+        <!-- CTA #3 -->
+        <div class="locations__cta reveal delay-2">
+            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Prüfe direkt die Verfügbarkeit!</p>
+            <a href="#verfuegbarkeit"
+               class="btn btn--primary btn--lg">
+                <i class="fas fa-calendar-check"></i> Verfügbarkeit prüfen
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ================================================================
      AVAILABILITY CHECKER
 ================================================================ -->
 <section class="avail" id="verfuegbarkeit">
@@ -2799,41 +2834,6 @@
         <div class="reveal" style="text-align: center; margin-top: 24px;">
             <a href="https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/view" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
                 <i class="fas fa-file-pdf"></i> Vollständiges Preisblatt ansehen
-            </a>
-        </div>
-
-    </div>
-</section>
-
-<!-- ================================================================
-     STANDORTKARTE
-================================================================ -->
-<section class="section section--light" id="standorte">
-    <div class="container">
-
-        <div class="section-header reveal">
-            <span class="section-tag"><i class="fas fa-map-location-dot"></i> Standorte</span>
-            <h2 class="section-title">Unsere Standorte</h2>
-            <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
-        </div>
-
-        <!-- PLZ-Suche -->
-        <div class="locations__search reveal">
-            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
-            <button class="btn btn--primary" onclick="searchLocation()">
-                <i class="fas fa-magnifying-glass"></i> Suchen
-            </button>
-        </div>
-
-        <!-- Karte -->
-        <div class="locations__map reveal delay-1" id="map"></div>
-
-        <!-- CTA #3 -->
-        <div class="locations__cta reveal delay-2">
-            <p style="margin-bottom:16px;color:var(--text-light);font-size:0.95rem;">Standort gefunden? Prüfe direkt die Verfügbarkeit!</p>
-            <a href="#verfuegbarkeit"
-               class="btn btn--primary btn--lg">
-                <i class="fas fa-calendar-check"></i> Verfügbarkeit prüfen
             </a>
         </div>
 
