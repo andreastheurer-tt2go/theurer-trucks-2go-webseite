@@ -385,9 +385,58 @@ Vollständiges Planungsdokument unter `Google_Ads/Kampagnen-Blueprint.md` — en
 
 ### Offene Punkte nach Session 6
 
-- [ ] **Google Ads Optimierung (ab ~25.04.2026)** — Suchbegriffe-Bericht prüfen, negative Keywords ergänzen, Anzeigen-Performance evaluieren, ggf. Ziel-CPA setzen
-- [ ] **Meta Ads einrichten** — Kampagnen-Setup, Zielgruppen, Creatives
-- [ ] **GA4 mit Google Ads verknüpfen** — in GA4 Admin → Produktverknüpfungen → Google Ads verknüpfen (ermöglicht Zielgruppen-Sharing und Conversion-Import)
-- [ ] **GA4 Key Events definieren** — CTA-Klicks, Verfügbarkeitsprüfung als Key Events markieren
+- [x] **Google Ads Optimierung (1. Runde)** → erledigt am 18.04.2026, siehe unten
+
+---
+
+## Session 7 — 18.04.2026
+
+### Webseite: Standortkarte verschoben
+
+- Sektion "Standorte" (Karte + PLZ-Suche) von Position 8 nach Position 2 verschoben (direkt nach Hero, vor Verfügbarkeitsprüfung)
+- CTA "Verfügbarkeit prüfen" unter der Karte zeigt weiterhin auf `#verfuegbarkeit`
+
+### Google Ads: Erste Performance-Analyse (nach ~5 Tagen)
+
+**Gesamtperformance:**
+- 10 Registrierungen für 184 € = **18,37 €/Registrierung**
+- 419 Klicks, CTR 22,69%, CPC 0,44 €
+- Zum Vergleich: Alte Kampagne hatte 0 Conversions bei 1.521 € in 30 Tagen
+
+**Conversion-Analyse nach Anzeigengruppe:**
+
+| Anzeigengruppe | Klicks | Kosten | Conv. | €/Conv. |
+|---|---|---|---|---|
+| Brand | 166 | 42,62 € | 5 | 8,52 € 🏆 |
+| Pferdetransporter | 195 | 100,90 € | 3 | 33,63 € |
+| Pferdeanhänger | 42 | 26,50 € | 1 | 26,50 € |
+| Neue Standorte | 16 | 13,66 € | 1 | 9,65 € |
+
+**Suchbegriffe-Analyse:**
+- 116 einzigartige Suchbegriffe ausgewertet
+- **Keine irrelevanten Begriffe** — negative Keywords greifen sauber (kein einziger Reiturlaub-Treffer)
+- **"pferdesprinter mieten"** als neues konvertierendes Synonym entdeckt (1 Klick, 0,02 €, 1 Conversion!)
+- Bundesland-Suchen identifiziert (NRW, Hessen, Brandenburg) — neues Keyword-Muster
+- "pferdeanhänger ausleihen" als weiteres Synonym entdeckt
+- Brand-Variante "theurer truck" (ohne s) mit 7 Klicks entdeckt
+
+**Keywords ergänzt (beide Kampagnen):**
+- `[pferdesprinter mieten]`, `"pferdesprinter mieten"` — neues Synonym
+- `[theurer truck]` — Brand-Variante ohne 's'
+- Bundesland-Keywords: `"pferdetransporter mieten nrw/bayern/hessen/niedersachsen/brandenburg/schleswig-holstein"`
+- `"pferdeanhänger ausleihen"`, `"pferdetransporter ausleihen"` — neue Synonyme
+
+**Strategische Erkenntnisse:**
+- Brand-Keywords liefern 50% aller Conversions bei nur 23% der Kosten → Markenbekanntheit ist der stärkste Conversion-Hebel
+- Städte-Keywords konvertieren exzellent (München 7,42 €/Conv., Düsseldorf 1,72 €/Conv.)
+- Budget wird nicht voll ausgeschöpft (National ~65-75%, Neue Standorte ~15-20%) — Nischen-typisch
+- Nächste Analyse ab ~02.05. mit dann genug Daten für Ziel-CPA-Evaluierung
+
+### Offene Punkte nach Session 7
+
+- [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren, Radius Neue Standorte ggf. erhöhen
+- [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue aufsetzen. 50 €/Tag Budget. 18 Video-Ads auf Frame.io.
+- [ ] **GA4 mit Google Ads verknüpfen**
+- [ ] **GA4 Key Events definieren**
 - [ ] **Enhanced Conversions** (Zukunftsthema)
 - [ ] **Favicon-Einbindung**

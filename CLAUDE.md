@@ -261,13 +261,33 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 **Neue Standorte (12 PLZ-Radien à 25 km):**
 40822 Mettmann, 14513 Teltow, 14624 Dallgow-Döberitz, 53501 Grafschaft Birresdorf, 32457 Porta Westfalica, 49439 Steinfeld, 53919 Weilerswist, 18279 Lalendorf, 73642 Welzheim, 24589 Schülp bei Nortorf, 08060 Zwickau, 01619 Zeithain
 
+## Google Ads Erste Analyse (18.04.2026, nach ~5 Tagen)
+
+**Performance:** 10 Registrierungen für 184 € = **18,37 €/Registrierung** (vs. alte Kampagne: 0 Conversions bei 1.521 € in 30 Tagen)
+
+| Anzeigengruppe | Klicks | Kosten | Conv. | €/Conv. |
+|---|---|---|---|---|
+| Brand | 166 | 42,62 € | 5 | **8,52 €** 🏆 |
+| Pferdetransporter | 195 | 100,90 € | 3 | 33,63 € |
+| Pferdeanhänger | 42 | 26,50 € | 1 | 26,50 € |
+| Neue Standorte | 16 | 13,66 € | 1 | 9,65 € |
+
+**Top-Suchbegriffe nach Conversions:** `theurer trucks` (4 Conv., 4,74 €), `pferdetransporter mieten` (1, 29,70 €), `pferdetransporter mieten münchen` (1, 7,42 €), `pferdetransporter mieten düsseldorf` (1, 1,72 €), `pferdetransporter mieten berlin brandenburg` (1, 1,43 €), `pferdesprinter mieten` (1, 0,02 €)
+
+**Erkenntnisse:** Brand-Keywords liefern 50% der Conversions bei nur 23% der Kosten. Städte-Keywords konvertieren hervorragend. "pferdesprinter" als neues Synonym entdeckt. Bundesland-Suchen (NRW, Hessen, Brandenburg) sind relevant. Keine irrelevanten Suchbegriffe gefunden — negative Keywords greifen sauber.
+
+**Keywords ergänzt am 18.04.:** `[pferdesprinter mieten]`, `[theurer truck]`, Bundesland-Keywords (NRW, Bayern, Hessen, Niedersachsen, Brandenburg, Schleswig-Holstein), `"pferdeanhänger ausleihen"`, `"pferdetransporter ausleihen"` — in beiden Kampagnen.
+
+**Nächste Analyse:** ab ~02.05.2026 (nach 30-50 Conversions ggf. Ziel-CPA evaluieren)
+
 ## Offene Punkte
 
-- [ ] **Google Ads Optimierung (nach 1-2 Wochen)** — Suchbegriffe-Bericht prüfen, irrelevante Begriffe als negative Keywords, ggf. Ziel-CPA setzen nach 30-50 Conversions
-- [ ] **Meta Ads einrichten** — Facebook/Instagram Werbekonto, Kampagnen-Setup, Zielgruppen, Creatives (Pixel läuft bereits, Conversions sind bereit)
+- [x] **Google Ads Optimierung (1. Runde)** — Suchbegriffe-Bericht geprüft, neue Keywords ergänzt, keine neuen negativen Keywords nötig
+- [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren wenn 30-50 Conversions erreicht, Neue-Standorte-Radius ggf. auf 35 km erhöhen
+- [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue Kampagnen aufsetzen. Pixel läuft, Conversions sind bereit. Budget: 50 €/Tag. 18 Video-Ads auf Frame.io vorhanden.
 - [x] **GA4 eingerichtet** — Property `289955115`, Mess-ID `G-TJLDKKHJJT`, via GTM Tag "GA4 - Konfiguration" (Version 3), Echtzeit-Daten bestätigt
-- [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema) — würde Server-Side Tracking oder fleetster-Integration benötigen, da auf den Conversion-Seiten keine Nutzerdaten im Frontend verfügbar sind
-- [ ] **Favicon-Einbindung** — STX-Truck-Icons liegen im `_archiv/favicons/` bereit (favicon.ico, favicon-16, favicon-32) + `_archiv/img/apple-touch-icon.png` (180×180). Müssten zurück ins Root und in allen 6 HTML-Seiten im `<head>` verlinkt werden
+- [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema)
+- [ ] **Favicon-Einbindung** — STX-Truck-Icons liegen im `_archiv/favicons/` bereit
 
 ## Externe Links
 
