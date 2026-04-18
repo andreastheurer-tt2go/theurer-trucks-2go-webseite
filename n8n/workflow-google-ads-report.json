@@ -1,0 +1,142 @@
+{
+  "name": "TT2GO Google Ads Wochenbericht → Claude → Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tt2go-ads-report",
+        "responseMode": "onReceived",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Google Ads Daten empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "tt2go-ads-report"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Google Ads Rohdaten für Claude API aufbereiten\nconst data = $input.first().json.body || $input.first().json;\n\n// Kontext-Prompt für Claude\nconst systemPrompt = `Du bist ein erfahrener Google Ads Performance-Analyst für TheurerTrucks 2GO — ein Car-Sharing-Anbieter für Pferdetransporter in Deutschland.\n\nGeschäftsmodell:\n- Einziger Carsharing-Anbieter für Pferdetransporter in Deutschland\n- Nur EIN Fahrzeugtyp: STX Pferdetransporter auf Renault Master Basis, unter 3,5t, Führerschein Klasse B\n- Fahrzeuge stehen an Reitstallparkplätzen deutschlandweit (~48 aktive Standorte)\n- Preise: Ab 165 €/Tag (brutto), 150 km frei, Mehrkilometer 0,46 €/km\n- Zielgruppe: Pferdebesitzer (90% weiblich, Durchschnitt 37 Jahre), die keinen eigenen Transporter/Anhänger haben\n- Conversion-Ziel: Registrierung auf der Carsharing-Plattform (fleetster)\n\nKampagnen-Struktur:\n- \"TT2GO - National - Search\" (55 €/Tag, deutschlandweit, 3 Anzeigengruppen: Brand, Pferdetransporter, Pferdeanhänger)\n- \"TT2GO - Neue Standorte - Search\" (15 €/Tag, 12 PLZ-Radien à 25 km für neue Standorte, nur Präsenz-Targeting)\n- Gesamt-Tagesbudget: 70 €/Tag\n- Gebotsstrategie: Conversions maximieren (ohne Ziel-CPA)\n- Negative Keywords: Reiturlaub, Reiterferien, Kauf-Intent\n\nBisherige Benchmarks:\n- Ziel-CPA: unter 25 €/Registrierung\n- Brand-Keywords performen am besten (~8,50 €/Conv.)\n- Städte-Keywords konvertieren überdurchschnittlich gut\n- Durchschnittliche CTR: ~20% (wegen hohem Brand-Anteil)\n- Durchschnittlicher CPC: 0,40-0,50 €\n\nDeine Aufgabe:\nAnalysiere die folgenden Google Ads Performance-Daten der letzten 7 Tage und erstelle einen Wochenbericht auf Deutsch. Der Bericht wird in Slack gepostet und muss mit Slack-Markdown formatiert sein.\n\nStrukturiere den Bericht so:\n\n1. *Zusammenfassung* (3-4 Sätze: Wie war die Woche? Besser/schlechter als Vorwoche? Auffälligkeiten?)\n\n2. *KPI-Übersicht* (Registrierungen, €/Registrierung, Ausgaben, Klicks, CTR, CPC — jeweils mit Vergleich zur Vorwoche als Trend ↑↓→)\n\n3. *Performance pro Kampagne und Anzeigengruppe* (kurze Tabelle)\n\n4. *Geräte-Analyse* (Mobile vs. Desktop — konvertiert eines besser?)\n\n5. *Beste Wochentage und Uhrzeiten* (wann kommen die meisten Conversions?)\n\n6. *Impression Share* (Verlieren wir Impressionen? Wegen Budget oder Rang?)\n\n7. *Top Suchbegriffe* (welche konvertieren, welche kosten ohne Ergebnis)\n\n8. *Qualitätsfaktor-Probleme* (Keywords mit QS unter 5 und warum)\n\n9. *Handlungsempfehlungen* (konkrete Aktionen, priorisiert nach Impact):\n   - Neue Keywords die hinzugefügt werden sollten (aus Suchbegriffe-Analyse)\n   - Keywords/Suchbegriffe die als negative Keywords hinzugefügt werden sollten\n   - Budget-Anpassungen\n   - Gebotsanpassungen (Geräte, Zeiten, Regionen)\n   - Anzeigentext-Optimierungen\n   - Oder: \"Keine Änderungen nötig — Kampagnen laufen stabil.\"\n\nWichtig:\n- Schreibe auf Deutsch\n- Formatiere für Slack (nutze *fett*, _kursiv_, Bullet Points mit •)\n- Sei konkret und actionable — keine generischen Tipps\n- Wenn alles gut läuft, sag das klar und empfiehl keine Änderungen nur um Änderungen zu empfehlen\n- Nutze Emojis sparsam aber sinnvoll (:chart_with_upwards_trend:, :warning:, :white_check_mark:, :mag:, :moneybag:)\n- Halte den Bericht kompakt — maximal 2000 Zeichen`;\n\nconst userMessage = `Hier sind die Google Ads Performance-Daten der letzten 7 Tage:\\n\\n${JSON.stringify(data, null, 2)}`;\n\nreturn [{\n  json: {\n    systemPrompt: systemPrompt,\n    userMessage: userMessage\n  }\n}];"
+      },
+      "id": "prepare-prompt",
+      "name": "Prompt aufbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4096, system: $json.systemPrompt, messages: [{ role: 'user', content: $json.userMessage }] }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "claude-api",
+      "name": "Claude API Analyse",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "Anthropic API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Claude API Response auslesen\nconst response = $input.first().json;\nlet analysisText = '';\n\nif (response.content && response.content.length > 0) {\n  analysisText = response.content[0].text;\n} else if (response.error) {\n  analysisText = ':rotating_light: *Claude API Fehler:* ' + JSON.stringify(response.error);\n} else {\n  analysisText = ':warning: Unerwartete API-Antwort: ' + JSON.stringify(response).substring(0, 500);\n}\n\n// Slack-Nachricht formatieren\nconst slackMessage = ':bar_chart: *TT2GO Google Ads — KI-Wochenbericht*\\n' +\n  '_Analyse erstellt von Claude AI am ' + new Date().toLocaleDateString('de-DE') + '_\\n\\n' +\n  analysisText;\n\nreturn [{ json: { text: slackMessage } }];"
+      },
+      "id": "format-slack",
+      "name": "Slack Nachricht formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "SLACK_WEBHOOK_URL_HIER_EINTRAGEN",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.text }) }}",
+        "options": {}
+      },
+      "id": "send-slack",
+      "name": "An Slack senden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Google Ads Daten empfangen": {
+      "main": [
+        [
+          {
+            "node": "Prompt aufbereiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt aufbereiten": {
+      "main": [
+        [
+          {
+            "node": "Claude API Analyse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude API Analyse": {
+      "main": [
+        [
+          {
+            "node": "Slack Nachricht formatieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Nachricht formatieren": {
+      "main": [
+        [
+          {
+            "node": "An Slack senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

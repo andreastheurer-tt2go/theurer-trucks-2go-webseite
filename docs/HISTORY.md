@@ -435,6 +435,30 @@ Vollständiges Planungsdokument unter `Google_Ads/Kampagnen-Blueprint.md` — en
 ### Offene Punkte nach Session 7
 
 - [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren, Radius Neue Standorte ggf. erhöhen
+### Automatisierter KI-Wochenbericht eingerichtet
+
+Vollautomatische Pipeline: Google Ads Script → n8n Webhook → Claude API → Slack
+
+**Google Ads Script** (`Google_Ads/weekly-report-script.js`):
+- Sammelt 10 Datenpunkte: Kampagnen-KPIs, Anzeigengruppen, Keywords + Qualitätsfaktor, Suchbegriffe (Top 30 + konvertierende + verschwendende), Geräte-Aufschlüsselung, Wochentag, Uhrzeit, Impression Share + Verlustgründe, Geografie, Anzeigen-Performance
+- Sendet als JSON an n8n Webhook
+- Zeitplan: Sonntag 09:00 Uhr
+
+**n8n Workflow** (`n8n/workflow-google-ads-report.json`):
+- 5 Nodes: Webhook → Code (Prompt aufbereiten) → HTTP Request (Claude Sonnet 4.6) → Code (Slack formatieren) → HTTP Request (Slack)
+- System-Prompt enthält vollständigen TT2GO-Geschäftskontext, Benchmarks und Kampagnenstruktur
+- Claude liefert: Zusammenfassung, KPI-Vergleich, Geräte-Analyse, Zeitanalyse, Impression Share, Suchbegriffe, QS-Probleme, konkrete Handlungsempfehlungen
+- Kosten: ~0,02-0,05 $ pro Report
+
+**Technische Hürden gelöst:**
+- n8n Anthropic-Integration erfordert höhere Lizenz → Workaround: HTTP Request Node mit Header Auth Credential
+- Model-ID musste als `claude-sonnet-4-6` eingetragen werden (andere IDs gaben 404)
+- Webhook muss auf POST stehen (GET nur für manuelle Browser-Tests)
+- End-to-End-Test erfolgreich: Report kommt in Slack an
+
+### Offene Punkte nach Session 7
+
+- [ ] **Slack Bot: Rückfragen zum Report** — Thread-Antworten via @mention im Slack-Channel (Option B), braucht Slack Bot mit Event Subscriptions
 - [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue aufsetzen. 50 €/Tag Budget. 18 Video-Ads auf Frame.io.
 - [ ] **GA4 mit Google Ads verknüpfen**
 - [ ] **GA4 Key Events definieren**

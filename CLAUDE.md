@@ -280,9 +280,26 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 **Nächste Analyse:** ab ~02.05.2026 (nach 30-50 Conversions ggf. Ziel-CPA evaluieren)
 
+## Automatisierter KI-Wochenbericht (eingerichtet 18.04.2026)
+
+**Ablauf:** Google Ads Script (Sonntag 09:00) → n8n Webhook → Claude API (Sonnet 4.6) → Slack
+
+**Google Ads Script:** `Google_Ads/weekly-report-script.js` — sammelt 10 Datenpunkte (Kampagnen, Anzeigengruppen, Keywords + QS, Suchbegriffe, Geräte, Wochentag, Uhrzeit, Impression Share, Geografie, Anzeigen)
+
+**n8n Workflow:** `n8n/workflow-google-ads-report.json` — "TT2GO Google Ads Wochenbericht → Claude → Slack"
+- Webhook: `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-ads-report` (POST)
+- Claude API via Header Auth Credential "Anthropic API Key"
+- Slack Webhook: konfiguriert in n8n und Google Ads Script (nicht im Repo, Secret)
+
+**Slack App:** "TT2GO Google Ads Report" — Incoming Webhook für Report-Zustellung
+
+**Kosten pro Report:** ~0,02-0,05 $ (Claude API)
+
 ## Offene Punkte
 
 - [x] **Google Ads Optimierung (1. Runde)** — Suchbegriffe-Bericht geprüft, neue Keywords ergänzt, keine neuen negativen Keywords nötig
+- [x] **Automatischer KI-Wochenbericht** — Google Ads Script → n8n → Claude → Slack, end-to-end getestet
+- [ ] **Slack Bot: Rückfragen zum Report** — Option B (Thread-Antworten via @mention), braucht Slack Bot mit Event Subscriptions + zweiten n8n Webhook + Report-Zwischenspeicherung
 - [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren wenn 30-50 Conversions erreicht, Neue-Standorte-Radius ggf. auf 35 km erhöhen
 - [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue Kampagnen aufsetzen. Pixel läuft, Conversions sind bereit. Budget: 50 €/Tag. 18 Video-Ads auf Frame.io vorhanden.
 - [x] **GA4 eingerichtet** — Property `289955115`, Mess-ID `G-TJLDKKHJJT`, via GTM Tag "GA4 - Konfiguration" (Version 3), Echtzeit-Daten bestätigt
