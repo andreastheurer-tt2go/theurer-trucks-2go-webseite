@@ -14,7 +14,10 @@
       "name": "Slack Event empfangen",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 400],
+      "position": [
+        240,
+        400
+      ],
       "webhookId": "tt2go-slack-events"
     },
     {
@@ -25,7 +28,10 @@
       "name": "Signatur + Event prüfen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 400]
+      "position": [
+        460,
+        400
+      ]
     },
     {
       "parameters": {
@@ -52,7 +58,10 @@
       "name": "Gültig?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 400]
+      "position": [
+        680,
+        400
+      ]
     },
     {
       "parameters": {
@@ -64,7 +73,10 @@
       "name": "401 Unauthorized",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [900, 560]
+      "position": [
+        900,
+        560
+      ]
     },
     {
       "parameters": {
@@ -141,7 +153,10 @@
       "name": "Routing",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [900, 320]
+      "position": [
+        900,
+        320
+      ]
     },
     {
       "parameters": {
@@ -152,7 +167,10 @@
       "name": "URL Verification Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1120, 180]
+      "position": [
+        1120,
+        180
+      ]
     },
     {
       "parameters": {
@@ -164,7 +182,10 @@
       "name": "Ignore Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1120, 320]
+      "position": [
+        1120,
+        320
+      ]
     },
     {
       "parameters": {
@@ -176,7 +197,10 @@
       "name": "ACK zu Slack",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1120, 460]
+      "position": [
+        1120,
+        460
+      ]
     },
     {
       "parameters": {
@@ -186,7 +210,10 @@
       "name": "Kontext + Whitelist",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1340, 460]
+      "position": [
+        1340,
+        460
+      ]
     },
     {
       "parameters": {
@@ -213,7 +240,10 @@
       "name": "Autorisiert?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1560, 460]
+      "position": [
+        1560,
+        460
+      ]
     },
     {
       "parameters": {
@@ -225,7 +255,10 @@
       "name": "Reports aus DB laden",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [1780, 400],
+      "position": [
+        1780,
+        400
+      ],
       "credentials": {
         "postgres": {
           "id": "POSTGRES_CREDENTIAL_ID_REPLACE",
@@ -235,13 +268,16 @@
     },
     {
       "parameters": {
-        "jsCode": "// Alle Reports aus DB + Kontext für Claude-Prompt aufbereiten\nconst reportRows = $input.all().map(i => i.json);\nconst contextOutput = $('Kontext + Whitelist').item.json;\nconst event = contextOutput.event;\nconst threadMessages = contextOutput.threadMessages || [];\n\n// Fall: Noch keine Reports in der DB\nif (reportRows.length === 0 || (reportRows.length === 1 && !reportRows[0].platform)) {\n  return [{\n    json: {\n      emptyDb: true,\n      channel: event.channel,\n      thread_ts: event.thread_ts || event.ts,\n      isIm: event.isIm,\n      errorMessage: ':warning: Noch keine Reports in der Datenbank. Der erste Wochenbericht wird Sonntag 09:00 automatisch erstellt.',\n    },\n  }];\n}\n\n// Reports pro Plattform gruppieren\nconst reportsByPlatform = reportRows.reduce((acc, r) => {\n  if (!r.platform) return acc;\n  if (!acc[r.platform]) acc[r.platform] = [];\n  acc[r.platform].push(r);\n  return acc;\n}, {});\n\n// Thread-History formatieren (ohne die aktuelle Nachricht)\nconst currentTs = event.ts;\nconst threadContext = threadMessages\n  .filter(m => m.ts !== currentTs)\n  .map(m => {\n    const role = m.bot_id ? 'assistant' : 'user';\n    const text = (m.text || '').replace(/<@[A-Z0-9]+>\\s*/g, '').trim();\n    return { role, content: text };\n  })\n  .filter(m => m.content.length > 0);\n\n// System-Prompt\nconst availablePlatforms = Object.keys(reportsByPlatform);\nconst platformList = availablePlatforms\n  .map(p => {\n    const rs = reportsByPlatform[p];\n    const earliest = rs[rs.length - 1].week_start;\n    const latest = rs[0].week_start;\n    return `- ${p}: ${rs.length} Wochen-Reports (von ${earliest} bis ${latest})`;\n  })\n  .join('\\n');\n\nconst systemPrompt = `Du bist ein Performance-Marketing-Analyst für TheurerTrucks 2GO (Car-Sharing für Pferdetransporter in Deutschland).\n\nGeschäftskontext:\n- Einziger Carsharing-Anbieter für Pferdetransporter in Deutschland\n- Nur EIN Fahrzeugtyp: STX Pferdetransporter auf Renault-Master-Basis, unter 3,5t, Führerschein Klasse B\n- Preise: Ab 165 €/Tag (brutto), 150 km frei, Mehrkilometer 0,46 €/km\n- Zielgruppe: Pferdebesitzer (90% weiblich, Ø 37 Jahre) ohne eigenen Transporter\n- Conversion-Ziel: Registrierung auf fleetster-Plattform\n- Ziel-CPA: unter 25 €/Registrierung\n\nVerfügbare Daten (Wochen-Reports):\n${platformList}\n\nJeder Report enthält Raw-Daten (JSON) vom jeweiligen Script und einen bereits generierten KI-Wochenbericht.\n\nAntwort-Regeln:\n- Schreibe auf Deutsch\n- Formatiere für Slack (Slack-Markdown: *fett*, _kursiv_, • Bullet Points)\n- Max 2000 Zeichen pro Antwort\n- Sei konkret und actionable, nicht generisch\n- Wenn die Daten für die Frage nicht reichen: klar sagen\n- Emojis sparsam aber sinnvoll (:chart_with_upwards_trend:, :warning:, :white_check_mark:, :mag:, :moneybag:)`;\n\n// User-Message mit Reports\nlet userMessage = 'Hier sind die verfügbaren Wochen-Reports:\\n\\n';\nfor (const [platform, reports] of Object.entries(reportsByPlatform)) {\n  userMessage += `## Plattform: ${platform}\\n\\n`;\n  for (const r of reports) {\n    userMessage += `### Woche ${r.week_start} bis ${r.week_end}\\n`;\n    userMessage += `**KI-Bericht:**\\n${r.ai_report}\\n\\n`;\n    userMessage += `**Rohdaten (gekürzt):**\\n\\`\\`\\`json\\n${JSON.stringify(r.raw_data).substring(0, 8000)}\\n\\`\\`\\`\\n\\n`;\n  }\n}\nuserMessage += `\\n---\\n\\n**Aktuelle Frage:** ${event.text}`;\n\n// Claude-Messages (Thread-History + aktuelle Frage)\nconst messages = [];\nfor (const m of threadContext) {\n  messages.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content });\n}\nmessages.push({ role: 'user', content: userMessage });\n\nreturn [{\n  json: {\n    emptyDb: false,\n    systemPrompt,\n    messages,\n    channel: event.channel,\n    thread_ts: event.thread_ts || event.ts,\n    isIm: event.isIm,\n  },\n}];"
+        "jsCode": "// Alle Reports aus DB + Kontext für Claude-Prompt aufbereiten\nconst reportRows = $input.all().map(i => i.json);\nconst contextOutput = $('Kontext + Whitelist').item.json;\nconst event = contextOutput.event;\nconst threadMessages = contextOutput.threadMessages || [];\n\n// Fall: Noch keine Reports in der DB\nif (reportRows.length === 0 || (reportRows.length === 1 && !reportRows[0].platform)) {\n  return [{\n    json: {\n      emptyDb: true,\n      channel: event.channel,\n      thread_ts: event.thread_ts || event.ts,\n      isIm: event.isIm,\n      errorMessage: ':warning: Noch keine Reports in der Datenbank. Der erste Wochenbericht wird Sonntag 09:00 automatisch erstellt.',\n    },\n  }];\n}\n\n// Reports pro Plattform gruppieren\nconst reportsByPlatform = reportRows.reduce((acc, r) => {\n  if (!r.platform) return acc;\n  if (!acc[r.platform]) acc[r.platform] = [];\n  acc[r.platform].push(r);\n  return acc;\n}, {});\n\n// Thread-History formatieren (ohne die aktuelle Nachricht)\nconst currentTs = event.ts;\nconst threadContext = threadMessages\n  .filter(m => m.ts !== currentTs)\n  .map(m => {\n    const role = m.bot_id ? 'assistant' : 'user';\n    const text = (m.text || '').replace(/<@[A-Z0-9]+>\\s*/g, '').trim();\n    return { role, content: text };\n  })\n  .filter(m => m.content.length > 0);\n\n// System-Prompt\nconst availablePlatforms = Object.keys(reportsByPlatform);\nconst platformList = availablePlatforms\n  .map(p => {\n    const rs = reportsByPlatform[p];\n    const earliest = rs[rs.length - 1].week_start;\n    const latest = rs[0].week_start;\n    return `- ${p}: ${rs.length} Wochen-Reports (von ${earliest} bis ${latest})`;\n  })\n  .join('\\n');\n\nconst systemPrompt = `Du bist Performance-Marketing-Analyst für TheurerTrucks 2GO (Car-Sharing für Pferdetransporter, DE).\n\nGeschäftskontext:\n- Einziger Pferdetransporter-Carsharing-Anbieter in DE\n- STX-Transporter auf Renault-Master-Basis (KEIN klassischer Anhänger)\n- Preise: ab 165 €/Tag (brutto), 150 km frei\n- Conversion-Ziel: Registrierung auf fleetster, Ziel-CPA < 25 €\n- Budget: 70 €/Tag (55 National + 15 Neue Standorte)\n\nVerfügbare Daten (Wochen-Reports aus Postgres):\n${platformList}\n\nJeder Report enthält raw_data (JSON vom Script) und einen bereits generierten KI-Wochenbericht.\n\n=== STRIKTE FORMAT-REGELN (SLACK-RENDERING!) ===\n\n1. KEINE #, ##, ### Überschriften — Slack rendert die nicht, bleiben als hässlicher Text stehen.\n   Stattdessen: *Fett-Text* für Abschnitts-Labels.\n2. KEINE **doppelten Sterne** — Slack braucht EINFACHE *Sterne*.\n3. KEINE --- Trennlinien — werden als Text gerendert.\n4. Bullet Points IMMER mit • (nicht -, nicht *)\n5. Emojis sparsam und nur als :emoji_code: (nicht Unicode): :chart_with_upwards_trend: :warning: :white_check_mark: :mag: :moneybag: :rotating_light: :dart:\n6. Max ~1500 Zeichen pro Antwort — mobile-tauglich.\n7. Zahlen mit Komma als Dezimaltrenner (DE): 25,89 € statt 25.89 €\n\n=== STRUKTUR ===\n\nTypische Antwort-Struktur (anpassen an die Frage):\n\n:mag: *Kurzantwort*\n1-2 Sätze zur Frage.\n\n*Details*\n• Bullet 1 mit konkreter Zahl\n• Bullet 2 mit konkreter Zahl\n• ...\n\n:dart: *Empfehlung* (wenn actionable)\n• Was konkret zu tun ist\n\n=== INHALT-REGELN ===\n\n- Schreibe auf Deutsch, präzise und konkret\n- NIEMALS generische Tipps — immer mit Zahlen aus den Reports belegen\n- Wenn die Daten die Frage nicht beantworten: klar sagen statt zu halluzinieren\n- Wenn ähnliche Fragen schon im Thread diskutiert wurden: Kontext aus Thread-History berücksichtigen (Folgefragen wie \"und bei Desktop?\" beantworten)\n- Keine Einleitung, kein Vorwort, direkt die Antwort\n- Kein Scratchpad / keine Zwischenrechnungen im Output`;\n\n// User-Message mit Reports\nlet userMessage = 'Hier sind die verfügbaren Wochen-Reports:\\n\\n';\nfor (const [platform, reports] of Object.entries(reportsByPlatform)) {\n  userMessage += `## Plattform: ${platform}\\n\\n`;\n  for (const r of reports) {\n    userMessage += `### Woche ${r.week_start} bis ${r.week_end}\\n`;\n    userMessage += `**KI-Bericht:**\\n${r.ai_report}\\n\\n`;\n    userMessage += `**Rohdaten (gekürzt):**\\n\\`\\`\\`json\\n${JSON.stringify(r.raw_data).substring(0, 8000)}\\n\\`\\`\\`\\n\\n`;\n  }\n}\nuserMessage += `\\n---\\n\\n**Aktuelle Frage:** ${event.text}`;\n\n// Claude-Messages (Thread-History + aktuelle Frage)\nconst messages = [];\nfor (const m of threadContext) {\n  messages.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content });\n}\nmessages.push({ role: 'user', content: userMessage });\n\nreturn [{\n  json: {\n    emptyDb: false,\n    systemPrompt,\n    messages,\n    channel: event.channel,\n    thread_ts: event.thread_ts || event.ts,\n    isIm: event.isIm,\n  },\n}];"
       },
       "id": "build-prompt",
       "name": "Prompt bauen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 400]
+      "position": [
+        2000,
+        400
+      ]
     },
     {
       "parameters": {
@@ -268,7 +304,10 @@
       "name": "Leere DB?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2220, 400]
+      "position": [
+        2220,
+        400
+      ]
     },
     {
       "parameters": {
@@ -300,7 +339,10 @@
       "name": "Claude API",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2440, 340],
+      "position": [
+        2440,
+        340
+      ],
       "credentials": {
         "httpHeaderAuth": {
           "id": "CREDENTIAL_ID",
@@ -316,7 +358,10 @@
       "name": "Antwort formatieren",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2660, 340]
+      "position": [
+        2660,
+        340
+      ]
     },
     {
       "parameters": {
@@ -344,7 +389,10 @@
       "name": "Slack Post (Antwort)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2880, 340]
+      "position": [
+        2880,
+        340
+      ]
     },
     {
       "parameters": {
@@ -354,7 +402,10 @@
       "name": "Whitelist-Fehler formatieren",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1780, 620]
+      "position": [
+        1780,
+        620
+      ]
     },
     {
       "parameters": {
@@ -382,7 +433,10 @@
       "name": "Slack Post (Whitelist-Fehler)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2000, 620]
+      "position": [
+        2000,
+        620
+      ]
     },
     {
       "parameters": {
@@ -410,61 +464,190 @@
       "name": "Slack Post (Leere DB)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2440, 500]
+      "position": [
+        2440,
+        500
+      ]
     }
   ],
   "connections": {
     "Slack Event empfangen": {
-      "main": [[{ "node": "Signatur + Event prüfen", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Signatur + Event prüfen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Signatur + Event prüfen": {
-      "main": [[{ "node": "Gültig?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Gültig?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Gültig?": {
       "main": [
-        [{ "node": "Routing", "type": "main", "index": 0 }],
-        [{ "node": "401 Unauthorized", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Routing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "401 Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Routing": {
       "main": [
-        [{ "node": "URL Verification Response", "type": "main", "index": 0 }],
-        [{ "node": "Ignore Response", "type": "main", "index": 0 }],
-        [{ "node": "ACK zu Slack", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "URL Verification Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignore Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ACK zu Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "ACK zu Slack": {
-      "main": [[{ "node": "Kontext + Whitelist", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Kontext + Whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Kontext + Whitelist": {
-      "main": [[{ "node": "Autorisiert?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Autorisiert?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Autorisiert?": {
       "main": [
-        [{ "node": "Reports aus DB laden", "type": "main", "index": 0 }],
-        [{ "node": "Whitelist-Fehler formatieren", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Reports aus DB laden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Whitelist-Fehler formatieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Whitelist-Fehler formatieren": {
-      "main": [[{ "node": "Slack Post (Whitelist-Fehler)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Slack Post (Whitelist-Fehler)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Reports aus DB laden": {
-      "main": [[{ "node": "Prompt bauen", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Prompt bauen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Prompt bauen": {
-      "main": [[{ "node": "Leere DB?", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Leere DB?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Leere DB?": {
       "main": [
-        [{ "node": "Slack Post (Leere DB)", "type": "main", "index": 0 }],
-        [{ "node": "Claude API", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Slack Post (Leere DB)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Claude API": {
-      "main": [[{ "node": "Antwort formatieren", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Antwort formatieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Antwort formatieren": {
-      "main": [[{ "node": "Slack Post (Antwort)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Slack Post (Antwort)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
