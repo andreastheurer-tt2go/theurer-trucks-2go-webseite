@@ -66,13 +66,33 @@
     },
     {
       "parameters": {
-        "jsCode": "// Claude API Response auslesen\nconst response = $input.first().json;\nlet analysisText = '';\n\nif (response.content && response.content.length > 0) {\n  analysisText = response.content[0].text;\n} else if (response.error) {\n  analysisText = ':rotating_light: *Claude API Fehler:* ' + JSON.stringify(response.error);\n} else {\n  analysisText = ':warning: Unerwartete API-Antwort: ' + JSON.stringify(response).substring(0, 500);\n}\n\n// Slack-Nachricht formatieren\nconst slackMessage = ':bar_chart: *TT2GO Google Ads — KI-Wochenbericht*\\n' +\n  '_Analyse erstellt von Claude AI am ' + new Date().toLocaleDateString('de-DE') + '_\\n\\n' +\n  analysisText;\n\nreturn [{ json: { text: slackMessage } }];"
+        "operation": "executeQuery",
+        "query": "INSERT INTO ads_reports (platform, week_start, week_end, raw_data, ai_report) VALUES ('google_ads', $1::date, $2::date, $3::jsonb, $4) ON CONFLICT (platform, week_start) DO UPDATE SET raw_data = EXCLUDED.raw_data, ai_report = EXCLUDED.ai_report, created_at = NOW() RETURNING id, week_start;",
+        "options": {
+          "queryReplacement": "={{ $('Google Ads Daten empfangen').item.json.body.periodThisWeek.start }},={{ $('Google Ads Daten empfangen').item.json.body.periodThisWeek.end }},={{ JSON.stringify($('Google Ads Daten empfangen').item.json.body) }},={{ $json.content[0].text }}"
+        }
+      },
+      "id": "postgres-insert",
+      "name": "Report in Postgres speichern",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [900, 300],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID_REPLACE",
+          "name": "TT2GO Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Claude API Response auslesen (von VOR dem Postgres-Node holen)\nconst response = $('Claude API Analyse').first().json;\nlet analysisText = '';\n\nif (response.content && response.content.length > 0) {\n  analysisText = response.content[0].text;\n} else if (response.error) {\n  analysisText = ':rotating_light: *Claude API Fehler:* ' + JSON.stringify(response.error);\n} else {\n  analysisText = ':warning: Unerwartete API-Antwort: ' + JSON.stringify(response).substring(0, 500);\n}\n\n// Slack-Nachricht formatieren\nconst slackMessage = ':bar_chart: *TT2GO Google Ads — KI-Wochenbericht*\\n' +\n  '_Analyse erstellt von Claude AI am ' + new Date().toLocaleDateString('de-DE') + '_\\n\\n' +\n  analysisText;\n\nreturn [{ json: { text: slackMessage } }];"
       },
       "id": "format-slack",
       "name": "Slack Nachricht formatieren",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [900, 300]
+      "position": [1120, 300]
     },
     {
       "parameters": {
@@ -87,7 +107,7 @@
       "name": "An Slack senden",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 300]
+      "position": [1340, 300]
     }
   ],
   "connections": {
@@ -114,6 +134,17 @@
       ]
     },
     "Claude API Analyse": {
+      "main": [
+        [
+          {
+            "node": "Report in Postgres speichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report in Postgres speichern": {
       "main": [
         [
           {
