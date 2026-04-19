@@ -64,6 +64,7 @@ TT2GO_Neue_WEBSEITE/
 - **Repo:** `https://github.com/andreastheurer-tt2go/theurer-trucks-2go-webseite`
 - **Hosting:** GitHub Pages (Deploy from branch `main`, root `/`)
 - **Live-URL:** `https://andreastheurer-tt2go.github.io/theurer-trucks-2go-webseite/`
+- **`.nojekyll` im Root:** NICHT löschen! Weist GitHub Pages an, Jekyll zu überspringen (reine HTML/CSS/JS-Seite, kein Jekyll). Ohne die Datei scheitert der Deploy an Markdown-Dateien in `docs/` mit Liquid-ähnlicher Syntax.
 
 ## Seitenstruktur (Reihenfolge der Sektionen)
 
