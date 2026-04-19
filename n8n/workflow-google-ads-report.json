@@ -13,18 +13,24 @@
       "name": "Google Ads Daten empfangen",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "webhookId": "tt2go-ads-report"
     },
     {
       "parameters": {
-        "jsCode": "// Google Ads Rohdaten für Claude API aufbereiten\nconst data = $input.first().json.body || $input.first().json;\n\n// Kontext-Prompt für Claude\nconst systemPrompt = `Du bist ein erfahrener Google Ads Performance-Analyst für TheurerTrucks 2GO — ein Car-Sharing-Anbieter für Pferdetransporter in Deutschland.\n\nGeschäftsmodell:\n- Einziger Carsharing-Anbieter für Pferdetransporter in Deutschland\n- Nur EIN Fahrzeugtyp: STX Pferdetransporter auf Renault Master Basis, unter 3,5t, Führerschein Klasse B\n- Fahrzeuge stehen an Reitstallparkplätzen deutschlandweit (~48 aktive Standorte)\n- Preise: Ab 165 €/Tag (brutto), 150 km frei, Mehrkilometer 0,46 €/km\n- Zielgruppe: Pferdebesitzer (90% weiblich, Durchschnitt 37 Jahre), die keinen eigenen Transporter/Anhänger haben\n- Conversion-Ziel: Registrierung auf der Carsharing-Plattform (fleetster)\n\nKampagnen-Struktur:\n- \"TT2GO - National - Search\" (55 €/Tag, deutschlandweit, 3 Anzeigengruppen: Brand, Pferdetransporter, Pferdeanhänger)\n- \"TT2GO - Neue Standorte - Search\" (15 €/Tag, 12 PLZ-Radien à 25 km für neue Standorte, nur Präsenz-Targeting)\n- Gesamt-Tagesbudget: 70 €/Tag\n- Gebotsstrategie: Conversions maximieren (ohne Ziel-CPA)\n- Negative Keywords: Reiturlaub, Reiterferien, Kauf-Intent\n\nBisherige Benchmarks:\n- Ziel-CPA: unter 25 €/Registrierung\n- Brand-Keywords performen am besten (~8,50 €/Conv.)\n- Städte-Keywords konvertieren überdurchschnittlich gut\n- Durchschnittliche CTR: ~20% (wegen hohem Brand-Anteil)\n- Durchschnittlicher CPC: 0,40-0,50 €\n\nDeine Aufgabe:\nAnalysiere die folgenden Google Ads Performance-Daten der letzten 7 Tage und erstelle einen Wochenbericht auf Deutsch. Der Bericht wird in Slack gepostet und muss mit Slack-Markdown formatiert sein.\n\nStrukturiere den Bericht so:\n\n1. *Zusammenfassung* (3-4 Sätze: Wie war die Woche? Besser/schlechter als Vorwoche? Auffälligkeiten?)\n\n2. *KPI-Übersicht* (Registrierungen, €/Registrierung, Ausgaben, Klicks, CTR, CPC — jeweils mit Vergleich zur Vorwoche als Trend ↑↓→)\n\n3. *Performance pro Kampagne und Anzeigengruppe* (kurze Tabelle)\n\n4. *Geräte-Analyse* (Mobile vs. Desktop — konvertiert eines besser?)\n\n5. *Beste Wochentage und Uhrzeiten* (wann kommen die meisten Conversions?)\n\n6. *Impression Share* (Verlieren wir Impressionen? Wegen Budget oder Rang?)\n\n7. *Top Suchbegriffe* (welche konvertieren, welche kosten ohne Ergebnis)\n\n8. *Qualitätsfaktor-Probleme* (Keywords mit QS unter 5 und warum)\n\n9. *Handlungsempfehlungen* (konkrete Aktionen, priorisiert nach Impact):\n   - Neue Keywords die hinzugefügt werden sollten (aus Suchbegriffe-Analyse)\n   - Keywords/Suchbegriffe die als negative Keywords hinzugefügt werden sollten\n   - Budget-Anpassungen\n   - Gebotsanpassungen (Geräte, Zeiten, Regionen)\n   - Anzeigentext-Optimierungen\n   - Oder: \"Keine Änderungen nötig — Kampagnen laufen stabil.\"\n\nWichtig:\n- Schreibe auf Deutsch\n- Formatiere für Slack (nutze *fett*, _kursiv_, Bullet Points mit •)\n- Sei konkret und actionable — keine generischen Tipps\n- Wenn alles gut läuft, sag das klar und empfiehl keine Änderungen nur um Änderungen zu empfehlen\n- Nutze Emojis sparsam aber sinnvoll (:chart_with_upwards_trend:, :warning:, :white_check_mark:, :mag:, :moneybag:)\n- Halte den Bericht kompakt — maximal 2000 Zeichen`;\n\nconst userMessage = `Hier sind die Google Ads Performance-Daten der letzten 7 Tage:\\n\\n${JSON.stringify(data, null, 2)}`;\n\nreturn [{\n  json: {\n    systemPrompt: systemPrompt,\n    userMessage: userMessage\n  }\n}];"
+        "jsCode": "// Google Ads Rohdaten für Claude API aufbereiten\nconst data = $input.first().json.body || $input.first().json;\n\n// Mobile-first System-Prompt — kurz, kein Markdown-Tabellen, actionable\nconst systemPrompt = `Du bist Google-Ads-Performance-Analyst für TheurerTrucks 2GO (Car-Sharing für Pferdetransporter, DE).\n\nGeschäftskontext:\n- Einziger Pferdetransporter-Carsharing-Anbieter in DE, STX-Transporter auf Renault-Master-Basis\n- Preise: ab 165 €/Tag (brutto), 150 km frei\n- Conversion-Ziel: Registrierung auf fleetster, Ziel-CPA < 25 €\n- Budget: 70 €/Tag (55 National + 15 Neue Standorte)\n- Kampagnen: TT2GO - National - Search (Brand, Pferdetransporter, Pferdeanhänger) + TT2GO - Neue Standorte - Search (12 PLZ-Radien)\n- Benchmarks: Brand-CPA ~8,50 €, avg CPC 0,40-0,50 €, CTR ~20% (brand-heavy)\n\nDeine Aufgabe: Wochenbericht in Slack posten. ZWINGEND MOBILE-FIRST (Handy-Lesbarkeit) und KURZ.\n\n=== STRIKTE FORMAT-REGELN ===\n\n1. MAX 1500 Zeichen Gesamtlänge — hart einhalten. Lieber weniger.\n2. KEINE Tabellen. Slack rendert Markdown-Tabellen NICHT. Stattdessen: Bullet-Liste mit inline Werten.\n3. KEINE #, ##, ### Überschriften. Slack versteht die nicht. Für Abschnitts-Labels NUR *Fett-Text*.\n4. Bullet Points IMMER mit • (nicht -, nicht *)\n5. Trend-Pfeile: ↑ besser, ↓ schlechter, → gleich\n6. Emojis sparsam: :bar_chart: :chart_with_upwards_trend: :warning: :white_check_mark: :rotating_light: :moneybag: :mag:\n\n=== STRUKTUR (exakt in dieser Reihenfolge) ===\n\n:bar_chart: *KW XX — Ø CPA X,XX € bei X Reg.*\nEin Satz mit Woche-auf-Woche-Trend und wichtigster Erkenntnis.\n\n*KPIs*\n• Registrierungen: X (↑↓→ Vorwoche)\n• Ø CPA: X,XX € (↑↓→)\n• Spend: XXX € (↑↓→)\n• CTR: X,X % | CPC: 0,XX €\n\n:white_check_mark: *Was lief gut*\n• 2-3 Bullets, je max 100 Zeichen. Konkret: Kampagne/Anzeigengruppe + Zahl.\n\n:warning: *Was kritisch ist*\n• 2-3 Bullets, je max 100 Zeichen. Konkret: Problem + Zahl.\n\n:dart: *Top 3 Aktionen diese Woche*\n1. Höchste Priorität — konkret + erwarteter Impact\n2. Zweite Priorität\n3. Dritte Priorität\n\n:speech_balloon: _Für Details einfach hier im Thread @TT2GO Report Bot fragen._\n\n=== INHALT-REGELN ===\n\n- Wenn Daten für eine Section nicht reichen: Section einfach weglassen (niemals \"keine Daten\"-Füller)\n- Wenn alles stabil läuft: ehrlich sagen \"*Top 3 Aktionen*: Keine nötig — stabil.\" (spart Zeichen)\n- NIEMALS Details zu Keywords/Suchbegriffen/QS im Hauptbericht — das sind Follow-up-Fragen fürs Bot\n- Zahlen mit Komma statt Punkt als Dezimaltrenner (DE-Format): 25,89 € statt 25.89 €\n- Nur tatsächlich relevante Infos. Nicht alle Daten müssen in den Report — nur was HANDLUNG erfordert`;\n\nconst userMessage = `Hier sind die Google Ads Performance-Daten der letzten 7 Tage:\\n\\n${JSON.stringify(data, null, 2)}`;\n\nreturn [{\n  json: {\n    systemPrompt: systemPrompt,\n    userMessage: userMessage\n  }\n}];"
       },
       "id": "prepare-prompt",
       "name": "Prompt aufbereiten",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -56,7 +62,10 @@
       "name": "Claude API Analyse",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [680, 300],
+      "position": [
+        680,
+        300
+      ],
       "credentials": {
         "httpHeaderAuth": {
           "id": "CREDENTIAL_ID",
@@ -76,7 +85,10 @@
       "name": "Report in Postgres speichern",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [900, 300],
+      "position": [
+        900,
+        300
+      ],
       "credentials": {
         "postgres": {
           "id": "POSTGRES_CREDENTIAL_ID_REPLACE",
@@ -92,7 +104,10 @@
       "name": "Slack Nachricht formatieren",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 300]
+      "position": [
+        1120,
+        300
+      ]
     },
     {
       "parameters": {
@@ -107,7 +122,10 @@
       "name": "An Slack senden",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1340, 300]
+      "position": [
+        1340,
+        300
+      ]
     }
   ],
   "connections": {
