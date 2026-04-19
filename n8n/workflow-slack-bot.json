@@ -337,7 +337,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.text }) }}",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, reply_broadcast: true, text: $json.text }) }}",
         "options": {}
       },
       "id": "slack-post-answer",
@@ -375,7 +375,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.text }) }}",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, reply_broadcast: true, text: $json.text }) }}",
         "options": {}
       },
       "id": "slack-post-auth-error",
@@ -403,7 +403,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.errorMessage } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.errorMessage }) }}",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.errorMessage } : { channel: $json.channel, thread_ts: $json.thread_ts, reply_broadcast: true, text: $json.errorMessage }) }}",
         "options": {}
       },
       "id": "slack-post-empty-db",
