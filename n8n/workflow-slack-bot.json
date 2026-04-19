@@ -1,0 +1,473 @@
+{
+  "name": "TT2GO Slack Bot → Rückfragen",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tt2go-slack-events",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Slack Event empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 400],
+      "webhookId": "tt2go-slack-events"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Slack Signature Verification + Event-Typ-Klassifikation\nconst crypto = require('crypto');\n\nconst signingSecret = $env.SLACK_SIGNING_SECRET;\nif (!signingSecret) {\n  return [{ json: { valid: false, reason: 'SLACK_SIGNING_SECRET nicht gesetzt' } }];\n}\n\nconst input = $input.first();\nconst headers = input.json.headers || {};\nconst timestamp = headers['x-slack-request-timestamp'];\nconst slackSignature = headers['x-slack-signature'];\n\n// Raw Body aus dem binary-Feld holen (rawBody: true im Webhook-Node)\nconst rawBodyBase64 = input.binary?.data?.data;\nconst rawBody = rawBodyBase64\n  ? Buffer.from(rawBodyBase64, 'base64').toString('utf8')\n  : '';\n\nif (!rawBody || !timestamp || !slackSignature) {\n  return [{ json: { valid: false, reason: 'Fehlende Headers oder Body' } }];\n}\n\n// Replay-Attack-Schutz: Requests älter als 5 Minuten ablehnen\nconst now = Math.floor(Date.now() / 1000);\nif (Math.abs(now - parseInt(timestamp, 10)) > 300) {\n  return [{ json: { valid: false, reason: 'Timestamp zu alt' } }];\n}\n\n// HMAC-SHA256 berechnen und timing-safe vergleichen\nconst baseString = `v0:${timestamp}:${rawBody}`;\nconst expectedSig = 'v0=' + crypto\n  .createHmac('sha256', signingSecret)\n  .update(baseString)\n  .digest('hex');\n\nconst sigA = Buffer.from(expectedSig);\nconst sigB = Buffer.from(slackSignature);\nconst valid = sigA.length === sigB.length && crypto.timingSafeEqual(sigA, sigB);\n\nif (!valid) {\n  return [{ json: { valid: false, reason: 'Invalid signature' } }];\n}\n\n// Body parsen und Event klassifizieren\nlet body;\ntry {\n  body = JSON.parse(rawBody);\n} catch (e) {\n  return [{ json: { valid: false, reason: 'Body ist kein gültiges JSON' } }];\n}\n\n// URL-Verification (einmalig beim Event-Subscriptions-Setup in Slack)\nif (body.type === 'url_verification') {\n  return [{ json: { valid: true, respondType: 'challenge', challenge: body.challenge } }];\n}\n\n// Event-Callback\nif (body.type === 'event_callback' && body.event) {\n  const event = body.event;\n\n  // Bot-eigene Nachrichten ignorieren (Endlosschleife vermeiden)\n  if (event.bot_id || event.subtype === 'bot_message') {\n    return [{ json: { valid: true, respondType: 'ignore' } }];\n  }\n\n  const isAppMention = event.type === 'app_mention';\n  const isIm = event.type === 'message' && event.channel_type === 'im';\n\n  if (!isAppMention && !isIm) {\n    return [{ json: { valid: true, respondType: 'ignore' } }];\n  }\n\n  // Frage-Text bereinigen (@mention entfernen)\n  const cleanText = (event.text || '').replace(/<@[A-Z0-9]+>\\s*/g, '').trim();\n\n  return [{\n    json: {\n      valid: true,\n      respondType: 'process',\n      event: {\n        user: event.user,\n        channel: event.channel,\n        channel_type: event.channel_type,\n        ts: event.ts,\n        thread_ts: event.thread_ts || null,\n        text: cleanText,\n        isIm,\n      },\n    },\n  }];\n}\n\nreturn [{ json: { valid: true, respondType: 'ignore' } }];"
+      },
+      "id": "verify-signature",
+      "name": "Signatur + Event prüfen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-valid",
+      "name": "Gültig?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseCode": 401,
+        "responseBody": "Invalid signature"
+      },
+      "id": "respond-401",
+      "name": "401 Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 560]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.respondType }}",
+                    "rightValue": "challenge",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "challenge"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.respondType }}",
+                    "rightValue": "ignore",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "ignore"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.respondType }}",
+                    "rightValue": "process",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "process"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-route",
+      "name": "Routing",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { challenge: $json.challenge } }}"
+      },
+      "id": "respond-challenge",
+      "name": "URL Verification Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseCode": 200,
+        "responseBody": "ok"
+      },
+      "id": "respond-ignore",
+      "name": "Ignore Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseCode": 200,
+        "responseBody": "ok"
+      },
+      "id": "respond-ack",
+      "name": "ACK zu Slack",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1120, 460]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Thread-History laden (falls Thread) + User-Whitelist prüfen\nconst event = $('Signatur + Event prüfen').item.json.event;\nconst botToken = $env.SLACK_BOT_TOKEN;\nconst allowedRaw = $env.SLACK_ALLOWED_USERS || '';\nconst allowed = allowedRaw.split(',').map(s => s.trim()).filter(Boolean);\n\n// Whitelist-Check\nif (!allowed.includes(event.user)) {\n  return [{\n    json: {\n      authorized: false,\n      event,\n      errorMessage: ':no_entry: Sorry, dafür bin ich nicht berechtigt.',\n    },\n  }];\n}\n\n// Thread-History holen falls wir in einem Thread antworten\nlet threadMessages = [];\nif (event.thread_ts && botToken) {\n  try {\n    const url = `https://slack.com/api/conversations.replies?channel=${encodeURIComponent(event.channel)}&ts=${encodeURIComponent(event.thread_ts)}&limit=50`;\n    const response = await fetch(url, {\n      headers: { Authorization: `Bearer ${botToken}` },\n    });\n    const data = await response.json();\n    if (data.ok) {\n      threadMessages = data.messages || [];\n    }\n  } catch (e) {\n    // Fetch fehlgeschlagen — mit leerer History weiter\n    threadMessages = [];\n  }\n}\n\nreturn [{\n  json: {\n    authorized: true,\n    event,\n    threadMessages,\n  },\n}];"
+      },
+      "id": "context-auth",
+      "name": "Kontext + Whitelist",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 460]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.authorized }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-auth",
+      "name": "Autorisiert?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 460]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "(SELECT platform, week_start, week_end, raw_data, ai_report FROM ads_reports WHERE platform = 'google_ads' ORDER BY week_start DESC LIMIT 8) UNION ALL (SELECT platform, week_start, week_end, raw_data, ai_report FROM ads_reports WHERE platform = 'meta_ads' ORDER BY week_start DESC LIMIT 8) ORDER BY week_start DESC;",
+        "options": {}
+      },
+      "id": "postgres-reports",
+      "name": "Reports aus DB laden",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [1780, 400],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID_REPLACE",
+          "name": "TT2GO Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Alle Reports aus DB + Kontext für Claude-Prompt aufbereiten\nconst reportRows = $input.all().map(i => i.json);\nconst contextOutput = $('Kontext + Whitelist').item.json;\nconst event = contextOutput.event;\nconst threadMessages = contextOutput.threadMessages || [];\n\n// Fall: Noch keine Reports in der DB\nif (reportRows.length === 0 || (reportRows.length === 1 && !reportRows[0].platform)) {\n  return [{\n    json: {\n      emptyDb: true,\n      channel: event.channel,\n      thread_ts: event.thread_ts || event.ts,\n      isIm: event.isIm,\n      errorMessage: ':warning: Noch keine Reports in der Datenbank. Der erste Wochenbericht wird Sonntag 09:00 automatisch erstellt.',\n    },\n  }];\n}\n\n// Reports pro Plattform gruppieren\nconst reportsByPlatform = reportRows.reduce((acc, r) => {\n  if (!r.platform) return acc;\n  if (!acc[r.platform]) acc[r.platform] = [];\n  acc[r.platform].push(r);\n  return acc;\n}, {});\n\n// Thread-History formatieren (ohne die aktuelle Nachricht)\nconst currentTs = event.ts;\nconst threadContext = threadMessages\n  .filter(m => m.ts !== currentTs)\n  .map(m => {\n    const role = m.bot_id ? 'assistant' : 'user';\n    const text = (m.text || '').replace(/<@[A-Z0-9]+>\\s*/g, '').trim();\n    return { role, content: text };\n  })\n  .filter(m => m.content.length > 0);\n\n// System-Prompt\nconst availablePlatforms = Object.keys(reportsByPlatform);\nconst platformList = availablePlatforms\n  .map(p => {\n    const rs = reportsByPlatform[p];\n    const earliest = rs[rs.length - 1].week_start;\n    const latest = rs[0].week_start;\n    return `- ${p}: ${rs.length} Wochen-Reports (von ${earliest} bis ${latest})`;\n  })\n  .join('\\n');\n\nconst systemPrompt = `Du bist ein Performance-Marketing-Analyst für TheurerTrucks 2GO (Car-Sharing für Pferdetransporter in Deutschland).\n\nGeschäftskontext:\n- Einziger Carsharing-Anbieter für Pferdetransporter in Deutschland\n- Nur EIN Fahrzeugtyp: STX Pferdetransporter auf Renault-Master-Basis, unter 3,5t, Führerschein Klasse B\n- Preise: Ab 165 €/Tag (brutto), 150 km frei, Mehrkilometer 0,46 €/km\n- Zielgruppe: Pferdebesitzer (90% weiblich, Ø 37 Jahre) ohne eigenen Transporter\n- Conversion-Ziel: Registrierung auf fleetster-Plattform\n- Ziel-CPA: unter 25 €/Registrierung\n\nVerfügbare Daten (Wochen-Reports):\n${platformList}\n\nJeder Report enthält Raw-Daten (JSON) vom jeweiligen Script und einen bereits generierten KI-Wochenbericht.\n\nAntwort-Regeln:\n- Schreibe auf Deutsch\n- Formatiere für Slack (Slack-Markdown: *fett*, _kursiv_, • Bullet Points)\n- Max 2000 Zeichen pro Antwort\n- Sei konkret und actionable, nicht generisch\n- Wenn die Daten für die Frage nicht reichen: klar sagen\n- Emojis sparsam aber sinnvoll (:chart_with_upwards_trend:, :warning:, :white_check_mark:, :mag:, :moneybag:)`;\n\n// User-Message mit Reports\nlet userMessage = 'Hier sind die verfügbaren Wochen-Reports:\\n\\n';\nfor (const [platform, reports] of Object.entries(reportsByPlatform)) {\n  userMessage += `## Plattform: ${platform}\\n\\n`;\n  for (const r of reports) {\n    userMessage += `### Woche ${r.week_start} bis ${r.week_end}\\n`;\n    userMessage += `**KI-Bericht:**\\n${r.ai_report}\\n\\n`;\n    userMessage += `**Rohdaten (gekürzt):**\\n\\`\\`\\`json\\n${JSON.stringify(r.raw_data).substring(0, 8000)}\\n\\`\\`\\`\\n\\n`;\n  }\n}\nuserMessage += `\\n---\\n\\n**Aktuelle Frage:** ${event.text}`;\n\n// Claude-Messages (Thread-History + aktuelle Frage)\nconst messages = [];\nfor (const m of threadContext) {\n  messages.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content });\n}\nmessages.push({ role: 'user', content: userMessage });\n\nreturn [{\n  json: {\n    emptyDb: false,\n    systemPrompt,\n    messages,\n    channel: event.channel,\n    thread_ts: event.thread_ts || event.ts,\n    isIm: event.isIm,\n  },\n}];"
+      },
+      "id": "build-prompt",
+      "name": "Prompt bauen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.emptyDb }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-empty-db",
+      "name": "Leere DB?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2220, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4096, system: $json.systemPrompt, messages: $json.messages }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "claude-api",
+      "name": "Claude API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2440, 340],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "Anthropic API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Claude-Antwort + Slack-Ziel für Slack Post zusammenstellen\nconst claudeResponse = $input.first().json;\nconst promptOutput = $('Prompt bauen').item.json;\n\nlet answerText;\nif (claudeResponse.content && claudeResponse.content[0]?.text) {\n  answerText = claudeResponse.content[0].text;\n} else if (claudeResponse.error) {\n  answerText = ':rotating_light: *Claude API Fehler:* ' + (claudeResponse.error.message || JSON.stringify(claudeResponse.error));\n} else {\n  answerText = ':warning: Unerwartete API-Antwort von Claude.';\n}\n\nreturn [{\n  json: {\n    channel: promptOutput.channel,\n    thread_ts: promptOutput.thread_ts,\n    isIm: promptOutput.isIm,\n    text: answerText,\n  },\n}];"
+      },
+      "id": "format-answer",
+      "name": "Antwort formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2660, 340]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SLACK_BOT_TOKEN }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.text }) }}",
+        "options": {}
+      },
+      "id": "slack-post-answer",
+      "name": "Slack Post (Antwort)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2880, 340]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fehlermeldung für unautorisierten User\nconst c = $input.first().json;\nreturn [{\n  json: {\n    channel: c.event.channel,\n    thread_ts: c.event.thread_ts || c.event.ts,\n    isIm: c.event.isIm,\n    text: c.errorMessage,\n  },\n}];"
+      },
+      "id": "format-auth-error",
+      "name": "Whitelist-Fehler formatieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 620]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SLACK_BOT_TOKEN }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.text } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.text }) }}",
+        "options": {}
+      },
+      "id": "slack-post-auth-error",
+      "name": "Slack Post (Whitelist-Fehler)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 620]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SLACK_BOT_TOKEN }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=utf-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.isIm ? { channel: $json.channel, text: $json.errorMessage } : { channel: $json.channel, thread_ts: $json.thread_ts, text: $json.errorMessage }) }}",
+        "options": {}
+      },
+      "id": "slack-post-empty-db",
+      "name": "Slack Post (Leere DB)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2440, 500]
+    }
+  ],
+  "connections": {
+    "Slack Event empfangen": {
+      "main": [[{ "node": "Signatur + Event prüfen", "type": "main", "index": 0 }]]
+    },
+    "Signatur + Event prüfen": {
+      "main": [[{ "node": "Gültig?", "type": "main", "index": 0 }]]
+    },
+    "Gültig?": {
+      "main": [
+        [{ "node": "Routing", "type": "main", "index": 0 }],
+        [{ "node": "401 Unauthorized", "type": "main", "index": 0 }]
+      ]
+    },
+    "Routing": {
+      "main": [
+        [{ "node": "URL Verification Response", "type": "main", "index": 0 }],
+        [{ "node": "Ignore Response", "type": "main", "index": 0 }],
+        [{ "node": "ACK zu Slack", "type": "main", "index": 0 }]
+      ]
+    },
+    "ACK zu Slack": {
+      "main": [[{ "node": "Kontext + Whitelist", "type": "main", "index": 0 }]]
+    },
+    "Kontext + Whitelist": {
+      "main": [[{ "node": "Autorisiert?", "type": "main", "index": 0 }]]
+    },
+    "Autorisiert?": {
+      "main": [
+        [{ "node": "Reports aus DB laden", "type": "main", "index": 0 }],
+        [{ "node": "Whitelist-Fehler formatieren", "type": "main", "index": 0 }]
+      ]
+    },
+    "Whitelist-Fehler formatieren": {
+      "main": [[{ "node": "Slack Post (Whitelist-Fehler)", "type": "main", "index": 0 }]]
+    },
+    "Reports aus DB laden": {
+      "main": [[{ "node": "Prompt bauen", "type": "main", "index": 0 }]]
+    },
+    "Prompt bauen": {
+      "main": [[{ "node": "Leere DB?", "type": "main", "index": 0 }]]
+    },
+    "Leere DB?": {
+      "main": [
+        [{ "node": "Slack Post (Leere DB)", "type": "main", "index": 0 }],
+        [{ "node": "Claude API", "type": "main", "index": 0 }]
+      ]
+    },
+    "Claude API": {
+      "main": [[{ "node": "Antwort formatieren", "type": "main", "index": 0 }]]
+    },
+    "Antwort formatieren": {
+      "main": [[{ "node": "Slack Post (Antwort)", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
