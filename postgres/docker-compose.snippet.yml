@@ -1,0 +1,27 @@
+# Snippet zum Einfügen in die bestehende docker-compose.yml auf dem Hostinger-VPS.
+# Postgres-Container für TT2GO Ads Reports.
+#
+# Wichtig: Kein Port-Publishing — nur im internen Docker-Network erreichbar.
+# n8n erreicht Postgres via Hostname `tt2go-postgres` auf Port 5432.
+
+services:
+  tt2go-postgres:
+    image: postgres:16-alpine
+    container_name: tt2go-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${TT2GO_POSTGRES_DB}
+      POSTGRES_USER: ${TT2GO_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TT2GO_POSTGRES_PASSWORD}
+    volumes:
+      - tt2go-postgres-data:/var/lib/postgresql/data
+    networks:
+      - default                # gleiches Netzwerk wie n8n
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TT2GO_POSTGRES_USER} -d ${TT2GO_POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  tt2go-postgres-data:
