@@ -295,13 +295,59 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 **Kosten pro Report:** ~0,02-0,05 $ (Claude API)
 
+**Format:** Ab 19.04.2026 Mobile-first — max 1500 Zeichen, keine Markdown-Tabellen, Bullet Points mit `•`, Struktur: Headline → KPIs → Was lief gut → Was kritisch → Top 3 Aktionen. Details zu Keywords/Suchbegriffen/QS gehen NICHT in den Hauptbericht, sondern werden per Rückfrage an den Bot (siehe unten) auf Anfrage beantwortet.
+
+## Slack Bot für Rückfragen (eingerichtet 19.04.2026)
+
+**Zweck:** Rückfragen zu Ads-Wochenberichten im Slack-Thread oder per DM mit Zugriff auf historische Reports aus Postgres.
+
+**Architektur:**
+- Postgres-Container `tt2go-postgres` auf Hostinger-VPS (PostgreSQL 16, Docker)
+- Tabelle `ads_reports` (platform, week_start, week_end, raw_data JSONB, ai_report TEXT, created_at)
+- Bestehender Wochenbericht-Workflow schreibt Reports nach Claude-Analyse zusätzlich in Postgres (idempotent via `ON CONFLICT DO UPDATE`)
+- Neuer n8n-Workflow `TT2GO Slack Bot → Rückfragen` empfängt Slack-Events und antwortet
+
+**Trigger:**
+- `@TT2GO Report Bot` im Channel (Bot antwortet im Thread + `reply_broadcast`)
+- DM an Bot (Bot antwortet als flache DM, ohne Thread)
+
+**Ablauf pro Frage:** Signatur-Verifikation (HMAC-SHA256, 5min Replay-Schutz) → Whitelist-Check → Thread-History holen → letzte 8 Reports pro Plattform aus Postgres (UNION ALL) → Claude Sonnet 4.6 (max 4096 Tokens) → Slack chat.postMessage.
+
+**Slack App:** "TT2GO Report Bot" (umbenannt von "TT2GO Google Ads Report")
+- Scopes: `app_mentions:read`, `chat:write`, `channels:history`, `groups:history`, `im:history`, `im:write`, `incoming-webhook`
+- Event Subscriptions: `app_mention`, `message.im`
+- Event URL: `https://n8n.srv1381541.hstgr.cloud/webhook/tt2go-slack-events`
+
+**ENV-Variablen in n8n (docker-compose.yml):**
+- `SLACK_SIGNING_SECRET` — aus Slack App → Basic Information
+- `SLACK_BOT_TOKEN` — Bot User OAuth Token (`xoxb-...`)
+- `SLACK_ALLOWED_USERS` — comma-separated Slack User-IDs (Whitelist)
+- `NODE_FUNCTION_ALLOW_BUILTIN=crypto` — n8n Task-Runner darf `crypto` nutzen (für HMAC)
+- Alle ENV-Vars müssen auch in `N8N_RESTRICT_ENVIRONMENT_VARIABLES` (Whitelist) aufgelistet sein
+
+**Error-Handling:**
+- Postgres down → ":rotating_light: Datenbank gerade nicht erreichbar"
+- Claude API Fehler → Fehlertext im Slack-Post
+- Invalid Signature → HTTP 401
+- Unerlaubter User → ":no_entry: Sorry, dafür bin ich nicht berechtigt"
+- Keine Reports in DB → ":warning: Noch keine Reports"
+
+**Multi-Plattform:** Schema und Bot sind auf Meta Ads vorbereitet. Wenn Meta-Ads-Workflow analog zu Google Ads gebaut wird (schreibt mit `platform='meta_ads'` in dieselbe Tabelle), zieht der Bot Meta-Reports automatisch mit — keine Code-Änderungen im Bot nötig.
+
+**Kosten pro Rückfrage:** ~0,06 $ (Sonnet 4.6 mit 8 Wochen Reports im Kontext)
+
+**Spec + Plan:**
+- `docs/specs/2026-04-19-slack-bot-design.md`
+- `docs/plans/2026-04-19-slack-bot.md`
+
 ## Offene Punkte
 
 - [x] **Google Ads Optimierung (1. Runde)** — Suchbegriffe-Bericht geprüft, neue Keywords ergänzt, keine neuen negativen Keywords nötig
 - [x] **Automatischer KI-Wochenbericht** — Google Ads Script → n8n → Claude → Slack, end-to-end getestet
-- [ ] **Slack Bot: Rückfragen zum Report** — Option B (Thread-Antworten via @mention), braucht Slack Bot mit Event Subscriptions + zweiten n8n Webhook + Report-Zwischenspeicherung
+- [x] **Slack Bot: Rückfragen zum Report** — Event Subscriptions + Postgres-Archiv + @mention/DM-Antworten, live seit 19.04.2026
 - [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren wenn 30-50 Conversions erreicht, Neue-Standorte-Radius ggf. auf 35 km erhöhen
 - [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue Kampagnen aufsetzen. Pixel läuft, Conversions sind bereit. Budget: 50 €/Tag. 18 Video-Ads auf Frame.io vorhanden.
+- [ ] **Meta Ads Wochenbericht-Workflow** — analog zu Google Ads aufbauen. Meta Ads Script → n8n → Claude → Postgres (`platform='meta_ads'`) → Slack. Bot ist bereits multi-plattform vorbereitet.
 - [x] **GA4 eingerichtet** — Property `289955115`, Mess-ID `G-TJLDKKHJJT`, via GTM Tag "GA4 - Konfiguration" (Version 3), Echtzeit-Daten bestätigt
 - [ ] **Enhanced Conversions** für Google Ads aktivieren (Zukunftsthema)
 - [ ] **Favicon-Einbindung** — STX-Truck-Icons liegen im `_archiv/favicons/` bereit
