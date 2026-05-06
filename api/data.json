@@ -342,12 +342,12 @@
     },
     {
       "id": "6995ae3a23d2b03af2696956",
-      "name": "53501 Grafschaft Birresdorf - Gut Bentgerhof",
-      "city": "Grafschaft Birresdorf",
+      "name": "53501 Grafschaft Birresdorf - Gut Bentgerhof - Bentgerhof 1",
+      "city": "Grafschaft",
       "postcode": "53501",
-      "street": "Bentgerhof 1",
-      "lat": 50.595669,
-      "lng": 7.1591653,
+      "street": "Berkumer Straße 100",
+      "lat": 50.5930791,
+      "lng": 7.1426196,
       "comment": ""
     },
     {
@@ -481,5 +481,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-05-05T04:00:00.604Z"
+  "updated": "2026-05-06T04:00:00.781Z"
 }
