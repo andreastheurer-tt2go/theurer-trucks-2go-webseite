@@ -321,16 +321,6 @@
       "comment": ""
     },
     {
-      "id": "65818c3dbbf234a6bf2e6e68",
-      "name": "49393 Lohne - Autoglas Middendorf",
-      "city": "Lohne",
-      "postcode": "49393",
-      "street": "Langwegerstraße 3",
-      "lat": 52.65867,
-      "lng": 8.18955,
-      "comment": ""
-    },
-    {
       "id": "69ba6562558e044712280fd6",
       "name": "49439 Steinfeld (Oldenburg) - Pferdeklinik Mühlen",
       "city": "Steinfeld (Oldenburg)",
@@ -481,5 +471,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-05T04:00:00.557Z"
+  "updated": "2026-06-06T04:00:00.876Z"
 }
