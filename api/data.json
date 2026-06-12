@@ -171,6 +171,16 @@
       "comment": ""
     },
     {
+      "id": "6a2a89b1b4941c3e141009c2",
+      "name": "22946 Grande - Pferdesport Granderheide e.V.",
+      "city": "Grande",
+      "postcode": "22946",
+      "street": "Rausdorfer Straße 16",
+      "lat": 53.5914006,
+      "lng": 10.366223,
+      "comment": ""
+    },
+    {
       "id": "654e2279fa0131e621215912",
       "name": "23556 Lübeck - Hans-Jürgen Steffen GmbH",
       "city": "Lübeck",
@@ -471,5 +481,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-11T04:00:00.633Z"
+  "updated": "2026-06-12T04:00:01.316Z"
 }
