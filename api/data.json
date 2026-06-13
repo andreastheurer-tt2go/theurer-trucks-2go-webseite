@@ -71,16 +71,6 @@
       "comment": ""
     },
     {
-      "id": "6995cf6e41a524f218cf1baa",
-      "name": "14778 Beetzsee - Pferdeklinik Havelland",
-      "city": "Beetzsee",
-      "postcode": "14778",
-      "street": "Hohenferchesarer Straße 49",
-      "lat": 52.4707199,
-      "lng": 12.5312232,
-      "comment": ""
-    },
-    {
       "id": "684951735b23fd667be187aa",
       "name": "16356 Ahrensfelde - Reitanlage Hermannshof (Berlin)",
       "city": "Ahrensfelde",
@@ -481,5 +471,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-12T04:00:01.316Z"
+  "updated": "2026-06-13T04:00:00.784Z"
 }
