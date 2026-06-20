@@ -231,6 +231,16 @@
       "comment": ""
     },
     {
+      "id": "6a35218b45f41ab113b4d98f",
+      "name": "29646 Bispingen - Eichenhof Pferdesport",
+      "city": "Bispingen",
+      "postcode": "29646",
+      "street": "Seestraße 42",
+      "lat": 53.1052019,
+      "lng": 9.969860500000001,
+      "comment": ""
+    },
+    {
       "id": "6421b1a0610cc1acc491f633",
       "name": "30916 Isernhagen - Reiterverein Isernhagen",
       "city": "Isernhagen",
@@ -269,6 +279,16 @@
       "lat": 52.07008,
       "lng": 8.48344,
       "comment": "Das Hoftor ist zwischen 18/19 Uhr und 7 Uhr morgens geschlossen. \nZum öffnen/schließen des Tors bitte den Code 25353 eingeben und mit den Doppelpunkten bestätigen.\nEin langer Piepton bestätigt die korrekte \nEingabe und das Tor setzt sich in Bewegung"
+    },
+    {
+      "id": "6a352ca3b7a442b20f1b69a3",
+      "name": "37133 Friedland - Katharina Oestreich",
+      "city": "Friedland",
+      "postcode": "37133",
+      "street": "Heimkehrerstraße 10",
+      "lat": 51.4212403,
+      "lng": 9.9129551,
+      "comment": ""
     },
     {
       "id": "635bd15f323dfd37f92fa3f4",
@@ -471,5 +491,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-19T04:00:00.610Z"
+  "updated": "2026-06-20T04:00:00.758Z"
 }
