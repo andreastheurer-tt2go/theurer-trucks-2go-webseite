@@ -282,13 +282,13 @@
     },
     {
       "id": "6a352ca3b7a442b20f1b69a3",
-      "name": "37133 Friedland - Katharina Oestreich",
+      "name": "37133 Friedland - Sportpferdetherapie Katharina Oestreich",
       "city": "Friedland",
       "postcode": "37133",
       "street": "Heimkehrerstraße 10",
       "lat": 51.4212403,
       "lng": 9.9129551,
-      "comment": ""
+      "comment": "Fahrzeug befindet sich auf dem Hinterhof"
     },
     {
       "id": "635bd15f323dfd37f92fa3f4",
@@ -491,5 +491,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-24T04:00:00.627Z"
+  "updated": "2026-06-25T04:00:00.953Z"
 }
