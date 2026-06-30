@@ -1,13 +1,13 @@
 {
   "stations": [
     {
-      "id": "69b3eef5761816c3fe833909",
-      "name": "01619 Zeithain - Reiterhof Kurze",
-      "city": "Zeithain",
-      "postcode": "01619",
-      "street": "Lessaer Straße 47",
-      "lat": 51.3204851,
-      "lng": 13.3047393,
+      "id": "6a426c592adc182c45942de0",
+      "name": "01109 Dresden - Glöckner Automobile Dresden Nord",
+      "city": "Dresden",
+      "postcode": "01109",
+      "street": "Grenzstraße 7",
+      "lat": 51.1270243,
+      "lng": 13.786817,
       "comment": ""
     },
     {
@@ -148,16 +148,6 @@
       "street": "Uetersener Weg  100",
       "lat": 53.60649,
       "lng": 9.79964,
-      "comment": ""
-    },
-    {
-      "id": "67a6311e97594f7a6137a043",
-      "name": "22889 Tangstedt - Reitanlage Gut Tangstedt",
-      "city": "Tangstedt",
-      "postcode": "22889",
-      "street": "Beekmoorweg 13",
-      "lat": 53.7357977,
-      "lng": 10.0802553,
       "comment": ""
     },
     {
@@ -491,5 +481,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-06-29T04:00:00.991Z"
+  "updated": "2026-06-30T04:00:00.640Z"
 }
