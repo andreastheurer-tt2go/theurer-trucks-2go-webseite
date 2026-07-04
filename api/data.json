@@ -421,6 +421,16 @@
       "comment": ""
     },
     {
+      "id": "6a476b0d33f4ee81cb3037bb",
+      "name": "71686 - Remseck am Neckar",
+      "city": "Remseck am Neckar",
+      "postcode": "71686",
+      "street": "Markgröninger Weg 7",
+      "lat": 48.8681415,
+      "lng": 9.2391604,
+      "comment": ""
+    },
+    {
       "id": "64cb8b60b0468a201288e444",
       "name": "73235 Weilheim a.d. Teck - Reitverein Weilheim",
       "city": "Weilheim a.d. Teck",
@@ -481,5 +491,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-07-03T04:00:00.718Z"
+  "updated": "2026-07-04T04:00:00.657Z"
 }
