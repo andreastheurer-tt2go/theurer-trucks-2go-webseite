@@ -391,6 +391,16 @@
       "comment": "Das Tor ist jederzeit offen und kann manuell aufgeschoben werden. "
     },
     {
+      "id": "6a4bbb67b40b030353695982",
+      "name": "65719 Hofheim - Reitverein Wallau und Umgebung e.V.",
+      "city": "Hofheim am Taunus",
+      "postcode": "65719",
+      "street": "Zollhof 4",
+      "lat": 50.0951493,
+      "lng": 8.4117234,
+      "comment": ""
+    },
+    {
       "id": "627d02b48b871538fb797a0e",
       "name": "65795 Hattersheim am Main - Reitanlage Georg Weitzel",
       "city": "Hattersheim am Main",
@@ -491,5 +501,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-07-06T04:00:00.754Z"
+  "updated": "2026-07-07T04:00:00.874Z"
 }
