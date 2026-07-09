@@ -402,12 +402,12 @@
     },
     {
       "id": "6a4bbb67b40b030353695982",
-      "name": "65719 Hofheim - Reitverein Wallau und Umgebung e.V.",
+      "name": "65719 Hofheim - Fohlenhof - Team Baum",
       "city": "Hofheim am Taunus",
       "postcode": "65719",
       "street": "Zollhof 4",
-      "lat": 50.0951493,
-      "lng": 8.4117234,
+      "lat": 50.079861,
+      "lng": 8.387905,
       "comment": ""
     },
     {
@@ -511,5 +511,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-07-08T04:00:01.198Z"
+  "updated": "2026-07-09T04:00:00.917Z"
 }
