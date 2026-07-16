@@ -109,7 +109,7 @@ TT2GO_Neue_WEBSEITE/
 | `--primary-dark` | `#006fa8` | Hover-States |
 | `--dark` | `#0f1419` | Dunkle Sektionen |
 
-## Aktuelle Preise (Stand 15.01.2024)
+## Aktuelle Preise (Stand 15.07.2026)
 
 | Tarif | Preis (brutto) | Freikilometer |
 |---|---|---|
@@ -123,7 +123,7 @@ TT2GO_Neue_WEBSEITE/
 | Mehrkilometer | 0,46 €/km | — |
 
 Dieselkosten trägt der Mieter — Fahrzeug muss vollgetankt zurückgebracht werden.
-Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/view`
+Preisblatt: `pdf/tt2go-preisblatt.pdf` (im Repo, via GitHub Pages ausgeliefert — bei Preisänderung Datei ersetzen, Dateiname bleibt stabil). Der alte Google-Drive-Link (`1KmHVFORjlvv-...`) wird nicht mehr verwendet.
 
 ## Inhaltliche Regeln — IMMER EINHALTEN
 
@@ -281,6 +281,26 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 
 **Nächste Analyse:** ab ~02.05.2026 (nach 30-50 Conversions ggf. Ziel-CPA evaluieren)
 
+## Google Ads Zweite Analyse (26.04.2026, Woche 2: 19.-25.04.)
+
+**Performance:** 13 Registrierungen für 536 € = **41,23 €/Registrierung** — Verschlechterung gegenüber Woche 1 (18,37 €), Ursache aber nicht Kampagnen-Qualität, sondern **massive Geräte-Lücke**:
+
+| Gerät | Klicks | Conv. | €/Conv. | Conv.-Rate |
+|---|---|---|---|---|
+| **Desktop** (beide Kampagnen) | 162 | 9 | **~12 €** | **5,5 %** 🏆 |
+| **Mobile** (beide Kampagnen) | 853 | 4 | **~106 €** | **0,5 %** ⚠️ |
+
+Mobile bringt 84 % der Klicks, aber nur 31 % der Conversions — Mobile-CPA ist ~9× höher als Desktop.
+
+**Ursachen-Diagnose (durchgeführt 26.04.):**
+1. fleetster zeigt Mobile-Nutzern eine **App-Download-Zwischenseite** ("Laden Sie unsere App herunter") mit zwei dominanten Buttons (App Store / Google Play) und kleinerem "Trotzdem fortfahren"-Button.
+2. fleetster-App leitet nach erfolgreicher Registrierung **NICHT** auf `registrierung-erfolgreich.html` zurück (live getestet) → Conversion wird nicht getrackt.
+3. Resultat: Mobile-Conversions sind **real niedriger UND zusätzlich untergetrackt** — wir wissen nicht, wie viele App-Registrierungen tatsächlich passieren.
+
+**Maßnahmen:**
+- Mail an fleetster raus (26.04.) mit drei Anfragen: (1) App-Download-Zwischenseite abschalten/entschärfen, (2) App-zu-Web-Redirect nach Registrierung, (3) Webhook bei Registrierung mit gclid + Email-Pre-Fill via URL-Parameter.
+- Plan B bei Funkstille: Eigenes Tracking-Setup über Postgres + n8n + fleetster-API-Match + Google Ads Offline Conversion Upload (siehe "Offene Punkte").
+
 ## Automatisierter KI-Wochenbericht (eingerichtet 18.04.2026)
 
 **Ablauf:** Google Ads Script (Sonntag 09:00) → n8n Webhook → Claude API (Sonnet 4.6) → Slack
@@ -346,6 +366,7 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] **Google Ads Optimierung (1. Runde)** — Suchbegriffe-Bericht geprüft, neue Keywords ergänzt, keine neuen negativen Keywords nötig
 - [x] **Automatischer KI-Wochenbericht** — Google Ads Script → n8n → Claude → Slack, end-to-end getestet
 - [x] **Slack Bot: Rückfragen zum Report** — Event Subscriptions + Postgres-Archiv + @mention/DM-Antworten, live seit 19.04.2026
+- [ ] **Mobile-Tracking-Lücke fleetster (offen seit 26.04.2026)** — Diagnose Woche 2: Mobile Conv.-Rate 0,5 % vs. Desktop 5,5 %, Mobile-CPA ~106 € vs. Desktop ~12 €. Ursache: fleetster zeigt Mobile-Nutzern App-Download-Zwischenseite, App leitet nach Registrierung NICHT auf `registrierung-erfolgreich.html` zurück → keine Conversion getrackt. **Status:** Mail an fleetster raus (26.04.), Antwort abwarten. Anfragen: (1) App-zu-Web-Redirect nach Registrierung, (2) Webhook bei neuer Registrierung mit gclid, (3) Email-Pre-Fill via URL-Parameter. **Plan B falls fleetster nicht spielt:** Eigenes Tracking-Setup bauen — Email-Capture auf `weiterleitung-registrierung.html` + Postgres + n8n-Cron + fleetster-API-Match + Google Ads Offline Conversion Upload (alternativ probabilistisches Matching via gclid+Timestamp+IP ohne Email-Eingabe). Sofortmaßnahme prüfen: Lead-Conversion in Google Ads zur Primär-Conversion machen (zuverlässige Metrik für Algorithmus).
 - [ ] **Google Ads Optimierung (2. Runde, ab ~02.05.)** — Suchbegriffe erneut prüfen, Ziel-CPA evaluieren wenn 30-50 Conversions erreicht, Neue-Standorte-Radius ggf. auf 35 km erhöhen
 - [ ] **Meta Ads einrichten** — Alte MKO-Kampagnen pausieren, neue Kampagnen aufsetzen. Pixel läuft, Conversions sind bereit. Budget: 50 €/Tag. 18 Video-Ads auf Frame.io vorhanden.
 - [ ] **Meta Ads Wochenbericht-Workflow** — analog zu Google Ads aufbauen. Meta Ads Script → n8n → Claude → Postgres (`platform='meta_ads'`) → Slack. Bot ist bereits multi-plattform vorbereitet.
@@ -362,5 +383,5 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - YouTube: `https://www.youtube.com/@theurertrucks`
 - App Store: `https://apps.apple.com/us/app/theurertrucks-2go/id1589088586`
 - Google Play: `https://play.google.com/store/apps/details?id=theurertrucks2go.fleetster.de`
-- Preisblatt: `https://drive.google.com/file/d/1KmHVFORjlvv-oRDJltwKop7fPJp1_b5k/view`
+- Preisblatt: `https://theurer-trucks-2go.de/pdf/tt2go-preisblatt.pdf` (liegt im Repo unter `pdf/tt2go-preisblatt.pdf`)
 - AGB PDF: `https://drive.google.com/file/d/129aQ5Sidqh6mkAiQgQuYl9M7R8Zg6HaI/view`
