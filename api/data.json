@@ -471,6 +471,16 @@
       "comment": ""
     },
     {
+      "id": "6a58c3993836a45f0933c832",
+      "name": "777463 Neuried-Altenheim - Reitanlage Neuried",
+      "city": "Neuried",
+      "postcode": "77743",
+      "street": "Viehweiderweg 8",
+      "lat": 48.4766592,
+      "lng": 7.798016899999999,
+      "comment": ""
+    },
+    {
       "id": "655b6ba8f192079968340de2",
       "name": "78667 Villingendorf - Reitanlage Güss",
       "city": "Villingendorf",
@@ -511,5 +521,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-07-16T04:00:00.686Z"
+  "updated": "2026-07-17T04:00:00.763Z"
 }
