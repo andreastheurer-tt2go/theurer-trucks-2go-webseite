@@ -2459,9 +2459,9 @@
             <p class="section-subtitle">Unsere STX Pferdetransporter stehen auf Reitstallparkplätzen deutschlandweit bereit.</p>
         </div>
 
-        <!-- PLZ-Suche -->
+        <!-- PLZ- und Ortssuche -->
         <div class="locations__search reveal">
-            <input type="text" class="form-input" id="plzInput" placeholder="Postleitzahl eingeben…" maxlength="5" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
+            <input type="text" class="form-input" id="plzInput" placeholder="PLZ oder Ort eingeben…" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}">
             <button class="btn btn--primary" onclick="searchLocation()">
                 <i class="fas fa-magnifying-glass"></i> Suchen
             </button>
@@ -3850,16 +3850,26 @@
             document.getElementById('verfuegbarkeit').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // PLZ-Suche mit Nominatim Geocoding (OpenStreetMap)
+        // PLZ- und Ortssuche mit Nominatim Geocoding (OpenStreetMap)
         function searchLocation() {
-            const plz = document.getElementById('plzInput')?.value?.trim();
-            if (!plz || plz.length !== 5 || !/^\d{5}$/.test(plz)) {
+            const query = document.getElementById('plzInput')?.value?.trim();
+            if (!query || query.length < 2) {
+                alert('Bitte gib eine Postleitzahl oder einen Ort ein.');
+                return;
+            }
+            // Reine Ziffernfolge = PLZ-Eingabe → muss 5-stellig sein
+            if (/^\d+$/.test(query) && !/^\d{5}$/.test(query)) {
                 alert('Bitte gib eine gültige 5-stellige Postleitzahl ein.');
                 return;
             }
             if (!leafletMap) return;
 
-            fetch('https://nominatim.openstreetmap.org/search?postalcode=' + plz + '&country=DE&format=json&limit=1')
+            // PLZ → gezielte Postleitzahl-Suche, sonst Freitext-Ortssuche (nur Deutschland)
+            var searchUrl = /^\d{5}$/.test(query)
+                ? 'https://nominatim.openstreetmap.org/search?postalcode=' + encodeURIComponent(query) + '&country=DE&format=json&limit=1'
+                : 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(query) + '&countrycodes=de&format=json&limit=1';
+
+            fetch(searchUrl)
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
                     if (data.length > 0) {
@@ -3881,7 +3891,7 @@
                         });
                         if (nearest) nearest.openPopup();
                     } else {
-                        alert('PLZ nicht gefunden. Bitte prüfe deine Eingabe.');
+                        alert('Ort nicht gefunden. Bitte prüfe deine Eingabe.');
                     }
                 })
                 .catch(function() {
