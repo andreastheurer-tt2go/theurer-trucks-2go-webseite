@@ -464,3 +464,35 @@ Vollautomatische Pipeline: Google Ads Script → n8n Webhook → Claude API → 
 - [ ] **GA4 Key Events definieren**
 - [ ] **Enhanced Conversions** (Zukunftsthema)
 - [ ] **Favicon-Einbindung**
+
+## Session 8 — 23.07.2026
+
+### Neues Preisblatt eingebunden (Stand 15.07.2026)
+
+- Neues Preisblatt-PDF als `pdf/tt2go-preisblatt.pdf` ins Repo gelegt — wird via GitHub Pages über die eigene Domain ausgeliefert (`https://theurer-trucks-2go.de/pdf/tt2go-preisblatt.pdf`)
+- Dateiname bewusst ohne Datum: Bei künftigen Preisänderungen nur die Datei ersetzen, alle Links bleiben stabil
+- Link in `index.html` (Preise-Sektion, Button "Vollständiges Preisblatt ansehen") von Google Drive auf relativen Pfad umgestellt
+- Vorteil: professioneller (kein Drive-Viewer), GA4 trackt den Download automatisch als Datei-Download (Enhanced Measurement)
+- `.gitignore`-Falle behoben: `*.pdf` war global ausgeschlossen → Ausnahme `!pdf/tt2go-preisblatt.pdf` ergänzt
+- Preise im neuen Preisblatt identisch mit der Webseite (165–860 €, 0,46 €/km) — keine Anpassung der Tarife nötig
+- Hinweis: Alter Google-Drive-Link kursiert ggf. noch extern (E-Mails, fleetster) — dort Datei in Drive durch neue Version ersetzen
+
+### FAQ: Selbstbeteiligung korrigiert
+
+- Vollkasko-Selbstbeteiligung von 1.000 € auf **2.500 €** korrigiert (gemäß Preisblatt 15.07.2026), Teilkasko bleibt 150 €
+- An beiden Stellen: sichtbare FAQ-Antwort "Wie sind die Fahrzeuge versichert?" + Schema.org-FAQPage-JSON-LD im `<head>`
+- AGB nennen keine konkreten Beträge (verweisen auf Preisliste) — dort keine Änderung nötig
+
+### Standortsuche: Ortsnamen zusätzlich zu PLZ
+
+- Eingabefeld: `maxlength="5"` + `inputmode="numeric"` entfernt, Placeholder jetzt "PLZ oder Ort eingeben…"
+- `searchLocation()`: 5-stellige Ziffernfolge → gezielte PLZ-Suche (`postalcode=`), alles andere → Freitext-Ortssuche (`q=` mit `countrycodes=de`)
+- Unvollständige Ziffernfolgen (z. B. "123") bekommen weiterhin eine Validierungs-Fehlermeldung
+- Getestet: "München", "Leezen", "23816", "123" — Karte zoomt, nächster Standort-Marker öffnet Popup
+- Mehrdeutige Ortsnamen: Nominatim nimmt den bestplatzierten Treffer; präzisieren via "Ort Bundesland" möglich
+
+### Commits
+
+- `479333a` feat: Preisblatt als PDF im Repo statt Google Drive
+- `761c6f4` fix: Selbstbeteiligung Vollkasko in FAQ auf 2.500 € korrigiert
+- `b08c297` feat: Standortsuche akzeptiert jetzt auch Ortsnamen (nicht nur PLZ)

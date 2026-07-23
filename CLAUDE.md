@@ -76,7 +76,7 @@ TT2GO_Neue_WEBSEITE/
 6. **Zahlen-Banner** — 63 Fahrzeuge | 51 Standorte | 15.677 Nutzer (blauer Gradient)
 7. **Trustpilot-Bewertungen** — Grid-Widget (4 Spalten Desktop, Höhe begrenzt auf Mobile)
 8. **Preise & Tarife** — 3 Karten + Fahrt-Rechner (Gesamtstrecke) + Preisblatt-Link
-9. **Standortkarte** — Leaflet/OpenStreetMap, 57 echte Standorte aus Fleetster-API, PLZ-Suche mit Nominatim, Popup → Verfügbarkeitsprüfer mit Vorauswahl
+9. **Standortkarte** — Leaflet/OpenStreetMap, 57 echte Standorte aus Fleetster-API, PLZ-/Ortssuche mit Nominatim (5-stellige Ziffernfolge = PLZ, sonst Freitext auf DE begrenzt), Popup → Verfügbarkeitsprüfer mit Vorauswahl
 10. **So geht's** — 5 Schritte + Erklärvideo (Vimeo 1019195471) eingebettet
 11. **Fahrzeug-Detail** — Bildergalerie (11 STX-Profifotos, 6 Spalten Desktop, Auto-Rotate) + 5 Specs
 12. **FAQ** — 31 Fragen in 5 Kategorien mit Tabs, Schema.org FAQPage JSON-LD (8 Fragen)
@@ -245,6 +245,12 @@ Zahlen werden manuell gepflegt (API-Abruf für Users/Vehicles zu langsam):
 - [x] Negative Keywords eingetragen (Reiturlaub-Begriffe, 9 Stück, kampagnenweit)
 - [x] Alte Kampagne `DE - TT2GO-Suche Neue Conversion 03/25` pausiert (nicht gelöscht, Daten + Screenshots unter `Google_Ads/Kampagne alt/` gesichert)
 - [x] Kampagnen-Blueprint erstellt: `Google_Ads/Kampagnen-Blueprint.md`
+
+## Erledigte Punkte (Session 8 — 23.07.2026)
+
+- [x] **Neues Preisblatt (Stand 15.07.2026) eingebunden** — PDF liegt jetzt im Repo unter `pdf/tt2go-preisblatt.pdf` (Dateiname ohne Datum, bei Änderung nur ersetzen), Link in `index.html` von Google Drive auf eigene Domain umgestellt, `.gitignore`-Ausnahme für das PDF ergänzt (`*.pdf` war global ausgeschlossen). GA4 trackt den Download jetzt automatisch.
+- [x] **FAQ Selbstbeteiligung korrigiert** — Vollkasko 2.500 € (vorher 1.000 €), Teilkasko 150 €; sichtbare FAQ + Schema.org-JSON-LD
+- [x] **Standortsuche auf Ortsnamen erweitert** — `searchLocation()` erkennt PLZ (5 Ziffern) vs. Freitext; Nominatim-Ortssuche auf DE begrenzt
 
 ## Google Ads Kampagnen (aktiv)
 

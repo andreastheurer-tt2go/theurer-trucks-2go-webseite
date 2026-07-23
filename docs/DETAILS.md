@@ -171,7 +171,7 @@ Der Fahrt-Rechner auf der Webseite berechnet:
 | `checkAvailability()` | Verfügbarkeits-Stub mit Loading-Spinner |
 | `switchImage()` / `startGalleryAutoplay()` | Fahrzeug-Bildergalerie, 5s Auto-Rotate |
 | `toggleFaq()` | FAQ-Akkordeon (nur eins gleichzeitig offen) |
-| `searchLocation()` | PLZ → Nominatim Geocoding → Karte zoomt + nächster Marker |
+| `searchLocation()` | PLZ oder Ortsname → Nominatim Geocoding → Karte zoomt + nächster Marker |
 | `selectTripDay()` / `updateTripCalc()` | Fahrt-Rechner |
 | Counter-Animation | IntersectionObserver, Zahlen zählen hoch |
 | Hotspot Touch-Support | Tap öffnet/schließt Tooltips (falls reaktiviert) |
