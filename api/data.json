@@ -8,7 +8,7 @@
       "street": "Grenzstraße 7",
       "lat": 51.1270243,
       "lng": 13.786817,
-      "comment": ""
+      "comment": "Privatfahrzeuge sind bitte auf dem Parkplatz schräg gegenüber, Grenzstraße 32, abzustellen."
     },
     {
       "id": "67bdf322908585dbbf33e0dd",
@@ -521,5 +521,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-07-22T04:00:00.764Z"
+  "updated": "2026-07-23T04:00:00.832Z"
 }
