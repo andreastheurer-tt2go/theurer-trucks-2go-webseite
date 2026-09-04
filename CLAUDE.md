@@ -4,7 +4,7 @@ Projektanleitung für Claude Code — TheurerTrucks 2GO Neue Webseite.
 
 ## Projektübersicht
 
-Statischer One-Pager für **TheurerTrucks 2GO** — Car-Sharing für Pferdetransporter. Die Seite ist ein **Conversion-Funnel**, der Besucher zur Registrierung im fleetster-Carsharing-System führt. Buchungsplattform: `https://theurer-trucks-2go.fleetster.de`. Firma: TheurerTrucks Renting GmbH, Hamburger Str. 65, 23816 Leezen.
+Statischer One-Pager für **TheurerTrucks 2GO** — Car-Sharing für Pferdetransporter. Die Seite ist ein **Conversion-Funnel**, der Besucher zur Registrierung im fleetster-Carsharing-System führt. Buchungsplattform: `https://theurer-trucks-2go.fleetster.de`. **Registrierungs-URL (Ziel von `weiterleitung-registrierung.html`, seit 04.09.2026):** `https://theurer-trucks-2go.fleetster.de/#/home/userregistration`. Firma: TheurerTrucks Renting GmbH, Hamburger Str. 65, 23816 Leezen.
 
 **Geschäftsmodell:** Einziger Carsharing-Anbieter für Pferdetransporter in Deutschland. Nur EIN Fahrzeugtyp (STX Pferdetransporter auf Renault Master Basis, unter 3,5t, Führerschein Klasse B). Fahrzeuge stehen an Reitstall-Parkplätzen deutschlandweit.
 
@@ -146,7 +146,7 @@ Preisblatt: `pdf/tt2go-preisblatt.pdf` (im Repo, via GitHub Pages ausgeliefert �
 - **Trustpilot Hero:** Statische Sterne (Glasmorphismus-Pill), klickbar → scrollt zu Bewertungen
 - **Trustpilot Bewertungen:** Grid-Widget (Template `539adbd6dec7e10e686debee`, Business `6295331e310b02c5d3124dd4`)
 - **CTA-Events:** Jeder CTA feuert `dataLayer.push({'event':'cta_click','cta_location':'...'})` mit eindeutigem Label
-- **Conversion-Funnel:** Alle CTAs → `weiterleitung-registrierung.html` (GTM `generate_lead`) → fleetster → `registrierung-erfolgreich.html` (GTM `sign_up`)
+- **Conversion-Funnel:** Alle CTAs → `weiterleitung-registrierung.html` (GTM `generate_lead`) → fleetster Registrierung (`/#/home/userregistration`) → `registrierung-erfolgreich.html` (GTM `sign_up`)
 
 ### GTM Trigger (Seitenaufruf-basiert)
 
@@ -383,6 +383,7 @@ Mobile bringt 84 % der Klicks, aber nur 31 % der Conversions — Mobile-CPA ist 
 ## Externe Links
 
 - Buchungsplattform: `https://theurer-trucks-2go.fleetster.de`
+- Registrierung direkt: `https://theurer-trucks-2go.fleetster.de/#/home/userregistration`
 - GitHub Repo: `https://github.com/andreastheurer-tt2go/theurer-trucks-2go-webseite`
 - Facebook: `https://www.facebook.com/theurertrucks2go`
 - Instagram: `https://www.instagram.com/theurer_trucks_2go/`
