@@ -271,16 +271,6 @@
       "comment": ""
     },
     {
-      "id": "66fbae56d241bee1017dead1",
-      "name": "33739 Bielefeld - Gestüt Wahl & Co - zusätzliche Informationen beachten!",
-      "city": "Bielefeld",
-      "postcode": "33739",
-      "street": "Hageresch 80",
-      "lat": 52.07008,
-      "lng": 8.48344,
-      "comment": "Das Hoftor ist zwischen 18/19 Uhr und 7 Uhr morgens geschlossen. \nZum öffnen/schließen des Tors bitte den Code 25353 eingeben und mit den Doppelpunkten bestätigen.\nEin langer Piepton bestätigt die korrekte \nEingabe und das Tor setzt sich in Bewegung"
-    },
-    {
       "id": "6a352ca3b7a442b20f1b69a3",
       "name": "37133 Friedland - Sportpferdetherapie Katharina Oestreich",
       "city": "Friedland",
@@ -521,5 +511,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-09-10T04:00:00.720Z"
+  "updated": "2026-09-11T04:00:01.801Z"
 }
