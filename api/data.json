@@ -451,14 +451,14 @@
       "comment": ""
     },
     {
-      "id": "69c3b02b493cf266d50ced6f",
-      "name": "73642 Welzheim - EquiZentrum",
-      "city": "Welzheim",
-      "postcode": "73642",
-      "street": "Obere Bausche 1",
-      "lat": 48.8586244,
-      "lng": 9.601808799999999,
-      "comment": ""
+      "id": "6aa8f12852827b2a061aa7fa",
+      "name": "73466 Lauchheim - Am Kalvarienberg",
+      "city": "Lauchheim",
+      "postcode": "73466",
+      "street": "Am Kalvarienberg 34",
+      "lat": 48.8760591,
+      "lng": 10.2569976,
+      "comment": "Privater PKW kann auf dem öffentlichen Parkplatz gegenüber kostenfrei abgestellt werden"
     },
     {
       "id": "6a58c3993836a45f0933c832",
@@ -509,7 +509,17 @@
       "lat": 48.21067,
       "lng": 11.43193,
       "comment": ""
+    },
+    {
+      "id": "6662eb3f336a73387ebe297a",
+      "name": "Gut Ringelsbruch",
+      "city": "Paderborn",
+      "postcode": "33106",
+      "street": "Ringelsbruch 1-9",
+      "lat": 51.70463,
+      "lng": 8.68457,
+      "comment": ""
     }
   ],
-  "updated": "2026-09-15T04:00:00.726Z"
+  "updated": "2026-09-16T04:00:00.906Z"
 }
