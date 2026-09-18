@@ -341,6 +341,16 @@
       "comment": ""
     },
     {
+      "id": "6aabb1732f8488edf81e7c68",
+      "name": "52249 Eschweiler - Reitstall Leonards",
+      "city": "Eschweiler",
+      "postcode": "52249",
+      "street": "Grünstraße 119B",
+      "lat": 50.83950549999999,
+      "lng": 6.285467799999999,
+      "comment": ""
+    },
+    {
       "id": "6995ae3a23d2b03af2696956",
       "name": "53501 Grafschaft Birresdorf - Gut Bentgerhof - Bentgerhof 1",
       "city": "Grafschaft",
@@ -521,5 +531,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-09-17T04:00:01.037Z"
+  "updated": "2026-09-18T04:00:00.674Z"
 }
