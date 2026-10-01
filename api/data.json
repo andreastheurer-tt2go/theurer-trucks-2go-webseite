@@ -81,16 +81,6 @@
       "comment": ""
     },
     {
-      "id": "69c27ba816e6c6dd98590764",
-      "name": "18279 Lalendorf - Agrarhof-Köper",
-      "city": "Lalendorf",
-      "postcode": "18279",
-      "street": "Im Wiesengrund 3",
-      "lat": 53.7606479,
-      "lng": 12.3765612,
-      "comment": ""
-    },
-    {
       "id": "66cc7e67bceec3df9b254465",
       "name": "21079 Hamburg - Reitsportanlage Soe Oertzen",
       "city": "Hamburg",
@@ -531,5 +521,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-09-30T04:00:00.776Z"
+  "updated": "2026-10-01T04:00:01.014Z"
 }
