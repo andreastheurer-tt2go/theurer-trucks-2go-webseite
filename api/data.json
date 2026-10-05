@@ -78,7 +78,7 @@
       "street": "Lindenberger Str. 29",
       "lat": 52.5851394,
       "lng": 13.5625496,
-      "comment": ""
+      "comment": "Code für Tor 1509"
     },
     {
       "id": "66cc7e67bceec3df9b254465",
@@ -521,5 +521,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-10-04T04:00:00.802Z"
+  "updated": "2026-10-05T04:00:00.947Z"
 }
