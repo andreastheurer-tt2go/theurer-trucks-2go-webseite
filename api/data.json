@@ -261,6 +261,16 @@
       "comment": ""
     },
     {
+      "id": "6662eb3f336a73387ebe297a",
+      "name": "33106 Paderborn - Gut Ringelsbruch",
+      "city": "Paderborn",
+      "postcode": "33106",
+      "street": "Ringelsbruch 1-9",
+      "lat": 51.70463,
+      "lng": 8.68457,
+      "comment": ""
+    },
+    {
       "id": "6a352ca3b7a442b20f1b69a3",
       "name": "37133 Friedland - Sportpferdetherapie Katharina Oestreich",
       "city": "Friedland",
@@ -509,17 +519,7 @@
       "lat": 48.21067,
       "lng": 11.43193,
       "comment": ""
-    },
-    {
-      "id": "6662eb3f336a73387ebe297a",
-      "name": "Gut Ringelsbruch",
-      "city": "Paderborn",
-      "postcode": "33106",
-      "street": "Ringelsbruch 1-9",
-      "lat": 51.70463,
-      "lng": 8.68457,
-      "comment": ""
     }
   ],
-  "updated": "2026-10-05T04:00:00.947Z"
+  "updated": "2026-10-06T04:00:00.659Z"
 }
