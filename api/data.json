@@ -271,16 +271,6 @@
       "comment": ""
     },
     {
-      "id": "6a352ca3b7a442b20f1b69a3",
-      "name": "37133 Friedland - Sportpferdetherapie Katharina Oestreich",
-      "city": "Friedland",
-      "postcode": "37133",
-      "street": "Heimkehrerstraße 10",
-      "lat": 51.4212403,
-      "lng": 9.9129551,
-      "comment": "Fahrzeug befindet sich auf dem Hinterhof"
-    },
-    {
       "id": "635bd15f323dfd37f92fa3f4",
       "name": "40764 Langenfeld - Landes- Reit- u. Fahrschule Rheinland",
       "city": "Langenfeld",
@@ -521,5 +511,5 @@
       "comment": ""
     }
   ],
-  "updated": "2026-11-24T05:00:00.876Z"
+  "updated": "2026-11-25T05:00:00.917Z"
 }
